@@ -1,0 +1,649 @@
+<section class="lesson" id="lesson-4">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 4 · Blok 2</div>
+    <h1>Navigácia a cesty</h1>
+    <p class="subtitle">Ako sa pohybovať medzi adresármi, čítať cesty a používať príkazy cd, pwd a ls.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">4.1</span> Absolútne a relatívne cesty</h2>
+  <p class="lead">Každý adresár v Linuxe má presnú cestu. Tá sa buď začína od rootu, alebo od toho, kde sa práve nachádzaš.</p>
+  <p><strong>Absolútna cesta</strong> začína lomítkom <code>/</code> a popisuje presnú polohu od rootu. <strong>Relatívna cesta</strong> začína bodkou <code>.</code> (aktuálny adresár) alebo dvoma bodkami <code>..</code> (rodičovský adresár) a popisuje cestu voči miestu, kde sa nachádzaš.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Cesta</th><th>Typ</th><th>Význam</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>/home/student</code></td><td>Absolútna</td><td>Presne od rootu</td></tr>
+        <tr><td><code>./dokumenty</code></td><td>Relatívna</td><td>Vnútri aktuálneho adresára</td></tr>
+        <tr><td><code>../fotky</code></td><td>Relatívna</td><td>V rodičovskom adresári</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="sec-num">4.2</span> Príkaz cd</h2>
+  <p>Príkaz <code>cd</code> (change directory) ťa presunie do ľubovoľného adresára. Funguje ako virtuálne "otvorenie priečinku".</p>
+  <ul>
+    <li><code>cd /</code> - presunie sa do rootu</li>
+    <li><code>cd ~</code> alebo len <code>cd</code> - presunie sa domov</li>
+    <li><code>cd ..</code> - presunie sa o úroveň vyššie</li>
+    <li><code>cd -</code> - vráti sa tam, kde si bol predtým</li>
+    <li><code>cd ~peter</code> - presunie sa do domova používateľa peter</li>
+  </ul>
+
+  <h2><span class="sec-num">4.3</span> pwd a ls</h2>
+  <p><code>pwd</code> (print working directory) ti povie, kde sa práve nachádzaš. <code>ls</code> zobrazí obsah adresára.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príkaz</th><th>Čo robí</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>pwd</code></td><td>Vypíše aktuálnu cestu</td></tr>
+        <tr><td><code>ls</code></td><td>Zoznam súborov a adresárov</td></tr>
+        <tr><td><code>ls -l</code></td><td>Detailný zoznam (práva, veľkosť, dátum)</td></tr>
+        <tr><td><code>ls -a</code></td><td>Zobrazí aj skryté súbory (bodku na začiatku)</td></tr>
+        <tr><td><code>ls -la</code></td><td>Kombinácia: detailné + skryté</td></tr>
+        <tr><td><code>ls -lh</code></td><td>Detailný zoznam s čitateľnými veľkosťami (KB, MB)</td></tr>
+        <tr><td><code>ls -R</code></td><td>Rekurzívne zobrazí všetko vrátane podadresárov</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="sec-num">4.4</span> Praktická ukážka</h2>
+  <p>Poďme si vyskúšať pohyb po adresároch. Začneme v domovskom adresári a postupne sa presunieme.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">pwd</span>
+<span class="out"><span class="path">/home/student</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cd /etc</span>
+<span class="prompt">student@debian:/etc$</span> <span class="cmd">pwd</span>
+<span class="out"><span class="path">/etc</span></span>
+<span class="prompt">student@debian:/etc$</span> <span class="cmd">cd -</span>
+<span class="out"><span class="path">/home/student</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -la</span>
+<span class="out">total 32
+drwxr-xr-x 5 student student 4096 sep  8 10:00 <span class="dir">.</span>
+drwxr-xr-x 3 root   root   4096 sep  1 08:00 <span class="dir">..</span>
+-rw-r--r-- 1 student student  220 sep  1 08:00 .bash_logout
+-rw-r--r-- 1 student student 3771 sep  1 08:00 .bashrc
+-rw-r--r-- 1 student student  807 sep  1 08:00 .profile
+drwxr-xr-x 2 student student 4096 sep  8 10:00 <span class="dir">Dokumenty</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cd ~/Dokumenty</span>
+<span class="prompt">student@debian:~/Dokumenty$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">poznamky.txt</span>  <span class="dir">projekt</span>  <span class="dir">ucet.txt</span></span>
+<span class="prompt">student@debian:~/Dokumenty$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~/Dokumenty</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~/Dokumenty$</span> <span class="cmd">cd ..</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">pwd</span>
+<span class="out"><span class="path">/home/student</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -lh /var/log</span>
+<span class="out">total 1.2M
+-rw-r----- 1 root   adm    48K sep  8 09:12 <span class="dir">auth.log</span>
+-rw-r----- 1 root   adm    12K sep  8 08:00 syslog
+-rw-r----- 1 root   adm   1.1M sep  7 23:59 kern.log</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cd /</span>
+<span class="prompt">student@debian:/$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">bin</span>   <span class="dir">boot</span>  <span class="dir">dev</span>  <span class="dir">etc</span>  <span class="dir">home</span>  <span class="dir">lib</span>  <span class="dir">lib64</span>  <span class="dir">media</span>  <span class="dir">mnt</span>
+<span class="dir">opt</span>  <span class="dir">proc</span>  <span class="dir">root</span>  <span class="dir">run</span>  <span class="dir">sbin</span>  <span class="dir">srv</span>  <span class="dir">sys</span>   <span class="dir">tmp</span>    <span class="dir">usr</span>   <span class="dir">var</span></span>
+<span class="prompt">student@debian:/$</span> <span class="cmd">cd</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Bodka a dve bodky sú adresáre</div>
+    <code>.</code> odkazuje na aktuálny adresár a <code>..</code> na rodičovský. Fungujú všade, nielen s <code>cd</code>. Príkaz <code>cd -</code> si pamätá predchádzajúcu adresu, takže sa ním rýchlo prepínaš medzi dvoma miestami.
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cd /tmp</span>
+<span class="prompt">student@debian:/tmp$</span> <span class="cmd">cd -</span>
+<span class="out"><span class="path">/home/student</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cd -</span>
+<span class="out"><span class="path">/tmp</span></span>
+<span class="prompt">student@debian:/tmp$</span> <span class="cmd">ls -la ..</span>
+<span class="out">total 12
+drwxr-xr-x 3 root     root     4096 sep  1 08:00 <span class="dir">.</span>
+drwxr-xr-x 1 root     root     4096 sep  1 08:00 <span class="dir">..</span>
+drwxr-xr-x 1 student  student  4096 sep  8 10:00 <span class="dir">home</span></span>
+<span class="prompt">student@debian:/tmp$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Tip pre prax</div>
+    Keď sa stratíš v adresároch, <code>pwd</code> ti vždy povie, kde si. A <code>cd ~</code> ťa vždy vráti domov. Tieto dva príkazy používaj často, kým si cesty zapamätáš.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Prejdi do adresára <code>/etc</code> a zisti, aká je absolútna cesta pomocou <code>pwd</code>.</li>
+      <li>Vráť sa do domovského adresára cez <code>cd -</code> a over, že si tam.</li>
+      <li>Vypíš obsah adresára <code>/tmp</code> pomocou <code>ls /tmp</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-5">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 5 · Blok 2</div>
+    <h1>Súbory a adresáre</h1>
+    <p class="subtitle">Vytváranie, kopírovanie, presúvanie a mazanie súborov a priečinkov.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">5.1</span> Vytváranie a mazanie</h2>
+  <p class="lead">Každý súbor aj adresár sa dá vytvoriť aj zmazať jedným riadkom. Dôležité je vedieť, ktorý príkaz slúži na čo.</p>
+  <p><code>touch</code> vytvorí prázdny súbor (alebo aktualizuje čas existujúceho). <code>mkdir</code> vytvorí nový adresár. Pomocou <code>mkdir -p</code> vytvoríš celú cestu naraz.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">mkdir -p projekt/src</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">touch projekt/src/main.c</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">touch projekt/README.md</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -R projekt</span>
+<span class="out"><span class="dir">projekt</span>
+projekt/README.md
+
+<span class="dir">projekt/src</span>
+projekt/src/main.c</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">5.2</span> Kopírovanie a presúvanie</h2>
+  <p><code>cp</code> vytvorí kópiu súboru alebo adresára. <code>mv</code> presunie súbor, alebo ho premenuje. Oba príkazy fungujú rovnako, len robia rôzne veci.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príkaz</th><th>Čo robí</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>cp</code></td><td>Kopíruje súbor</td><td><code>cp subor.txt kopia.txt</code></td></tr>
+        <tr><td><code>cp -r</code></td><td>Kopíruje adresár</td><td><code>cp -r projekt backup</code></td></tr>
+        <tr><td><code>mv</code></td><td>Presúva / premenuje</td><td><code>mv stare.txt nove.txt</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~/projekt</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~/projekt$</span> <span class="cmd">cp README.md backup.md</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">mv backup.md BAKA.md</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">BAKA.md</span>  <span class="dir">README.md</span>  <span class="dir">src</span></span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">cp -r src src_backup</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">BAKA.md</span>  <span class="dir">README.md</span>  <span class="dir">src</span>  <span class="dir">src_backup</span></span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">5.3</span> Mazanie súborov</h2>
+  <p><code>rm</code> vymaže súbor. <code>rm -r</code> vymaže adresár aj s obsahom. <code>rmdir</code> vymaže len prázdny adresár.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~/projekt</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~/projekt$</span> <span class="cmd">rm BAKA.md</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">rm -r src_backup</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">README.md</span>  <span class="dir">src</span></span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">mkdir empty_dir</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">rmdir empty_dir</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">README.md</span>  <span class="dir">src</span></span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">5.4</span> Typ súboru</h2>
+  <p>Príkaz <code>file</code> zistí skutočný typ súboru podľa obsahu, nie podľa prípony. V Linuxe prípory nie sú také dôležité ako vo Windowse.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~/projekt</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~/projekt$</span> <span class="cmd">file README.md</span>
+<span class="out">README.md: ASCII text</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">file src/main.c</span>
+<span class="out">src/main.c: C source, ASCII text</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="cmd">file /bin/ls</span>
+<span class="out">/bin/ls: ELF 64-bit LSB pie executable, x86-64</span>
+<span class="prompt">student@debian:~/projekt$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Pozor na rm</div>
+    <code>rm</code> maže natrvalo. V Linuxe nie je žiadny kôš. Keď zmážeš súbor cez <code>rm</code>, je preč. Najmä sa vyhýbaj <code>sudo rm -rf /</code>. Nikdy. Ani zvedavosti.
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">Nikdy nepíš toto</div>
+    <code>sudo rm -rf /</code> vymaže celý tvoj systém. Toto je prvý príkaz, ktorý by si mal poznať, aby si ho nikdy náhodou nenapísal.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor adresár <code>cvicenie</code> a v ňom 5 súborov pomocou <code>touch</code> (napr. <code>a.txt</code> až <code>e.txt</code>).</li>
+      <li>Skopíruj celý adresár <code>cvicenie</code> ako <code>cvicenie_backup</code>.</li>
+      <li>Premenuj <code>cvicenie_backup</code> na <code>archiv</code>.</li>
+      <li>Vymaž adresár <code>archiv</code> pomocou <code>rm -r</code> a over výpisom <code>ls</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-6">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 6 · Blok 2</div>
+    <h1>Čítanie súborov a wildcards</h1>
+    <p class="subtitle">Ako zobraziť obsah súborov rôznymi spôsobmi a používať zástupné znaky.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">6.1</span> Čítanie obsahu súborov</h2>
+  <p class="lead">Linux ponúka viacero spôsobov, ako zobraziť obsah súboru. Každý sa hodí na inú situáciu.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príkaz</th><th>Kedy použiť</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>cat</code></td><td>Vypíše celý súbor na obrazovku. Ideálne pre krátke súbory.</td></tr>
+        <tr><td><code>less</code></td><td>Otvorí súbor so scrollovaním. Pre veľké súbory.</td></tr>
+        <tr><td><code>head -n 10</code></td><td>Zobrazí prvých 10 riadkov.</td></tr>
+        <tr><td><code>tail -n 10</code></td><td>Zobrazí posledných 10 riadkov.</td></tr>
+        <tr><td><code>tail -f</code></td><td>Sleduje pridávané riadky v reálnom čase.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/hostname</span>
+<span class="out">debian</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">head -n 5 /etc/passwd</span>
+<span class="out">root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">tail -n 3 /etc/passwd</span>
+<span class="out">sshd:x:106:65534::/run/sshd:/usr/sbin/nologin
+student:x:1000:1000:Student,,,:/home/student:/bin/bash
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>V <code>less</code> sa pohybuješ šípkami alebo <kbd>Page Up</kbd> / <kbd>Page Down</kbd>. Stlač <kbd>q</kbd> na ukončenie. Ak hľadáš text, stlač <kbd>/</kbd> a napíš hľadané slovo.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">less /etc/passwd</span>
+<span class="out"><span class="comment">root:x:0:0:root:/root:/bin/bash</span>
+<span class="comment">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span>
+<span class="comment">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span>
+<span class="comment">...</span>
+<span class="comment">student:x:1000:1000:Student,,,:/home/student:/bin/bash</span>
+<span class="comment">(End of file - stlač q pre ukončenie)</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">6.2</span> Wildcards</h2>
+  <p>Wildcards (zástupné znaky) fungujú v príkazoch ako <code>ls</code>, <code>cp</code>, <code>rm</code>. Shell ich rozšíri ešte pred spustením programu.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Znak</th><th>Význam</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>*</code></td><td>Ľubovoľný počet znakov</td><td><code>ls *.txt</code></td></tr>
+        <tr><td><code>?</code></td><td>Presne jeden znak</td><td><code>ls ?.txt</code></td></tr>
+        <tr><td><code>[abc]</code></td><td>Jeden znak zo zoznamu</td><td><code>ls [ab].txt</code></td></tr>
+        <tr><td><code>[0-9]</code></td><td>Jeden znak z rozsahu</td><td><code>ls [0-3].txt</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">mkdir wild && cd wild</span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">touch a.txt b.txt c.txt test.py log1.txt log2.txt</span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">ls *.txt</span>
+<span class="out"><span class="dir">a.txt</span>  <span class="dir">b.txt</span>  <span class="dir">c.txt</span>  <span class="dir">log1.txt</span>  <span class="dir">log2.txt</span></span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">ls ?.txt</span>
+<span class="out"><span class="dir">a.txt</span>  <span class="dir">b.txt</span>  <span class="dir">c.txt</span></span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">ls [ab].txt</span>
+<span class="out"><span class="dir">a.txt</span>  <span class="dir">b.txt</span></span>
+<span class="prompt">student@debian:~/wild$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~/wild</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~/wild$</span> <span class="cmd">ls log?.txt</span>
+<span class="out"><span class="dir">log1.txt</span>  <span class="dir">log2.txt</span></span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">ls *.py</span>
+<span class="out"><span class="dir">test.py</span></span>
+<span class="prompt">student@debian:~/wild$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Shell expanduje wildcards</div>
+    Zástupné znaky <code>*</code> a <code>?</code> nerozširuje samotný program, ale shell. Keď napíšeš <code>ls *.txt</code>, shell najprv nájde všetky <code>.txt</code> súbory a až potom ich odovzdá príkazu <code>ls</code>. Preto <code>echo *</code> vypíše názvy súborov, lebo echo nedostane hviezdičku, ale už rozšírený zoznam.
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~/wild</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~/wild$</span> <span class="cmd">echo *</span>
+<span class="out">a.txt b.txt c.txt log1.txt log2.txt test.py</span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">rm *.txt</span>
+<span class="prompt">student@debian:~/wild$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">test.py</span></span>
+<span class="prompt">student@debian:~/wild$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Otvor súbor <code>/etc/passwd</code> cez <code>less</code> a nájdi riadok, v ktorom je tvoj používateľ.</li>
+      <li>Vytvor 6 súborov: <code>dat1.txt</code>, <code>dat2.txt</code>, <code>dat10.txt</code>, <code>report.txt</code>, <code>report2.txt</code>, <code>notes.md</code>.</li>
+      <li>Nájdi wildcard príkaz, ktorý vypíše len súbory s <code>report</code> v názve.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-7">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 7 · Blok 2</div>
+    <h1>História a nápoveda</h1>
+    <p class="subtitle">Ako pracovať s históriou príkazov, tabulačným dokončením a manuálovými stránkami.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">7.1</span> História príkazov</h2>
+  <p class="lead">Shell si pamätá všetky príkazy, ktoré si napísal. Nemusíš ich písať znova, stačí ich zavolať späť.</p>
+  <p>Stlač <kbd>↑</kbd> (šípka hore) pre opakovanie predchádzajúceho príkazu. Stlač <kbd>↓</kbd> pre vrátenie sa dopredu. Každým stlačením prechádzaš históriou.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">history</span>
+<span class="out">  1  whoami
+  2  pwd
+  3  ls
+  4  cd /etc
+  5  ls -la
+  6  cd ~
+  7  history</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Niektoré skratky z histórie fungujú okamžite:</p>
+  <ul>
+    <li><code>!!</code> - zopakuje celý posledný príkaz</li>
+    <li><code>!n</code> - spustí príkaz s číslom <code>n</code> z histórie</li>
+  </ul>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -la /etc/hostname</span>
+<span class="out">-rw-r--r-- 1 root root 7 sep  8 08:00 /etc/hostname</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo !!</span>
+<span class="out"><span class="comment">sudo ls -la /etc/hostname</span></span>
+<span class="out">-rw-r--r-- 1 root root 7 sep  8 08:00 /etc/hostname</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">!3</span>
+<span class="out"><span class="comment">ls</span></span>
+<span class="out">Dokumenty  projekt  wild</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">7.2</span> Spätné hľadanie</h2>
+  <p>Kombinácia <kbd>Ctrl</kbd>+<kbd>R</kbd> otvorí interaktívne vyhľadávanie v histórii. Píšeš text a shell hľadá posledný príkaz, ktorý ho obsahuje.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">(reverse-i-search)`ls':</span> <span class="cmd">ls -la /etc/hostname</span>
+<span class="out"><span class="comment">Stlač Enter pre spustenie, alebo šípky pre úpravu</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">7.3</span> Tabulačné dokončovanie</h2>
+  <p>Stlač <kbd>Tab</kbd> a shell sa pokúsi automaticky dokončiť príkaz alebo cestu. Ak je viac možností, stlač <kbd>Tab</kbd> dvakrát pre zoznam.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls /et</span><span class="out">[TAB]</span>
+<span class="out"><span class="comment">/etc/</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls /etc/ho</span><span class="out">[TAB]</span>
+<span class="out"><span class="comment">/etc/hostname</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/hostname</span>
+<span class="out">debian</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">7.4</span> Manuály a help</h2>
+  <p>Príkaz <code>man</code> otvorí manuálovú stránku akéhokoľvek príkazu. Je to najdôležitejší nástroj na získavanie informácií. Ak potrebuješ rýchlu odpoveď, použi <code>--help</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls --help</span>
+<span class="out">Usage: ls [OPTION]... [FILE]...
+List information about the FILEs (the current directory by default).
+
+  -a, --all                  do not ignore entries starting with .
+  -l                         use a long listing format
+  -h, --human-readable       with -l, print sizes in human readable format
+  -t                         sort by time, newest first
+  -R, --recursive            list subdirectories recursively
+      --help     display this help and exit</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>V manuáli sa pohybuješ šípkami alebo medzerníkom. Vyhľadávaš cez <kbd>/</kbd> a potom napíšeš slovo. Ďalší výsledok cez <kbd>n</kbd>, predchádzajúci cez <kbd>N</kbd>. Odchod cez <kbd>q</kbd>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">man ls</span>
+<span class="out"><span class="comment">LS(1)                    User Commands                    LS(1)</span>
+
+<span class="comment">NAME</span>
+       ls - list directory contents
+
+<span class="comment">SYNOPSIS</span>
+       ls [OPTION]... [FILE]...
+
+<span class="comment">DESCRIPTION</span>
+       List information about the FILEs (the current directory by default).
+
+       -a, --all
+              do not ignore entries starting with .
+
+       -l     use a long listing format
+
+       -R, --recursive
+              list subdirectories recursively
+
+<span class="comment">(stlač q pre ukončenie, / pre hľadanie, n/N pre ďalší/predchádzajúci výsledok)</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">apropos "network"</span>
+<span class="out">hostname (1)        - show or set the system's host name
+ifconfig (8)        - configure a network interface
+ip (8)              - show / manipulate routing, network devices
+netstat (8)         - Print network connections, routing tables, ...</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Man je tvoj najlepší kamarát</div>
+    <code>man</code> obsahuje kompletnú dokumentáciu ku každému príkazu. Ak nevieš, čo príkaz robí, <code>man príkaz</code> ti odpovie. <code>--help</code> je rýchlejšia alternatíva pre krátke zhrnie. A <code>apropos</code> ti pomôže, keď nevieš ani názov príkazu.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Otvor manuál pre <code>ls</code> a nájdi prepínač na zoradenie súborov podľa času. Vyskúšaj ho.</li>
+      <li>Stlač <kbd>Ctrl</kbd>+<kbd>R</kbd> a vyhľadaj v histórii príkaz <code>man</code>.</li>
+      <li>Použi <code>apropos</code> na vyhľadanie príkazov súvisiacich s <code>"copy"</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-8">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 8 · Blok 2</div>
+    <h1>Redirekcia a rúry</h1>
+    <p class="subtitle">Ako presmerovať výstup príkazov, prepájať programy rúrami a pracovať s chybami.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">8.1</span> Redirekcia výstupu</h2>
+  <p class="lead">Každý príkaz produkuje výstup na obrazovku. Pomocou <code>&gt;</code> a <code>&gt;&gt;</code> ho môžeš presmerovať do súboru.</p>
+  <ul>
+    <li><code>&gt;</code> zapíše výstup do súboru (prepíše ho)</li>
+    <li><code>&gt;&gt;</code> pridá výstup na koniec súboru</li>
+    <li><code>&lt;</code> nasmeruje obsah súboru ako vstup príkazu</li>
+  </ul>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "Ahoj svet" > uvitanie.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat uvitanie.txt</span>
+<span class="out">Ahoj svet</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "Druhy riadok" >> uvitanie.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat uvitanie.txt</span>
+<span class="out">Ahoj svet
+Druhy riadok</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Pozor, <code>&gt;</code> prepíše súbor. Ak bude v súbore niečo dôležité, po <code>&gt;</code> to zmizne. Používaj <code>&gt;&gt;</code>, keď chceš pridávať.</p>
+
+  <h2><span class="sec-num">8.2</span> Rúry (pipes)</h2>
+  <p>Rúra <code>|</code> prepojí výstup jedného príkazu so vstupom ďalšieho. Výstup nepôjde na obrazovku, ale do ďalšieho programu.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -la | grep ".txt"</span>
+<span class="out">-rw-r--r-- 1 student student 14 sep  8 11:00 uvitanie.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/passwd | head -n 3</span>
+<span class="out">root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">8.3</span> Chybový výstup</h2>
+  <p>Programy majú dva výstupy: <strong>stdout</strong> (štandardný výstup) a <strong>stderr</strong> (chybový výstup). Oba idú na obrazovku, ale dajú sa presmerovať oddelene.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Zápis</th><th>Čo robí</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>2&gt;</code></td><td>Presmeruje chyby (stderr) do súboru</td></tr>
+        <tr><td><code>2&gt;&amp;1</code></td><td>Zlúči chyby s normálnym výstupom</td></tr>
+        <tr><td><code>&amp;&gt;</code></td><td>Oboje do súboru (skratka)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls /neexistujuci 2> chyby.txt</span>
+<span class="out"><span class="err">ls: cannot access '/neexistujuci': No such file or directory</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat chyby.txt</span>
+<span class="out">ls: cannot access '/neexistujuci': No such file or directory</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls /neexistujuci 2>/dev/null</span>
+<span class="out"><span class="comment">(zobrazí sa len príkaz, chyba zmizla)</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">8.4</span> Praktické kombinácie</h2>
+  <p>Rúry a redirekcie sa dajú kombinovať. Toto sú príkazy, ktoré budeš používať často.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ps aux | grep ssh</span>
+<span class="out">root       812  0.0  0.1  16088  9600 ?        Ss   08:00   0:01 /usr/sbin/sshd -D
+student   1245  0.0  0.0   8940  3200 pts/0    S+   11:00   0:00 grep --color=auto ssh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">history | grep cd</span>
+<span class="out">  4  cd /etc
+  6  cd ~
+  9  cd /tmp
+ 10  cd -</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -la | wc -l</span>
+<span class="out">15</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>tee</code> zobrazí výstup na obrazovku a zároveň ho uloží do súboru. Hodí sa, keď chceš vidieť výstup a zároveň ho archivovať.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -la | tee zoznam.txt</span>
+<span class="out">total 16
+drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
+drwxr-xr-x 3 root   root   4096 sep  1 08:00 <span class="dir">..</span>
+-rw-r--r-- 1 student student  220 sep  1 08:00 .bash_logout
+-rw-r--r-- 1 student student 3771 sep  1 08:00 .bashrc
+-rw-r--r-- 1 student student  807 sep  1 08:00 .profile
+drwxr-xr-x 2 student student 4096 sep  8 11:00 <span class="dir">Dokumenty</span>
+-rw-r--r-- 1 student student   14 sep  8 11:00 <span class="dir">uvitanie.txt</span>
+drwxr-xr-x 2 student student 4096 sep  8 10:00 <span class="dir">wild</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat zoznam.txt</span>
+<span class="out">total 16
+drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
+<span class="comment">... (rovnaký výstup)</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">stdout a stderr</div>
+    Výstup programu ide cez dva kanály. <strong>stdout</strong> nesie normálny výstup, <strong>stderr</strong> chybové hlášky. Keď napíšeš <code>ls /cesta 2&gt;/dev/null</code>, chyby zmiznú, lebo smerujú do <code>/dev/null</code> (ďura, ktorá všetko zahodí). Normálny výstup zostane na obrazovke.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Napíš <code>history | grep cd</code> a výstup ulož do súboru <code>cd_history.txt</code> cez <code>&gt;</code>.</li>
+      <li>Vypíš zoznam súborov v <code>/etc</code> a ulož výstup do <code>etc_list.txt</code> cez <code>ls -la /etc &gt; etc_list.txt</code>.</li>
+      <li>Over obsah súboru pomocou <code>cat etc_list.txt</code>.</li>
+      <li>Vyskúšaj <code>ls /neexistujuci 2&gt;/dev/null</code>. Čo sa stalo s chybovým výstupom?</li>
+    </ol>
+  </div>
+</section>

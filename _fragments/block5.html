@@ -1,0 +1,692 @@
+<section class="lesson" id="lesson-19">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 19 · Blok 5</div>
+    <h1>Správa softvéru</h1>
+    <p class="subtitle">Inštalácia, aktualizácia a odstraňovanie programov cez balíkový systém.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">19.1</span> Čo je balíkový systém?</h2>
+  <p class="lead">Balíkový systém je nástroj, ktorým sa v Linuxe inštalujú, aktualizujú a odstraňujú programy. Nemusíš nikam chodiť na web, sťahovať .exe súbory a klikať "Next". Všetko sa dá z terminálu.</p>
+  <p>Každý program je zabalený do <strong>balíka</strong>. Balíky sa ukladajú na serveri, ktorý sa volá <strong>repozitár</strong>. Keď napíšeš príkaz na inštaláciu, systém stiahne balík z repozitára, rozbalí ho a umiestni súbory na správne miesta. Automaticky vyrieši aj <strong>závislosti</strong> (ďalšie balíky, ktoré ten program potrebuje).</p>
+  <p>Rôzne distribúcie používajú rôzne balíkové systémy:</p>
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Distribúcia</th><th>Správca balíkov</th><th>Príkaz</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Debian</code></td><td><code>apt</code></td><td><code>apt install nazov</code></td></tr>
+        <tr><td><code>Linux Mint</code></td><td><code>apt</code></td><td><code>apt install nazov</code></td></tr>
+        <tr><td><code>Fedora</code></td><td><code>dnf</code></td><td><code>dnf install nazov</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Na našom krúžku sú zmiešané distribúcie, takže si ukážeme oba varianty. Príkazy sú takmer identické, líši sa len názov správcu balíkov.</p>
+
+  <h2><span class="sec-num">19.2</span> Aktualizácia systému</h2>
+  <p>Pred akoukoľvek inštaláciou by si mal aktualizovať zoznam balíkov. Tým sa stiahne najnovší zoznam dostupných programov a ich verzií.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian / Mint</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt update</span>
+<span class="out">Hit:1 http://deb.debian.org/debian bookworm InRelease
+Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+Hit:3 http://security.debian.org/debian-security bookworm-security InRelease
+Reading package lists... Done</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo dnf check-update</span>
+<span class="out">Last metadata expiration check: 0:05:12 ago on Thu Sep  8 10:00:00 2026.
+Updates metadata is up to date.</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>apt update</code> iba stiahne zoznam, nič neinštaluje. Až <code>apt upgrade</code> nainštaluje samotné aktualizácie. Je to rozdiel: <strong>update</strong> = aktualizuj zoznam, <strong>upgrade</strong> = nainštaluj aktualizácie.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian / Mint</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt upgrade -y</span>
+<span class="out">Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Calculating upgrade... Done
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo dnf upgrade -y</span>
+<span class="out">Last metadata expiration check: 0:10:34 ago on Thu Sep  8 10:00:00 2026.
+Dependencies resolved.
+Nothing to do.
+Complete!</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Vždy najprv update!</div>
+    Pred inštaláciou alebo upgrade vždy spusti <code>apt update</code> (alebo <code>dnf check-update</code>). Bez toho môže systém hľadať balíky podľa starého zoznamu a nenájde ich, alebo nainštaluje staršiu veriu.
+  </div>
+
+  <h2><span class="sec-num">19.3</span> Hľadanie a inštalácia</h2>
+  <p>Ak nevieš presný názov balíka, vyhľadaj ho:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian / Mint</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">apt search prehravac</span>
+<span class="out">Sorting... Done
+Full Text Search... Done
+vlc/stable,now 3.0.21-0+deb12u1 amd64 [installed]
+  Multimedia player and streamer
+
+mpv/stable 0.35.1-3 amd64
+  Movie player playing almost everything</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">dnf search prehravac</span>
+<span class="out">Last metadata expiration check: 0:15:22 ago on Thu Sep  8 10:00:00 2026.
+================================= Name Exactly Matched: prehravac ==================================
+
+================================== Name Matched: prehravac ====================================
+vlc.x86_64 : Multimedia player and streamer
+mpv.x86_64 : Movie player playing almost everything</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Vyskúšame si inštaláciu programu <code>tree</code>, ktorý zobrazuje obsah adresárov ako strom:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian / Mint</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt install tree -y</span>
+<span class="out">Reading package lists... Done
+Building dependency tree... Done
+The following NEW packages will be installed:
+  tree
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 46.4 kB of archives.
+After this operation, 159 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main amd64 tree amd64 2.1.1-1 [46.4 kB]
+Fetched 46.4 kB in 0s (320 kB/s)
+Selecting previously unselected package tree.
+Unpacking tree (2.1.1-1)...</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo dnf install tree -y</span>
+<span class="out">Last metadata expiration check: 0:20:15 ago on Thu Sep  8 10:00:00 2026.
+Dependencies resolved.
+================================================================================
+ Package        Architecture       Version           Repository          Size
+================================================================================
+Installing:
+ tree           x86_64             2.1.1-5.fc40      fedora              62 k
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Installed size: 181 k</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tree ~/Documents</span>
+<span class="out"><span class="path">/home/student/Documents</span>
+├── <span class="dir">projekt</span>
+│   ├── index.html
+│   ├── style.css
+│   └── <span class="dir">images</span>
+│       ├── logo.png
+│       └── pozadie.jpg
+└── poznámky.txt
+
+2 directories, 5 files</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">19.4</span> Odstraňovanie programov</h2>
+  <p>Ak program už nepotrebuješ, môžeš ho odstrániť. Dva príkazy: <code>remove</code> odstráni balík, ale ponechá konfiguračné súbory. <code>purge</code> odstráni všetko vrátane konfigurácie.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian / Mint</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt remove tree -y</span>
+<span class="out">Reading package lists... Done
+Building dependency tree... Done
+The following packages will be REMOVED:
+  tree
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo dnf remove tree -y</span>
+<span class="out">Last metadata expiration check: 0:30:00 ago on Thu Sep  8 10:00:00 2026.
+Dependencies resolved.
+================================================================================
+ Package        Architecture       Version           Repository          Size
+================================================================================
+Removing:
+ tree           x86_64             2.1.1-5.fc40      @fedora            181 k
+
+Transaction Summary
+================================================================================
+Remove  1 Package</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">remove vs. purge</div>
+    <code>apt remove</code> (alebo <code>dnf remove</code>) odstráni program, ale nechá jeho konfiguráciu v systéme. <code>apt purge</code> odstráni úplne všetko. Ak chceš program nainštalovať znova a ponechať si nastavenia, stačí <code>remove</code>. Ak ho chceš zmazať aj s konfiguráciou, použi <code>purge</code>.
+  </div>
+
+  <h2><span class="sec-num">19.5</span> Ďalšie užitočné príkazy</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">apt list --installed</span>
+<span class="out">Listing... Done
+base-files/stable,now 12.4 amd64 [installed,automatic]
+bash/stable,now 5.2.15-2+b7 amd64 [installed,automatic]
+firefox-esr/stable,now 115.15.0esr-1 amd64 [installed]
+... (zoznam bude dlhý)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">dpkg -l | grep tree</span>
+<span class="out">ii  tree    2.1.1-1    amd64    directory listing program</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@fedora: ~</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">dnf list installed | grep tree</span>
+<span class="out">tree.x86_64    2.1.1-5.fc40    @fedora</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Ktorý správca?</div>
+    Ak si nie si istý, aký správca balíkov funguje na tvojom systéme, skús <code>apt --version</code> alebo <code>dnf --version</code>. Ten, ktorý nevyhodí chybu, je ten správny.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Aktualizuj zoznam balíkov (<code>apt update</code> alebo <code>dnf check-update</code>).</li>
+      <li>Nainštaluj program <code>htop</code> (správca procesov, budeme ho potrebovať nabudúce).</li>
+      <li>Spusti <code>htop</code> a preskúmaj jeho rozhranie. Ukonči ho klávesom <kbd>q</kbd>.</li>
+      <li>Vyskúšaj vyhľadať balík, ktorý ťa zaujíma cez <code>apt search</code> alebo <code>dnf search</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-20">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 20 · Blok 5</div>
+    <h1>Procesy</h1>
+    <p class="subtitle">Čo sa deje v pozadí systému, ako sledovať a riadiť spustené programy.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">20.1</span> Čo je proces?</h2>
+  <p class="lead">Keď spustíš akýkoľvek program v Linuxe, vytvorí sa <strong>proces</strong>. Proces je program, ktorý práve beží. Každý proces má svoje číslo (PID) a vie, aký proces ho spustil (PPID).</p>
+  <ul>
+    <li><strong>PID</strong> (Process ID) - jedinečné číslo každého procesu</li>
+    <li><strong>PPID</strong> (Parent Process ID) - PID procesu, ktorý ho spustil</li>
+    <li><strong>UID</strong> (User ID) - používateľ, ktorému proces patrí</li>
+  </ul>
+  <p>Na sledovanie a ovládanie procesov slúžia príkazy <code>ps</code>, <code>top</code>, <code>htop</code>, <code>kill</code> a ďalšie.</p>
+
+  <h2><span class="sec-num">20.2</span> Zobrazenie procesov</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ps</span>
+<span class="out">  PID TTY          TIME CMD
+ 1234 pts/0    00:00:00 bash
+ 5678 pts/0    00:00:00 ps</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+  <p>Bazické <code>ps</code> ukáže iba procesy v aktuálnom termináli. To málo stačí. Omnoho užitočnejší je:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ps aux</span>
+<span class="out">USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.2 169404 11200 ?        Ss   Sep07   0:12 /sbin/init
+root           2  0.0  0.0      0     0 ?        S    Sep07   0:00 [kthreadd]
+student     1234  0.0  0.1  22836  5400 pts/0    Ss   10:00   0:00 -bash
+student     1235  0.0  0.0  38468  3200 pts/0    R+   10:30   0:00 ps aux</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Príznak <code>aux</code> znamená: <code>a</code> = všetky procesy, <code>u</code> = pre používateľa, <code>x</code> = aj bez terminálu. Alternatíva:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ps -ef | head -5</span>
+<span class="out">UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 Sep07 ?        00:00:12 /sbin/init
+root           2       0  0 Sep07 ?        00:00:00 [kthreadd]
+root           3       2  0 Sep07 ?        00:00:00 [pool_workqueue_release]
+root           4       2  0 Sep07 ?        00:00:00 [kworker/R-inode_wb]</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">ps aux vs. ps -ef</div>
+    Oba príkazy ukážu všetky procesy. Rozdiel je len v formáte výstupu. <code>ps aux</code> zobrazuje percentuálnu spotrebu CPU a RAM, <code>ps -ef</code> ukazuje PPID (rodičovský proces). Používaj ten, ktorý ti viac vyhovuje.
+  </div>
+
+  <h2><span class="sec-num">20.3</span> Interaktívne sledovanie: top a htop</h2>
+  <p>Namiesto statického výpisu môžeš sledovať procesy v reálnom čase:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">htop</span>
+<span class="out">  1  [||||||||||||||||||||||||||||||||||||||100.0%]     Tasks:  87 total,   1 running
+  2  [||||||||||||||||||||||||||||||||||||||100.0%]     Load average: 0.52 0.38 0.29
+  3  [||||||||||||||||||||||||||||||||||||||100.0%]     Uptime: 01:23:45
+  Mem[|||||||||||||||           420Mi/3.8Gi]
+  Swp[|                           0B/2.0Gi]
+
+  PID USER      PRI  NI  VIRT   RES   SHR S CPU% MEM%   TIME+  Command
+    1 root         20   0  169M  11M  8.2M S  0.0  0.3   0:12.34 /sbin/init
+ 1234 student      20   0 22836 5.4M 4.1M S  0.0  0.1   0:00.12 -bash</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>htop</code> je farebný, intuitívny a dá sa ovládať šípkami a klávesmi. Pre ukončenie stlač <kbd>q</kbd>.</p>
+  <p><code>top</code> funguje podobne, ale je menej prehľadný. Oba ukazujú: koľko procesov beží, ako veľmi sa používa CPU a RAM, ktoré procesy žerú najviac zdrojov.</p>
+
+  <h2><span class="sec-num">20.4</span> Zabíjanie procesov</h2>
+  <p>Ak proces zbesí alebo ho chceš ukončiť, použiješ <code>kill</code>. Potrebuješ PID procesu:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sleep 300 &amp;</span>
+<span class="out">[1] 6789</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ps aux | grep sleep</span>
+<span class="out">student     6789  0.0  0.0   3212  1024 pts/0    S    10:35   0:00 sleep 300
+student     6790  0.0  0.0   6544  1536 pts/0    S+   10:35   0:00 grep --color=auto sleep</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">kill 6789</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ps aux | grep sleep</span>
+<span class="out">student     6791  0.0  0.0   6544  1536 pts/0    S+   10:36   0:00 grep --color=auto sleep</span>
+<span class="comment"># Proces zmizol - zostal iba grep</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Ak normálne <code>kill</code> nepomôže (proces nereaguje), použijeme silnejší signál:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">kill -9 6789</span>
+<span class="comment"># SIGKILL - okamžite zabije proces</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">pkill sleep</span>
+<span class="comment"># Zabije všetky procesy s názvom "sleep"</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">kill -9 je posledná možnosť</div>
+    Normálne <code>kill</code> (bez prepínača) pošle procesu signál SIGTERM a nechá ho korektne skončiť. <code>kill -9</code> (SIGKILL) proces okamžite ukončí bez možnosti uložiť dáta. Používaj <code>kill</code> bez <code>-9</code> vždy, keď to ide. <code>-9</code> až keď nič iné nefunguje.
+  </div>
+
+  <h2><span class="sec-num">20.5</span> Úlohy na pozadí</h2>
+  <p>Pomocník <code>&amp;</code> spustí príkaz na pozadí. <kbd>Ctrl</kbd>+<kbd>Z</kbd> pozastaví proces. <code>jobs</code> ukáže zoznam pozastavených/odložených úloh. <code>fg</code> vráti poslednú úlohu do popredia. <code>bg</code> ju spustí na pozadí.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sleep 60 &amp;</span>
+<span class="out">[1] 7890</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sleep 120 &amp;</span>
+<span class="out">[2] 7891</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">jobs</span>
+<span class="out">[1]+  Running                 sleep 60 &amp;
+[2]-  Running                 sleep 120 &amp;</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">kill 7890</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">jobs</span>
+<span class="out">[1]+  Terminated              sleep 60 &amp;
+[2]-  Running                 sleep 120 &amp;</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Ak chceš, aby príkaz bežal aj po odhlásení z terminálu, použi <code>nohup</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">nohup sleep 3600 &amp;</span>
+<span class="out">[3] 7892
+nohup: appending output to 'nohup.out'</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Zhrnutie signálov</div>
+    <code>kill PID</code> = jemné ukončenie (SIGTERM). <code>kill -9 PID</code> = okamžité ukončenie (SIGKILL). <code>pkill nazov</code> = zabiť všetky procesy podľa názvu. <code>killall nazov</code> = to isté, ale presnejšie.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Spusti <code>sleep 100</code> na pozadí pomocou <code>&amp;</code>.</li>
+      <li>Nájdij ho cez <code>ps aux | grep sleep</code> a zapíš si jeho PID.</li>
+      <li>Zabij ho cez <code>kill</code> (bez <code>-9</code>).</li>
+      <li>Over cez <code>ps aux | grep sleep</code>, že zmizol.</li>
+      <li>Vyskúšaj <code>htop</code> a nájdi tam proces, ktorý zaberá najviac CPU.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-21">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 21 · Blok 5</div>
+    <h1>Služby a systemd</h1>
+    <p class="subtitle">Správa služieb na pozadí, logovanie a riadenie systému cez systemd.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">21.1</span> Čo je systemd?</h2>
+  <p class="lead">Keď sa Linux spustí, systemd je prvý proces (PID 1), ktorý naštartuje všetko ostatné. Stará sa o služby (services), ako je SSH, sieť, tlačiareň a ďalšie programy, ktoré bežia na pozadí.</p>
+  <p><strong>Servis</strong> (service) je program, ktorý beží na pozadí a čaká na požiadavky. Príklady:</p>
+  <ul>
+    <li><code>sshd</code> - server pre vzdialené pripojenie cez SSH</li>
+    <li><code>cron</code> - plánovač úloh</li>
+    <li><code>NetworkManager</code> - správa siete</li>
+    <li><code>cups</code> - tlačiarenský server</li>
+  </ul>
+  <p>Každá služba je opísaná v súbore <strong>jednotky</strong> (unit file), typicky v adresári <code>/etc/systemd/system/</code>. Ovládame ju cez príkaz <code>systemctl</code>.</p>
+
+  <h2><span class="sec-num">21.2</span> Kontrola stavu služieb</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status ssh</span>
+<span class="out">● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; preset: enabled)
+     Active: <span class="out">active (running)</span> since Thu 2026-09-08 09:45:12 CEST; 1h 15min ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 567 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS)
+   Main PID: 789 (sshd)
+      Tasks: 1 (limit: 4607)
+     Memory: 5.2M
+        CPU: 120ms
+     CGroup: /system.slice/ssh.service
+             └─789 "sshd: /usr/sbin/sshd -D [listener] 10 of 10-100 startups"</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Vidíš tri dôležité veci: <strong>Loaded</strong> (kde je konfigurácia, či je zapnutý pri štarte), <strong>Active</strong> (že práve beží), a <strong>Main PID</strong> (číslo hlavného procesu).</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl --failed</span>
+<span class="out">  UNIT           LOAD   ACTIVE SUB     DESCRIPTION
+● ssh.service    loaded failed failed  OpenBSD Secure Shell server
+
+0 loaded units listed.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Príkaz <code>systemctl --failed</code> ukáže iba služby, ktoré zlyhali. Ak je zoznam prázdny, systém je v poriadku.</p>
+
+  <h2><span class="sec-num">21.3</span> Štart, stop, reštart</h2>
+  <p>Základné ovládanie služieb:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príkaz</th><th>Čo robí</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>systemctl start nazov</code></td><td>Spustí službu hneď</td></tr>
+        <tr><td><code>systemctl stop nazov</code></td><td>Zastaví službu</td></tr>
+        <tr><td><code>systemctl restart nazov</code></td><td>Zastaví a spustí znova</td></tr>
+        <tr><td><code>systemctl enable nazov</code></td><td>Zapne službu pri štarte systému</td></tr>
+        <tr><td><code>systemctl disable nazov</code></td><td>Vypne službu pri štarte systému</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl restart ssh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status ssh</span>
+<span class="out">● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; preset: enabled)
+     Active: <span class="out">active (running)</span> since Thu 2026-09-08 11:05:33 CEST; 3s ago</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">enable vs. start</div>
+    <code>systemctl start</code> spustí službu len teraz. <code>systemctl enable</code> nastaví, aby sa služba spustila automaticky pri každom zapnutí systému. Ak chceš niečo spustiť teraz aj pri bootovaní, použi obe: <code>systemctl enable --now nazov</code>.
+  </div>
+
+  <h2><span class="sec-num">21.4</span> Časovanie a logy</h2>
+  <p><code>systemd-analyze blame</code> ukáže, ako dlho trvalo spustenie jednotlivých služieb. Hodí sa, keď chceš zistiť, prečo sa systém dlho štartuje.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemd-analyze blame | head -5</span>
+<span class="out">          8.123s NetworkManager-wait-online.service
+          3.456s plymouth-quit-wait.service
+          1.234s dev-sda6.device
+          0.890s accounts-daemon.service
+          0.567s ModemManager.service</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Pre logy (záznamy) systému použijeme <code>journalctl</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">journalctl -u ssh --no-pager -n 10</span>
+<span class="out">Sep 08 10:00:12 debian sshd[789]: Server listening on 0.0.0.0 port 22.
+Sep 08 10:00:12 debian sshd[789]: Server listening on :: port 22.
+Sep 08 10:05:45 debian sshd[1023]: Accepted publickey for student from 192.168.1.100
+Sep 08 10:05:45 debian sshd[1023]: pam_unix(sshd:session): session opened for user student</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">journalctl -f</span>
+<span class="out">-- Logs begin at Thu 2026-09-08 09:45:12 CEST. --
+Sep 08 11:10:01 debian CRON[9012]: (student) CMD (test -x /usr/sbin/anacron || ...)
+Sep 08 11:10:15 debian kernel: [12345.678] USB disconnect, address 2</span>
+<span class="comment"># Stlač Ctrl+C pre ukončenie</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Príkaz <code>journalctl -f</code> sleduje logy v reálnom čase, rovnako ako <code>tail -f</code> pre súbory. Ukončíš ho <kbd>Ctrl</kbd>+<kbd>C</kbd>.</p>
+
+  <div class="callout warn">
+    <div class="callout-title">root oprávnenia</div>
+    Na ovládanie služieb potrebuješ <code>sudo</code>. Čítanie logov cez <code>journalctl</code> väčšinou funguje aj ako normálny používateľ, ale niekedy potrebuješ <code>sudo journalctl</code> pre staršie záznamy.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Zisti, ktoré služby na tvojom systéme bežia: <code>systemctl list-units --type=service --state=running</code>.</li>
+      <li>Vyber jednu službu a pozri si jej detailný stav cez <code>systemctl status nazov</code>.</li>
+      <li>Pozri si posledných 20 logov tejto služby cez <code>journalctl -u nazov -n 20</code>.</li>
+      <li>Skús <code>systemd-analyze blame</code> a zapíš si, ktorá služba sa spúšťa najdlhšie.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-22">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 22 · Blok 5</div>
+    <h1>Cron a plánovač</h1>
+    <p class="subtitle">Automatické spúšťanie príkazov a skriptov v naplánovanom čase.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">22.1</span> Čo je cron?</h2>
+  <p class="lead">Cron je plánovač úloh v Linuxe. Umožňuje naplánovať spúšťanie príkazov alebo skriptov v presne určenom čase. Nastavíš raz a funguje automaticky, bez tvojho zásahu.</p>
+  <p>Služba <code>cron</code> (alebo <code>crond</code>) beží na pozadí. Každú minútu kontroluje, či niektorý naplánovaný príkaz má prísť na rad. Ak áno, spustí ho.</p>
+  <p>Nastavenia sa ukladajú do <strong>crontab</strong> (cron tabuľka). Každý používateľ má svoj vlastný crontab.</p>
+
+  <h2><span class="sec-num">22.2</span> Práca s crontabom</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">crontab -l</span>
+<span class="out">no crontab for student</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">crontab -e</span>
+<span class="comment"># Otvorí sa editor (nano alebo vim), kde napíšeš pravidlá</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príkaz</th><th>Čo robí</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>crontab -e</code></td><td>Otvorí crontab na úpravu</td></tr>
+        <tr><td><code>crontab -l</code></td><td>Vypíše obsah crontabu</td></tr>
+        <tr><td><code>crontab -r</code></td><td>Odstráni celý crontab (pozor!)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="sec-num">22.3</span> Syntax cron riadku</h2>
+  <p>Každý riadok v crontabe má túto štruktúru:</p>
+  <p><code>minúta hodina deň mesiac deň_týždňa príkaz</code></p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Pozícia</th><th>Rozsah</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>minúta</td><td>0 - 59</td><td><code>30</code></td></tr>
+        <tr><td>hodina</td><td>0 - 23</td><td><code>8</code></td></tr>
+        <tr><td>deň</td><td>1 - 31</td><td><code>15</code></td></tr>
+        <tr><td>mesiac</td><td>1 - 12</td><td><code>6</code></td></tr>
+        <tr><td>deň_týždňa</td><td>0 - 7 (0 a 7 = nedeľa)</td><td><code>1</code></td></tr>
+        <tr><td>príkaz</td><td>akýkoľvek príkaz alebo skript</td><td><code>/home/student/zaloha.sh</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Znak <code>*</code> znamená "každý". Špeciálne znaky: <code>*/5</code> = každých 5, <code>1,15</code> = 1. a 15., <code>1-5</code> = od 1 do 5.</p>
+
+  <h2><span class="sec-num">22.4</span> Praktické príklady</h2>
+  <p>Otvor crontab cez <code>crontab -e</code> a pridaj tieto riadky:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">crontab</span></div>
+    <div class="term-body"><span class="comment"># Spustiť zálohu každý deň o 3:00 v noci</span>
+<span class="cmd">0 3 * * * /home/student/zaloha.sh</span>
+
+<span class="comment"># Spustiť report každý pondelok o 8:00</span>
+<span class="cmd">0 8 * * 1 /home/student/report.sh</span>
+
+<span class="comment"># Vypísať dátum každú hodinu do logu</span>
+<span class="cmd">0 * * * * echo "$(date)" >> /tmp/hodiny.log</span>
+
+<span class="comment"># Test: spustiť každú minútu (pre testovanie, potom zmazať!)</span>
+<span class="cmd">* * * * * echo "Test $(date)" >> /tmp/cron_test.log</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Výpis crontabu</div>
+    Po uložení (v nano: <kbd>Ctrl</kbd>+<kbd>O</kbd>, <kbd>Enter</kbd>, <kbd>Ctrl</kbd>+<kbd>X</kbd>) over príkazom <code>crontab -l</code>, že sa riadky uložili správne.
+  </div>
+
+  <h2><span class="sec-num">22.5</span> Cron zo zálohy z hodiny 17</h2>
+  <p>Na hodine 17 sme napísali zálohovací skript. Teraz ho naplánujeme, aby sa spúšťal automaticky:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -la ~/zaloha.sh</span>
+<span class="out">-rwxr-xr-x 1 student student 256 Sep  7 12:00 <span class="path">/home/student/zaloha.sh</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">crontab -l</span>
+<span class="out"><span class="comment"># Spustiť zálohu každý deň o 3:00</span>
+<span class="cmd">0 3 * * * /home/student/zaloha.sh</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Predtým, než založíš cron, otestuj skript manuálne:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">bash ~/zaloha.sh</span>
+<span class="out">Záloha vytvorená: backup_2026-09-08.tar.gz</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls ~/zalohy/</span>
+<span class="out">backup_2026-09-08.tar.gz</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Vždy testuj pred cron</div>
+    Nikdy nenastavuj cron pre skript, ktorý si predtým nespustil manuálne. Ak má skript chybu, cron ju bude opakovať každý deň a možno si to nevšimneš.
+  </div>
+
+  <h2><span class="sec-num">22.6</span> Logy cronu</h2>
+  <p>Ako zistíš, či cron naozaj spustil tvoj príkaz?</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status cron</span>
+<span class="out">● cron.service - Regular background program processing daemon
+     Loaded: loaded (/lib/systemd/system/cron.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-09-08 09:45:12 CEST; 1h 30min ago</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">journalctl -u cron --no-pager -n 10</span>
+<span class="out">Sep 08 09:45:12 debian cron[456]: (CRON) INFO (pidfile fd = 3)
+Sep 08 09:45:12 debian cron[456]: (CRON) INFO (Running @reboot jobs)
+Sep 08 10:00:01 debian CRON[7890]: (student) CMD (echo "$(date)" >> /tmp/hodiny.log)
+Sep 08 11:00:01 debian CRON[8012]: (student) CMD (echo "$(date)" >> /tmp/hodiny.log)</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cat /tmp/hodiny.log</span>
+<span class="out">Thu Sep  8 10:00:01 CEST 2026
+Thu Sep  8 11:00:01 CEST 2026</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Rýchle testovanie</div>
+    Ak chceš otestovať cron bez čakania, nastav čas o 1-2 minúty v budúcnosti, pridaj riadok do crontabu, počkaj, over výstup a potom riadok zmaž. Príkaz <code>crontab -r</code> odstráni celý crontab, radšej uprav cez <code>crontab -e</code> a vymaž len ten riadok.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Ak máš z hodiny 18 skript <code>report.sh</code>, nastav cron na jeho spustenie raz denne o 7:00.</li>
+      <li>Otestuj: nastav cron na spustenie každú minútu, počkaj 2 minúty, over cez <code>cat</code> na výstupnom súbore.</li>
+      <li>Po otestovaní testovací riadok vymaž cez <code>crontab -e</code>.</li>
+      <li>Vypíš svoj finálny crontab cez <code>crontab -l</code> a zapíš si, čo tam máš.</li>
+    </ol>
+  </div>
+</section>

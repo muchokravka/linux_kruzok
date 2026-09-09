@@ -1,0 +1,626 @@
+<section class="lesson" id="lesson-23">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 23 · Blok 6</div>
+    <h1>Základy siete</h1>
+    <p class="subtitle">IP adresy, gateway, DNS a prvé sieťové príkazy.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">23.1</span> Čo je IP adresa?</h2>
+  <p class="lead">Každý počítač v sieti má svoju adresu, podobne ako dom má číslo. Bez nej by sa dáta nemali kam doručiť.</p>
+  <p>IP adresa je číslo, napríklad <code>192.168.1.10</code>. <strong>localhost</strong> je špeciálna adresa <code>127.0.0.1</code>, ktorá vždy ukazuje na tvoj vlastný počítač. <strong>Gateway</strong> je brána, cez ktorú sa dostaneš von do internetu, a <strong>DNS</strong> prekladá mená ako <code>google.com</code> na IP adresy.</p>
+
+  <div class="callout info">
+    <div class="callout-title">localhost</div>
+    <code>localhost</code> je vždy <code>127.0.0.1</code> a ukazuje na tvoj vlastný počítač. Každý počítač v sieti má unikátnu IP adresu, aby sa dáta doručili správnemu stroju.
+  </div>
+
+  <h2><span class="sec-num">23.2</span> Zisti svoju IP a gateway</h2>
+  <p>Príkaz <code>ip</code> je moderný nástroj na správu siete. <code>ip a</code> ukáže všetky sieťové rozhrania a ich adresy.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ip a</span>
+<span class="out">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536
+    inet <span class="path">127.0.0.1/8</span> scope host lo
+2: enp0s3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500
+    inet <span class="path">192.168.1.10/24</span> brd 192.168.1.255 scope global enp0s3</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ip route</span>
+<span class="out">default via <span class="path">192.168.1.1</span> dev enp0s3
+192.168.1.0/24 dev enp0s3 proto kernel scope link src 192.168.1.10</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>lo</code> je loopback rozhranie (localhost). <code>enp0s3</code> je tvoja skutočná sieťová karta. Riadok <code>default via 192.168.1.1</code> ti hovorí, že gateway je <code>192.168.1.1</code>.</p>
+
+  <h2><span class="sec-num">23.3</span> Ping a traceroute</h2>
+  <p><code>ping</code> pošle testovací paket a čaká na odpoveď. Najprv otestujeme localhost, potom sa pozrieme von do internetu.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ping -c 4 localhost</span>
+<span class="out">PING localhost (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.028 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.031 ms
+--- localhost ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ping -c 4 1.1.1.1</span>
+<span class="out">PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=58 time=12.4 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=58 time=11.9 ms
+--- 1.1.1.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>-c 4</code> obmedzí počet paketov na štyri, inak by ping bežal donekonečna. <code>1.1.1.1</code> je verejný DNS server Cloudflare, dobrý na test, či máš internet.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tracepath 1.1.1.1</span>
+<span class="out"> 1?: [LOCALHOST]                      pmtu 1500
+ 1:  <span class="path">192.168.1.1</span>                         0.412ms
+ 2:  <span class="path">10.0.0.1</span>                           1.203ms
+ 3:  <span class="path">89.173.0.1</span>                         8.451ms
+ 4:  <span class="path">1.1.1.1</span>                           12.300ms reached</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>tracepath</code> (alebo <code>traceroute</code>) ukáže cestu, ktorou paket prechádza cez jednotlivé routery až k cieľu. Každý riadok je jeden skok v sieti.</p>
+
+  <h2><span class="sec-num">23.4</span> Počúvajúce porty a hostname</h2>
+  <p><code>ss -tln</code> ukáže, ktoré služby na tvojom počítači počúvajú na sieťových portoch. <code>hostname</code> ti povie názov stroja.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ss -tln</span>
+<span class="out">State   Recv-Q  Send-Q  Local Address:Port   Peer Address:Port
+LISTEN  0       128     0.0.0.0:22           0.0.0.0:*
+LISTEN  0       128     127.0.0.1:631        0.0.0.0:*</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">hostname</span>
+<span class="out">debian</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/hosts</span>
+<span class="out">127.0.0.1   localhost
+127.0.1.1   debian</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Port <code>22</code> počúva SSH, port <code>631</code> tlačiareň. Súbor <code>/etc/hosts</code> je lokálna tabuľka mien, ktorá sa prečíta skôr ako DNS. Zatiaľ ho len ukazujeme, neupravujeme.</p>
+
+  <div class="callout warn">
+    <div class="callout-title">Zapamätaj si</div>
+    <code>ip a</code> ukáže IP adresy, <code>ip route</code> gateway, <code>ping</code> testuje spojenie a <code>ss -tln</code> ukáže počúvajúce porty. Tieto štyri príkazy sú základ každého sieťového admina.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Zisti svoju IP adresu cez <code>ip a</code> a zapíš si ju.</li>
+      <li>Zisti svoju gateway cez <code>ip route</code> a zapíš si ju.</li>
+      <li>Pingni <code>1.1.1.1</code> a zapíš si priemerný čas odpovede.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-24">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 24 · Blok 6</div>
+    <h1>SSH</h1>
+    <p class="subtitle">Vzdialená správa serverov cez Secure Shell.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">24.1</span> Čo je SSH?</h2>
+  <p class="lead">SSH (Secure Shell) je šifrovaný protokol na vzdialenú správu počítačov. Správcovia serverov sa takto pripájajú na stroje, ktoré nemajú žiadny monitor.</p>
+  <p>Keď sa pripojíš cez SSH, dostaneš terminál vzdialeného počítača, akoby si pri ňom sedel. Všetko, čo pošleš, je šifrované, takže nikto na ceste nevidí tvoje heslá ani príkazy.</p>
+
+  <h2><span class="sec-num">24.2</span> Prvé pripojenie</h2>
+  <p>Pripojenie má tvar <code>ssh používateľ@ip</code>. Skúsime sa pripojiť na localhost ako root, čo je bežné na VM.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ssh root@localhost</span>
+<span class="out">The authenticity of host 'localhost (127.0.0.1)' can't be established.
+Are you sure you want to continue connecting (yes/no)? <span class="comment">yes</span>
+root@localhost's password: <span class="comment">********</span>
+Welcome to Debian GNU/Linux 12!</span>
+<span class="prompt">root@debian:~#</span> <span class="cmd">hostname</span>
+<span class="out">debian</span>
+<span class="prompt">root@debian:~#</span> <span class="cmd">exit</span>
+<span class="out">logout
+Connection to localhost closed.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Pri prvom pripojení sa ťa systém pýta, či dôveruješ serveru. Odpovieš <code>yes</code> a potom zadáš heslo. Všimni si, že prompt sa zmenil na <code>root@debian:~#</code>.</p>
+
+  <h2><span class="sec-num">24.3</span> Inštalácia SSH servera</h2>
+  <p>Ak SSH server nemáš nainštalovaný, nainštalujeme ho. Na Debiane a Minte cez <code>apt</code>, na Fedore cez <code>dnf</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt install openssh-server</span>
+<span class="out">Reading package lists... Done
+Building dependency tree... Done
+openssh-server is already the newest version.</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl enable ssh</span>
+<span class="out">Synchronizing state of ssh.service with SysV service script.</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl status ssh</span>
+<span class="out">● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled)
+     Active: active (running)</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@fedora: ~</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo dnf install openssh-server</span>
+<span class="out">Last metadata expiration check: 1:12:34 ago.
+Package openssh-server-9.6p1-3.fc40.x86_64 is already installed.</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo systemctl enable --now sshd</span>
+<span class="out">Created symlink /etc/systemd/system/multi-user.target.wants/sshd.service.</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>systemctl enable</code> zabezpečí, že sa služba spustí aj po reštarte. Na Fedore sa služba volá <code>sshd</code>, na Debiane <code>ssh</code>.</p>
+
+  <h2><span class="sec-num">24.4</span> SSH kľúče</h2>
+  <p>Heslá sa dajú uhádnuť. Kľúče sú bezpečnejšie. Vygeneruješ si pár: súkromný kľúč (necháš si ho) a verejný kľúč (nakopíruješ na server).</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ssh-keygen -t ed25519</span>
+<span class="out">Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/student/.ssh/id_ed25519): <span class="comment">Enter</span>
+Enter passphrase (empty for no passphrase): <span class="comment">Enter</span>
+Your identification has been saved in /home/student/.ssh/id_ed25519
+Your public key has been saved in /home/student/.ssh/id_ed25519.pub</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ssh-copy-id root@localhost</span>
+<span class="out">/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s)
+root@localhost's password: <span class="comment">********</span>
+Number of key(s) added: 1</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ssh root@localhost</span>
+<span class="out">Welcome to Debian GNU/Linux 12!</span>
+<span class="prompt">root@debian:~#</span> <span class="cmd">exit</span>
+<span class="out">logout</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Po nakopírovaní kľúča sa pripojíš bez zadávania hesla. <code>ssh-copy-id</code> ti verejný kľúč pridá do súboru <code>~/.ssh/authorized_keys</code> na serveri.</p>
+
+  <div class="callout warn">
+    <div class="callout-title">Nikdy nezdieľaj súkromný kľúč</div>
+    Súkromný kľúč <code>~/.ssh/id_ed25519</code> (alebo <code>id_rsa</code>) je tvoja identita. Kto ho má, môže sa za teba prihlásiť. Verejný kľúč <code>.pub</code> môžeš zdieľať, súkromný nikdy.
+  </div>
+
+  <h2><span class="sec-num">24.5</span> SCP - kopírovanie súborov</h2>
+  <p><code>scp</code> kopíruje súbory medzi počítačmi cez SSH. Funguje ako <code>cp</code>, ale s adresou vzdialeného stroja.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "ahoj" &gt; poznamka.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">scp poznamka.txt root@localhost:/root/</span>
+<span class="out">poznamka.txt                                   100%    5     0.1KB/s   00:00</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">scp -r moj_adresar root@localhost:/root/</span>
+<span class="out">moj_adresar/subor1.txt                       100%   12     0.2KB/s   00:00
+moj_adresar/subor2.txt                       100%   34     0.3KB/s   00:00</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>scp -r</code> kopíruje celý adresár rekurzívne. Smer šípky určuje smer kopírovania: z lokálneho na vzdialený, alebo naopak.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vygeneruj SSH kľúč cez <code>ssh-keygen -t ed25519</code>.</li>
+      <li>Nakopíruj ho na localhost cez <code>ssh-copy-id root@localhost</code>.</li>
+      <li>Pripoj sa cez <code>ssh root@localhost</code> a over, že sa pripojíš bez hesla.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-25">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 25 · Blok 6</div>
+    <h1>Súborové systémy</h1>
+    <p class="subtitle">Disky, mountovanie a miesto na disku.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">25.1</span> Čo je mount a súborový systém?</h2>
+  <p class="lead">Súborový systém určuje, ako sú dáta uložené na disku. Linux najčastejšie používa <code>ext4</code>. Mount znamená pripojiť disk do adresárovej štruktúry.</p>
+  <p>Na rozdiel od Windowsu, kde má každý disk písmeno, v Linuxe sa disky pripájajú do existujúcich adresárov. Napríklad tvoj hlavný disk je pripojený na <code>/</code> a swap je špeciálny oddiel, ktorý slúži ako rozšírená pamäť.</p>
+
+  <h2><span class="sec-num">25.2</span> lsblk a blkid</h2>
+  <p><code>lsblk</code> ukáže disky a oddiely v prehľadnej stromovej štruktúre. <code>blkid</code> ukáže identifikátory oddielov.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">lsblk</span>
+<span class="out">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda      8:0    0   20G  0 disk
+├─sda1   8:1    0  512M  0 part /boot/efi
+├─sda2   8:2    0   18G  0 part /
+└─sda3   8:3    0  1.5G  0 part [SWAP]</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo blkid</span>
+<span class="out">/dev/sda2: UUID="a1b2c3d4-..." TYPE="ext4" PARTUUID="..."
+/dev/sda3: UUID="e5f6a7b8-..." TYPE="swap" PARTUUID="..."</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Vidíš disk <code>sda</code> s tromi oddielmi: boot, hlavný systém na <code>ext4</code> a swap. <code>MOUNTPOINTS</code> ukazuje, kam je ktorý oddiel pripojený.</p>
+
+  <h2><span class="sec-num">25.3</span> Miesto na disku</h2>
+  <p><code>df -h</code> ukáže voľné miesto na všetkých pripojených systémoch. <code>du</code> ukáže, koľko miesta zaberajú adresáre.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">df -h</span>
+<span class="out">Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        18G   6.2G   11G  37% /
+tmpfs           1.9G     0   1.9G   0% /dev/shm</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">du -sh *</span>
+<span class="out">4.0K    Dokumenty
+1.2G    Downloads
+8.0K    poznamka.txt
+340M    Projekty</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">du -sh .</span>
+<span class="out">1.6G    .</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>-h</code> znamená human-readable, teda čitateľné veľkosti ako <code>1.2G</code>. <code>du -sh *</code> ukáže veľkosť každého súboru a adresára v aktuálnom priečinku, <code>du -sh .</code> celkovú veľkosť aktuálneho adresára.</p>
+
+  <h2><span class="sec-num">25.4</span> Mount a fstab</h2>
+  <p><code>mount</code> bez argumentov ukáže všetky aktuálne pripojené systémy. Súbor <code>/etc/fstab</code> definuje, čo sa pripojí pri štarte.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">mount | head -5</span>
+<span class="out">/dev/sda2 on / type ext4 (rw,relatime)
+proc on /proc type proc (rw,nosuid)
+sysfs on /sys type sysfs (rw,nosuid)
+devtmpfs on /dev type devtmpfs (rw,nosuid)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/fstab</span>
+<span class="out">UUID=a1b2c3d4-...  /  ext4  errors=remount-ro  0  1
+UUID=e5f6a7b8-...  none  swap  sw  0  0</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">/etc/fstab NEUPRAVOVAŤ</div>
+    Súbor <code>/etc/fstab</code> riadi, čo sa pripojí pri štarte systému. Chyba v ňom môže spôsobiť, že sa systém nespustí. Nikdy ho neupravuj bez dozoru učiteľa.
+  </div>
+
+  <h2><span class="sec-num">25.5</span> Vytvor a odstráň testovací súbor</h2>
+  <p><code>dd</code> vytvorí súbor presnej veľkosti. Vytvoríme 100 MB testovací súbor a hneď ho odstránime.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">dd if=/dev/zero of=/tmp/test bs=1M count=100</span>
+<span class="out">100+0 records in
+100+0 records out
+104857600 bytes (105 MB, 100 MiB) copied, 0.12 s, 873 MB/s</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -lh /tmp/test</span>
+<span class="out">-rw-r--r-- 1 student student 100M Sep  8 10:30 /tmp/test</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">rm /tmp/test</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>if=/dev/zero</code> znamená vstup plný núl, <code>bs=1M</code> veľkosť bloku a <code>count=100</code> počet blokov, teda 100 MB. Súbor sme hneď odstránili, aby sme nezaplnili disk.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>V domovskom adresári spusti <code>du -sh *</code> a nájdi najväčší priečinok.</li>
+      <li>Zapíš si, koľko miesta zaberá a čo v ňom je.</li>
+      <li>Spusti <code>df -h</code> a zapíš si, koľko voľného miesta máš na <code>/</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-26">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 26 · Blok 6</div>
+    <h1>Nano a vim</h1>
+    <p class="subtitle">Textové editory priamo v termináli.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">26.1</span> Prečo editor v termináli?</h2>
+  <p class="lead">Na serveri nemáš grafické prostredie. Keď sa pripojíš cez SSH, jediný spôsob, ako upraviť konfiguračný súbor, je textový editor v termináli.</p>
+  <p>Naučíš sa dva: <code>nano</code> je jednoduchý a priateľský, <code>vim</code> je výkonný, ale má strmú krivku učenia. Oba nájdeš na každom Linuxe.</p>
+
+  <h2><span class="sec-num">26.2</span> Nano - priateľský editor</h2>
+  <p>Nano otvoríš príkazom <code>nano súbor</code>. Dole v okne vidíš klávesové skratky. <kbd>Ctrl</kbd>+<kbd>O</kbd> uloží, <kbd>Ctrl</kbd>+<kbd>X</kbd> ukončí, <kbd>Ctrl</kbd>+<kbd>W</kbd> hľadá.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">nano poznamky.txt</span>
+<span class="out">  GNU nano 7.2                    poznamky.txt
+Ahoj, toto su moje poznamky z hodiny.
+Dnes sme sa ucili nano a vim.
+
+^G Nápoveda  ^O Uložiť   ^W Hľadať   ^X Ukončiť</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>V nano píšeš rovno, žiadne módy. <kbd>Ctrl</kbd>+<kbd>O</kbd> ťa opýta na názov súboru, stlačíš <kbd>Enter</kbd> a je uložený. <kbd>Ctrl</kbd>+<kbd>X</kbd> ťa vráti do terminálu.</p>
+
+  <h2><span class="sec-num">26.3</span> Vim - výkonný, ale náročný</h2>
+  <p>Vim má dva hlavné módy: <strong>normal</strong> a <strong>insert</strong>. V normal móde naviguješ a vydávaš príkazy, v insert móde píšeš text. <kbd>i</kbd> ťa prepne do insert, <kbd>Esc</kbd> vždy vráti do normal.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Vim má módy</div>
+    Vim má módy: insert a normal. <kbd>Esc</kbd> ti vždy vráti normal mód. Ak si sa zasekol, stlač <kbd>Esc</kbd> a si v bezpečí.
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">vim poznamky.txt</span>
+<span class="out">Ahoj, toto su moje poznamky z hodiny.
+Dnes sme sa ucilo nano a vim.
+~
+~
+~
+-- INSERT --</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Po otvorení si v normal móde. Stlač <kbd>i</kbd> a začni písať. Keď skončíš, stlač <kbd>Esc</kbd>, napíš <code>:wq</code> a <kbd>Enter</kbd> pre uloženie a ukončenie. <code>:q!</code> ukončí bez uloženia.</p>
+
+  <h2><span class="sec-num">26.4</span> Základné vim príkazy</h2>
+  <p>Pár príkazov, ktoré ti ušetria veľa času. V normal móde:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príkaz</th><th>Význam</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><kbd>i</kbd></td><td>prepnúť do insert módu (písať)</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>vrátiť sa do normal módu</td></tr>
+        <tr><td><kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd></td><td>pohyb vľavo, dole, hore, vpravo</td></tr>
+        <tr><td><kbd>x</kbd></td><td>zmazať znak pod kurzorom</td></tr>
+        <tr><td><code>:wq</code></td><td>uložiť a ukončiť</td></tr>
+        <tr><td><code>:q!</code></td><td>ukončiť bez uloženia</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Namiesto šípok používaj <kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd>. Spočiatku to bude pomalé, ale po pár dňoch budeš rýchlejší ako s myšou.</p>
+
+  <h2><span class="sec-num">26.5</span> vimtutor</h2>
+  <p>Vim má vstavaný tutoriál. Stačí spustiť <code>vimtutor</code> a prejdeš si všetko krok za krokom priamo v termináli.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">vimtutor</span>
+<span class="out">===============================================================================
+=    Vitajte v tutoriáli VIM - Verzia 1.7                              =
+=                                                                      =
+=     Vim je veľmi výkonný editor, ktorý má veľa príkazov...           =
+=                                                                      =
+===============================================================================
+</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>vimtutor</code> je najlepší spôsob, ako sa naučiť vim. Prejdi si ho celý, zaberie to asi 30 minút a naučí ťa všetko podstatné.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor si poznámky z dnešnej hodiny v <code>nano</code> a ulož ich.</li>
+      <li>Otvori ich v <code>vim</code> a prečítaj si ich.</li>
+      <li>Spusti <code>vimtutor</code> a prejdi si prvých päť lekcií.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-27">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 27 · Blok 6</div>
+    <h1>tmux a vzdialená správa</h1>
+    <p class="subtitle">Terminálový multiplexor, ktorý drží tvoje relácie nažive.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">27.1</span> Problém s odpojením</h2>
+  <p class="lead">Keď sa pripojíš cez SSH a spustíš dlhý príkaz, čo sa stane, keď sa odpojíš? Proces zomrie, pretože bežal na popredí tvojej relácie.</p>
+  <p>Predstav si, že inštaluješ veľký balík, odpojíš sa na obed a po návrate zistíš, že inštalácia sa prerušila. <code>tmux</code> tento problém rieši.</p>
+
+  <h2><span class="sec-num">27.2</span> Čo je tmux?</h2>
+  <p><code>tmux</code> je terminálový multiplexor. Vytvorí reláciu, ktorá beží nezávisle od tvojho pripojenia. Môžeš sa odpojiť, relácia beží ďalej, a keď sa vrátiš, pripojíš sa späť a vidíš presne to, čo si nechal.</p>
+
+  <div class="callout info">
+    <div class="callout-title">tmux drží reláciu nažive</div>
+    tmux drží tvoju reláciu nažive aj po odpojení SSH. Procesy v nej bežia ďalej, aj keď si offline.
+  </div>
+
+  <h2><span class="sec-num">27.3</span> Vytvor a pripoj reláciu</h2>
+  <p>Novú reláciu vytvoríš <code>tmux new -s názov</code>. Odpojíš sa <kbd>Ctrl</kbd>+<kbd>B</kbd> a potom <kbd>d</kbd>. Znova sa pripojíš <code>tmux attach</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tmux new -s praca</span>
+<span class="out">[detached (from session praca)]</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">tmux ls</span>
+<span class="out">praca: 1 windows (created Tue Sep  8 10:30:01 2026)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">tmux attach -t praca</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Všimni si: <code>tmux new -s praca</code> vytvoril reláciu, ale hneď sa odpojil, pretože sme ju spustili z terminálu. <code>tmux ls</code> ukáže bežiace relácie a <code>tmux attach -t praca</code> sa k nej pripojí.</p>
+
+  <h2><span class="sec-num">27.4</span> Dlhý príkaz a odpojenie</h2>
+  <p>Teraz to najdôležitejšie. Spustíme dlhý príkaz v tmux, odpojíme sa a znova pripojíme. Príkaz medzitým beží.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tmux new -s dlhy</span>
+<span class="out">[v tmux relácii]</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sleep 60 &amp;&amp; echo "hotovo"</span>
+<span class="comment"># stlač Ctrl+B a potom d pre odpojenie</span>
+<span class="out">[detached (from session dlhy)]</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">tmux attach -t dlhy</span>
+<span class="out">hotovo</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Príkaz <code>sleep 60</code> bežal 60 sekúnd. Medzitým sme sa odpojili a znova pripojili, a príkaz stále bežal a dokončil sa. Presne takto funguje tmux.</p>
+
+  <h2><span class="sec-num">27.5</span> Rozdelenie okna</h2>
+  <p>tmux ti umožní mať viac terminálov v jednom okne. <kbd>Ctrl</kbd>+<kbd>B</kbd> a <kbd>%</kbd> rozdelí okno vertikálne, <kbd>Ctrl</kbd>+<kbd>B</kbd> a <kbd>"</kbd> horizontálne. Prepínaš sa <kbd>Ctrl</kbd>+<kbd>B</kbd> a šípkou.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tmux new -s rozdelene</span>
+<span class="out">[v tmux relácii]
+# Ctrl+B %  -> vertikálne rozdelenie
+# Ctrl+B "  -> horizontálne rozdelenie
+# Ctrl+B šípka -> prepínanie medzi panelmi</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>V jednej polovici môžeš sledovať logy, v druhej písať príkazy. Je to ako viac okien terminálu, ale v jednom SSH pripojení.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Spusti tmux reláciu s názvom <code>test</code>.</li>
+      <li>Rozdeľ okno vertikálne cez <kbd>Ctrl</kbd>+<kbd>B</kbd> a <kbd>%</kbd>.</li>
+      <li>V jednej polovici spusti <code>htop</code> a v druhej <code>ls</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-28">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 28 · Blok 6</div>
+    <h1>Bezpečnosť a firewall</h1>
+    <p class="subtitle">Základné pravidlá a ochrana systému firewallom.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">28.1</span> Základné pravidlá bezpečnosti</h2>
+  <p class="lead">Bezpečnosť nie je o jednom nástroji, ale o návykoch. Tri najdôležitejšie: aktualizuj systém, používaj silné heslá a spúšťaj čo najmenej služieb.</p>
+  <p>Každá otvorená služba je potenciálny vstup pre útočníka. Čím menej portov počúva, tým menšia plocha na útok. A aktualizácie opravujú známe diery, takže ich neodkladaj.</p>
+
+  <h2><span class="sec-num">28.2</span> Firewall - čo to je?</h2>
+  <p>Firewall je filter, ktorý rozhoduje, ktoré spojenia môžu prejsť do tvojho počítača. Predvolene môže blokovať všetko a ty povolíš len to, čo naozaj potrebuješ.</p>
+
+  <div class="callout warn">
+    <div class="callout-title">Neotváraj zbytočné porty</div>
+    Neotváraj porty, ktoré nepotrebuješ. Každý otvorený port je potenciálny vstup pre útočníka. Povol len to, čo naozaj používaš.
+  </div>
+
+  <h2><span class="sec-num">28.3</span> UFW na Debiane a Minte</h2>
+  <p><code>ufw</code> (Uncomplicated Firewall) je jednoduchý firewall pre Debian a Mint. Zapneš ho, skontroluješ stav a povolíš SSH.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw enable</span>
+<span class="out">Firewall is active and enabled on system startup</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw status</span>
+<span class="out">Status: active</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw allow ssh</span>
+<span class="out">Rule added
+Rule added (v6)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw status</span>
+<span class="out">Status: active
+
+To                         Action      From
+--                         ------      ----
+22/tcp                     ALLOW       Anywhere
+22/tcp (v6)                ALLOW       Anywhere (v6)</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Po zapnutí firewall blokuje všetko okrem povolených pravidiel. <code>sudo ufw allow ssh</code> povolí port 22, aby si sa mohol pripojiť cez SSH.</p>
+
+  <h2><span class="sec-num">28.4</span> Firewalld na Fedore</h2>
+  <p>Fedora používa <code>firewalld</code>. Skontroluješ stav služby a vypíšeš aktívne pravidlá.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@fedora: ~</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">systemctl status firewalld</span>
+<span class="out">● firewalld.service - firewalld - dynamic firewall daemon
+     Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled)
+     Active: active (running)</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --list-all</span>
+<span class="out">public (active)
+  target: default
+  services: dhcpv6-client ssh
+  ports:</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --add-service=http --permanent</span>
+<span class="out">success</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --reload</span>
+<span class="out">success</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>firewall-cmd --list-all</code> ukáže povolené služby. <code>--add-service=http --permanent</code> pridá HTTP natrvalo a <code>--reload</code> aplikuje zmeny.</p>
+
+  <h2><span class="sec-num">28.5</span> Ako firewall blokuje port</h2>
+  <p>Ukážeme si rozdiel. Keď je firewall vypnutý, port je otvorený. Keď ho zapneme bez povolenia, port sa zablokuje a spojenie zlyhá.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw disable</span>
+<span class="out">Firewall stopped and disabled on system startup</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">nc -l 8080 &amp;</span>
+<span class="out">[1] 1234</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ss -tln | grep 8080</span>
+<span class="out">LISTEN  0  1  0.0.0.0:8080  0.0.0.0:*</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw enable</span>
+<span class="out">Firewall is active and enabled on system startup</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ss -tln | grep 8080</span>
+<span class="out"><span class="err">(žiadny výstup - port je zablokovaný)</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>So zapnutým firewallom sa k portu 8080 zvonku nikto nedostane, aj keď služba beží. Firewall ho jednoducho neprepustí.</p>
+
+  <h2><span class="sec-num">28.6</span> Ďalšie bezpečnostné tipy</h2>
+  <p>Pár pravidiel, ktoré ťa ochránia na reálnom serveri:</p>
+  <ul>
+    <li>Vypni root login cez SSH v <code>/etc/ssh/sshd_config</code> (riadok <code>PermitRootLogin no</code>).</li>
+    <li>Používaj silné heslá a SSH kľúče namiesto hesiel.</li>
+    <li>Buď opatrný so <code>sudoers</code>, neprideľuj zbytočné práva.</li>
+    <li>Pravidelne aktualizuj systém cez <code>apt upgrade</code> alebo <code>dnf upgrade</code>.</li>
+  </ul>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Zapni firewall cez <code>sudo ufw enable</code> (alebo <code>systemctl start firewalld</code> na Fedore).</li>
+      <li>Povol SSH cez <code>sudo ufw allow ssh</code>.</li>
+      <li>Over status cez <code>sudo ufw status</code> a zapíš si, čo vidíš.</li>
+    </ol>
+  </div>
+</section>

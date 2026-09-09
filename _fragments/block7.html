@@ -1,0 +1,116 @@
+<section class="lesson" id="lesson-29">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 29 · Blok 7</div>
+    <h1>Web server (nginx)</h1>
+    <p class="subtitle">Inštalácia, konfigurácia a testovanie web servera nginx.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">29.1</span> Čo je web server?</h2>
+  <p class="lead">Každá web stránka, ktorú navštíviš v prehliadači, niekde beží. Web server je program, ktorý prijíma požiadavky od klientov (prehliadačov) a posiela im späť obsah. Komunikácia prebieha cez protokol <strong>HTTP</strong> (port 80) alebo <strong>HTTPS</strong> (port 443).</p>
+  <p>Funguje to jednoducho: ty napíšeš v prehliadači adresu, tvoj počítač sa spojí so serverom a server odošle späť HTML stránku. Na našom VM si rozbeháme vlastný web server, aby sme videli, ako to celé funguje odvnútra.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Klient-server model</div>
+    Klient (prehliadač) sa pýta, server odpovedá. Ty si na krúžku budeš serverom aj klientom zároveň, pretože všetko beží na jednom stroji.
+  </div>
+
+  <h2><span class="sec-num">29.2</span> Inštalácia nginx</h2>
+  <p><code>nginx</code> (vyslovuj "engine-x") je jeden z najpopulárnejších web serverov na svete. Je rýchly, spoľahlivý a ľahko sa konfiguruje. Nainštalujeme ho cez správcu balíkov.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Inštalácia nginx (Debian/Mint)</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt update</span>
+<span class="out">...</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo apt install nginx -y</span>
+<span class="out">Čítanie zoznamov balíkov... Hotovo
+...</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Inštalácia nginx (Fedora)</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo dnf install nginx -y</span>
+<span class="out">...</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">29.3</span> Spustenie a kontrola</h2>
+  <p>Po inštalácii treba nginx spustiť a nastaviť, aby sa spúšťal automaticky pri štarte systému. Použijeme na to <code>systemctl</code>, ktorý už poznáme z hodiny 21.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Spustenie nginx</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl enable --now nginx</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status nginx</span>
+<span class="out"><span class="path">●</span> nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (<span class="path">/lib/systemd/system/nginx.service</span>; enabled)
+     Active: <span class="cmd">active (running)</span> since ...</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Test pomocou curl</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">curl localhost</span>
+<span class="out">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Welcome to nginx!&lt;/title&gt;...
+&lt;/html&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">curl 127.0.0.1</span>
+<span class="out">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Welcome to nginx!&lt;/title&gt;...
+&lt;/html&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Čo je curl?</div>
+    <code>curl</code> je príkaz na odosielanie HTTP požiadaviek priamo z terminálu. Je to prvý nástroj, ktorým testuješ, či web server funguje. <code>localhost</code> a <code>127.0.0.1</code> odkazujú na ten istý stroj, na ktorom sedíš.
+  </div>
+
+  <h2><span class="sec-num">29.4</span> Vlastná stránka</h2>
+  <p>Úvodná stránka nginx je pekná, ale naša bude lepšia. Predvolený obsah sa nachádza v <code>/var/www/html/</code>. Upravíme si ju.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Vytvorenie vlastnej stránky</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bak</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo nano /var/www/html/index.html</span>
+<span class="out"><span class="comment"># Vlož tento obsah:</span></span>
+<span class="out">&lt;!DOCTYPE html&gt;
+&lt;html lang="sk"&gt;
+&lt;head&gt;&lt;title&gt;Moja stránka&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Ahoj, toto je môj web server!&lt;/h1&gt;
+  &lt;p&gt;Beží na nginx v mojom Linux VM.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">curl localhost</span>
+<span class="out">&lt;!DOCTYPE html&gt;
+&lt;html lang="sk"&gt;
+&lt;head&gt;&lt;title&gt;Moja stránka&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Ahoj, toto je môj web server!&lt;/h1&gt;
+  &lt;p&gt;Beží na nginx v mojom Linux VM.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Zapamätaj si</div>
+    Obsah stránok nginx sa nachádza v <code>/var/www/html/</code>. Súbory tam píšeš ako root (pomocou <code>sudo</code>), pretože ten adresár vlastní systém. Ak chceš stránku vytvoriť normálnym používateľom, musíš opraviť oprávnenia.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Nainštaluj nginx a spusti ho cez <code>systemctl</code>.</li>
+      <li>Over, že beží pomocou <code>curl localhost</code>.</li>
+      <li>Vytvor vlastnú HTML stránku v <code>/var/www/html/index.html</code> so svojím menom a triedou.</li>
+      <li>Skús pridať obrázok alebo zoznam do stránky.</li>
+    </ol>
+  </div>
+</section>

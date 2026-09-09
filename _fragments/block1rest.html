@@ -1,0 +1,225 @@
+<section class="lesson" id="lesson-2">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 2 · Blok 1</div>
+    <h1>Inštalácia do VM</h1>
+    <p class="subtitle">Praktická inštalácia Linux distribúcie do virtuálneho stroja.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">2.1</span> Virtuálny stroj</h2>
+  <p class="lead">Virtuálny stroj (VM) je program, ktorý vytvorí v tvojom počítači ďalší "počítač vo vnútri počítača". Nainštaluješ si operačný systém, ktorý beží izolovane od toho hlavného.</p>
+  <p>Dva najpoužívanejšie hypervisory:</p>
+  <ul>
+    <li><strong>VirtualBox</strong> (Oracle) - zadarmo, funguje na Windows, Mac aj Linux. Na náš krúžok úplne postačí.</li>
+    <li><strong>VMware</strong> (Workstation Pro) - taktiež zadarmo pre študentov, trochu rýchlejší grafický výkon.</li>
+  </ul>
+  <p>Obe riešenia fungujú na rovnakom princípe: vytvoríš virtuálny disk, pridelíš RAM a CPU jadrá, potom spustíš ISO obraz (kópiu instalačného disku) a nainštaluješ Linux tak, akoby šlo o reálny stroj.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Host vs. Guest</div>
+    Tvoj skutočný počítač sa volá <strong>host</strong> (hostiteľ). Linux vo VM sa volá <strong>guest</strong> (hosť). Host môže kedykoľvek vypnúť, pozastaviť alebo zmazať guest bez akéhokoľvek vplyvu na seba.
+  </div>
+
+  <h2><span class="sec-num">2.2</span> ISO obraz</h2>
+  <p>ISO obraz je digitálna kópia inštalačného DVD. Stiahneš si ho z webu distribúcie a VM z neho nabootuje ako keby si vložil fyzické CD. Koľko miesta zaberie?</p>
+  <ul>
+    <li><code>Debian</code> ~3.7 GB</li>
+    <li><code>Fedora</code> ~2 GB</li>
+    <li><code>Linux Mint</code> ~2.1 GB</li>
+  </ul>
+
+  <h2><span class="sec-num">2.3</span> Postup inštalácie</h2>
+  <p>Kroky sú pre všetky distribúcie veľmi podobné. Tu je zjednodušený postup:</p>
+  <ol>
+    <li>Otvor VirtualBox a klikni <strong>Nový</strong> (New).</li>
+    <li>Názov: napíš názov distribúcie, typ nechaj <strong>Linux</strong>, verzia zvoľ podľa ISO.</li>
+    <li>RAM: <strong>2048 MB</strong> (2 GB) je minimum, <strong>4096 MB</strong> je ideál.</li>
+    <li>Virtuálny disk: vytvor nový, typ <strong>VDI</strong> (VirtualBox) alebo <strong>QCOW2</strong> (QEMU/KVM), veľkosť <strong>20 GB</strong>.</li>
+    <li>V Nastaveniach VM vlož ISO obraz do sekcie <strong>Storage → IDE Controller</strong>.</li>
+    <li>Spusti VM, spustí sa inštalačný program.</li>
+    <li>Keď sa pýta na rozdelenie disku, zvoľ <strong>použiť celý disk</strong> (Guided, use entire disk).</li>
+    <li>Ostatné nastavenia nechaj na defaulte ( meno, heslo, časové pásmo).</li>
+  </ol>
+
+  <div class="callout warn">
+    <div class="callout-title">Pozor na rozdelenie disku</div>
+    Pri inštalácii sa dostaneš do sekcie "Partitioning". Ak si začiatočník, voľ vždy <strong>Guided - use entire disk</strong> (automatické rozdelenie). Manuálne rozdeľovanie na <code>/</code>, <code>/home</code> a <code>swap</code> ponechaj na neskôr. S defaultným nastavením nič nepokazíš.
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">Zapíš si prihlasovacie údaje!</div>
+    Počas inštalácie si nastavíš meno používateľa a heslo. Zapíš si obe. Bez hesla sa do VM neprihlásiš. Nepoužívaj triviálne heslá ako <code>1234</code>, ale ani nič príliš zložité, na krúžok postačí jednoduché slovo.
+  </div>
+
+  <h2><span class="sec-num">2.4</span> Overenie inštalácie</h2>
+  <p>Po reštarte sa prihlás a spusti terminál. Overíme, či všetko funguje:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">uname -a</span>
+<span class="out">Linux debian 6.1.0-25-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1 (2024-09-30) x86_64 GNU/Linux</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/os-release</span>
+<span class="out">PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Príkaz <code>uname -a</code> ukáže informácie o jadre a systéme. <code>cat /etc/os-release</code> presne identifikuje, akú distribúciu a verziu máš nainštalovanú.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">free -h</span>
+<span class="out">               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       420Mi       2.9Gi        12Mi       480Mi       3.1Gi
+Swap:         2.0Gi          0B       2.0Gi</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">df -h</span>
+<span class="out">Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda6        19G  2.8G   15G  16% /
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+/dev/sda2       510M  186M  324M  37% /boot/efi</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>free -h</code> ukazuje koľko RAM VM dostala a koľko sa používa. <code>df -h</code> (disk free) ukazuje veľkosť disku a koľko miesta zostalo. Ak vidíš tieto výpisy, máš funkčnú inštaláciu.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Ak nejde <code>uname</code> alebo iný príkaz</div>
+    Skús reštartovať VM a prihlásiť sa znova. Ak problém pretrváva, skontroluj, či si pri inštalácii nezvolil odlišné meno používateľa alebo či sa VM správne spúšťa (v zozname VM musí byť "Running").
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Dokonči inštaláciu Linuxu do VM, ak si nestihol na hodine.</li>
+      <li>Prihlás sa do terminálu a spusti <code>cat /etc/os-release</code>. Zapíš si názov a verziu svojej distribúcie.</li>
+      <li>Ak máš nainštalovaný <code>neofetch</code>, spusti ho a odfotografuj výstup. Ak nie, nič sa nedeje, dozvieme sa o ňom neskôr.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-3">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 3 · Blok 1</div>
+    <h1>Prvý login a terminál</h1>
+    <p class="subtitle">Orientácia v termináli, prompt, základné príkazy a skryté súbory.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">3.1</span> Čo je terminál?</h2>
+  <p class="lead">Terminál je program, cez ktorý komunikuješ s Linuxom písaním príkazov. Volá sa aj konzola, CLI (Command Line Interface) alebo proste "príkazový riadok".</p>
+  <p>Desktopové prostredie (GNOME, KDE, XFCE) je to, čo vidíš po prihlásení. Terminál je len ďalší program, ktorý spustíš z plochy alebo cez klávesovú skratku <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>T</kbd> (funguje vo väčšine distribúcii).</p>
+  <p>Základné pojmy:</p>
+  <ul>
+    <li><strong>Shell</strong> - program, ktorý interpretuje tvoje príkazy. Najčastejšie <code>bash</code> alebo <code>zsh</code>.</li>
+    <li><strong>Prompt</strong> - text, ktorý ťa vyzve na zadanie príkazu. Väčšinou končí znakom <code>$</code>.</li>
+    <li><strong>Príkaz</strong> - program alebo príkaz shellu, ktorý napíšeš za prompt.</li>
+  </ul>
+
+  <h2><span class="sec-num">3.2</span> Štruktúra promptu</h2>
+  <p>Vidíš niečo takéto:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt"><span class="dir">student</span>@debian:<span class="path">~</span>$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Časť</th><th>Význam</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="dir">student</span></td><td>Meno prihláseného používateľa</td><td><code>student</code></td></tr>
+        <tr><td><code>@debian</code></td><td>Názov počítača (hostname)</td><td><code>debian</code></td></tr>
+        <tr><td><span class="path">~</span></td><td>Aktuálny adresár (~ = domov)</td><td><code>~</code>, <code>/etc</code></td></tr>
+        <tr><td><code>$</code></td><td>Znak normálneho používateľa (<code>#</code> = root)</td><td><code>$</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="sec-num">3.3</span> Prvé príkazy</h2>
+  <p>Otvor terminál a postupne napíš tieto príkazy. Všetky sú malým písmenom, bez diakritiky.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">whoami</span>
+<span class="out">student</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">hostname</span>
+<span class="out">debian</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">pwd</span>
+<span class="out"><span class="path">/home/student</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls</span>
+<span class="out">Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>whoami</code> ti povie meno používateľa. <code>hostname</code> názov stroja. <code>pwd</code> (print working directory) ukazuje, v ktorom adresári sa nachádzaš. A <code>ls</code> (list) zobrazí obsah aktuálneho adresára.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -la</span>
+<span class="out">total 32
+drwxr-xr-x 5 student student 4096 Sep  8 10:00 <span class="path">.</span>
+drwxr-xr-x 3 root   root   4096 Sep  8 09:45 <span class="path">..</span>
+-rw------- 1 student student  220 Sep  8 09:45 <span class="path">.bash_logout</span>
+-rw------- 1 student student 3526 Sep  8 09:45 <span class="path">.bashrc</span>
+-rw------- 1 student student  807 Sep  8 09:45 <span class="path">.profile</span>
+drwxr-xr-x 2 student student 4096 Sep  8 10:00 <span class="dir">Desktop</span>
+drwxr-xr-x 2 student student 4096 Sep  8 10:00 <span class="dir">Documents</span>
+drwxr-xr-x 2 student student 4096 Sep  8 10:00 <span class="dir">Downloads</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Príznak <code>-l</code> znamená "long format" (podrobný výpis), <code>-a</code> znamená "all" (vrátane skrytých súborov). Skryté súbory v Linuxe začínajú bodkou <code>.</code>. Bez <code>-a</code> by si ich nevidel.</p>
+
+  <h2><span class="sec-num">3.4</span> Navigácia a čistenie</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cd /home</span>
+<span class="prompt">student@debian:/home$</span> <span class="cmd">pwd</span>
+<span class="out"><span class="path">/home</span></span>
+<span class="prompt">student@debian:/home$</span> <span class="cmd">cd</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">clear</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">exit</span></div>
+  </div>
+
+  <p><code>cd</code> (change directory) ťa presunie do zadaného adresára. Samotný <code>cd</code> bez cesty ťa vráti domov. <code>clear</code> (alebo <kbd>Ctrl</kbd>+<kbd>L</kbd>) vyčistí obrazovku. <code>exit</code> zatvorí terminál.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Tab completion</div>
+    Pri písaní príkazu alebo cesty stlač <kbd>Tab</kbd>. Shell doplní názov automaticky, ak existuje jedna možnosť. Ak je ich viac, stlač <kbd>Tab</kbd> dvakrát a uvidíš zoznam. Toto je najužitočnejší trik v termináli, ktorý ti ušetrí more času.
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Ako sa vrátiť z problémov</div>
+    Ak sa zasekneš, fungujú tieto základy: <code>cd</code> ťa vráti domov, <code>clear</code> vyčistí terminál, <code>exit</code> zatvorí okno. Nikdy sa nemôžeš úplne stratiť.
+  </div>
+
+  <h2><span class="sec-num">3.5</span> Skryté súbory v domovskom adresári</h2>
+  <p>Keď napíšeš <code>ls -la ~</code>, uvidíš všetky súbory vrátane skrytých. Všimni si:</p>
+  <ul>
+    <li><code>.bashrc</code> - konfigurácia shellu (prompt, farby, skratky)</li>
+    <li><code>.profile</code> - spúšťa sa pri prihlásení, nastavuje premenné prostredia</li>
+    <li><code>.bash_logout</code> - spúšťa sa pri odhlásení</li>
+  </ul>
+  <p>Tieto súbory upravíme neskôr, keď sa naučíme pracovať s textovými editormi. Zatiaľ stačí vedieť, že existujú a čo robia.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Otvor terminál a preskúmaj svoj domovský adresár príkazom <code>ls -la ~</code>.</li>
+      <li>Zapíš si názvy troch skrytých súborov (tie, čo začínajú bodkou), ktoré si našiel.</li>
+      <li>Skús použiť <kbd>Tab</kbd> na doplnenie názvu súboru. Funguje to?</li>
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,958 @@
+<section class="lesson" id="lesson-13">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 13 · Blok 4</div>
+    <h1>Premenné a echo</h1>
+    <p class="subtitle">Prvý skript, premenné, vstup od používateľa a príkazová substitúcia.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">13.1</span> Čo je skript?</h2>
+  <p class="lead">Skript je obyčajný textový súbor, v ktorom sú príkazy postupne za sebou. Namiesto toho, aby si písal príkazy jeden po druhom do terminálu, napíšeš ich do súboru a shell ich spustí naraz.</p>
+  <p>Prvý riadok skriptu sa volá <strong>shebang</strong>. Hovorí systému, akým programom sa má súbor spustiť:</p>
+  <ul>
+    <li><code>#!/bin/bash</code> pre bash skripty</li>
+    <li><code>#!/bin/sh</code> pre POSIX sh (obecnejší, ale menej funkcii)</li>
+  </ul>
+  <p>Na našom krúžku budeme používať bash, takže shebang bude vždy <code>#!/bin/bash</code>.</p>
+
+  <h2><span class="sec-num">13.2</span> Vytvorenie prvého skriptu</h2>
+  <p>Otvor textový editor nano a vytvor súbor:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">nano prvy.sh</span></div>
+  </div>
+
+  <p>Napíš do neho toto:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">prvy.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Toto je môj prvý skript</span>
+<span class="cmd">echo</span> <span class="out">"Ahoj, svet!"</span></div>
+  </div>
+
+  <p>Ulož (<kbd>Ctrl</kbd>+<kbd>O</kbd>), odíď z nano (<kbd>Ctrl</kbd>+<kbd>X</kbd>). Teraz musíš súboru dať oprávnenie na spustenie a spustiť ho:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">chmod +x prvy.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./prvy.sh</span>
+<span class="out">Ahoj, svet!</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Prečo <code>./</code>?</div>
+    Keď spúšťaš skript z aktuálneho adresára, musíš napísať <code>./prvy.sh</code>. Bez <code>./</code> shell hľadá program v adresároch uvedených v premennej <code>PATH</code> a tvoj skript tam nie je. Bez <code>chmod +x</code> dostaneš chybu "Permission denied".
+  </div>
+
+  <h2><span class="sec-num">13.3</span> Premenné a echo</h2>
+  <p>Premenná je priestor, v ktorom shell uchováva hodnotu. Priradíš ju takto:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">meno="Jano"</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo $meno</span>
+<span class="out">Jano</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "$ meno je super"</span>
+<span class="out">Jano je super</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Všimni si: <code>meno="Jano"</code> nemá medzery okolo <code>=</code>. Pri priraďovaní je to prísne zakázané. Na čítanie hodnoty pridáš znak <code>$</code> pred názov premennej.</p>
+
+  <div class="callout danger">
+    <div class="callout-title">Žiadne medzery okolo <code>=</code></div>
+    Správne: <code>meno="Jano"</code>. Nesprávne: <code>meno = "Jano"</code>. Shell by to interpretoval ako pokus o spustenie príkazu <code>meno</code> s argumentmi <code>=</code> a <code>"Jano"</code>. Výsledok? Chyba.
+  </div>
+
+  <h2><span class="sec-num">13.4</span> Citácia: jednodvojitá vs jednoduchá</h2>
+  <p>Typ uvozoviek mení, ako shell spracúva premenné:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">meno="Jano"</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "Ahoj $meno"</span>
+<span class="out">Ahoj Jano</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo 'Ahoj $meno'</span>
+<span class="out">Ahoj $meno</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <ul>
+    <li><strong>Dvojitá uvozovka <code>"..."</code></strong>: shell nahradí premenné za ich hodnoty (tzv. rozšírenie).</li>
+    <li><strong>Jednoduchá uvozovka <code>'...'</code></strong>: všetko sa berie doslovne, žiadne nahradzovanie.</li>
+  </ul>
+  <p>Väčšinou budeš používať dvojité uvozovky. Jednoduché si zapamätaj pre prípady, keď nechceš, aby shell niečo nahradil.</p>
+
+  <h2><span class="sec-num">13.5</span> Načítanie vstupu: read</h2>
+  <p>Príkaz <code>read</code> čaká, kým používateľ niečo napíše a stlačí Enter. Hodnotu uloží do premennej:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "Zadaj svoje meno:"</span>
+<span class="out">Zadaj svoje meno:</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">read meno</span>
+<span class="out">Petra</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "Ahoj, $meno!"</span>
+<span class="out">Ahoj, Petra!</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Aj <code>read</code> má voliteľný parameter <code>-p</code> pre výzvu, aby si nemusel písať <code>echo</code> zvlášť:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">prvy.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="cmd">read</span> <span class="out">-p</span> <span class="out">"Zadaj svoje meno: "</span> meno
+<span class="cmd">echo</span> <span class="out">"Vitaj, $meno!"</span></div>
+  </div>
+
+  <h2><span class="sec-num">13.6</span> Príkazová substitúcia: <code>$(...)</code></h2>
+  <p>Výsledok akéhokoľvek príkazu môžeš uložiť do premennej pomocou <code>$(príkaz)</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">datum=$(date)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "Dnes je $datum"</span>
+<span class="out">Dnes je Tue Sep  8 10:30:00 CEST 2026</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Vnútri zátvoriek sa spustí príkaz a jeho výstup sa dosadí namiesto <code>$(...)</code>. Funguje to všade, kde môžeš použiť premennú.</p>
+
+  <h2><span class="sec-num">13.7</span> Kompletný príklad: pozdrav</h2>
+  <p>Vytvor súbor <code>pozdrav.sh</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">pozdrav.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Skript pozdravu s menom a dátumom</span>
+
+<span class="cmd">read</span> <span class="out">-p</span> <span class="out">"Zadaj svoje meno: "</span> meno
+<span class="cmd">datum</span>=<span class="out">$(date +%d.%m.%Y)</span>
+
+<span class="cmd">echo</span> <span class="out">""</span>
+<span class="cmd">echo</span> <span class="out">"Ahoj, $meno!"</span>
+<span class="cmd">echo</span> <span class="out">"Dnes je $datum"</span>
+<span class="cmd">echo</span> <span class="out">"Pekný deň ti praje Linux krúžok."</span></div>
+  </div>
+
+  <p>Nezabudni: <code>chmod +x pozdrav.sh</code> a potom <code>./pozdrav.sh</code>.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor skript <code>pozdrav.sh</code>, ktorý sa opýta na meno a vypíše pozdrav.</li>
+      <li>Uprav skript tak, aby okrem pozdravu zobrazil aj aktuálny dátum vo formáte DD.MM.YYYY (použi <code>date +%d.%m.%Y</code>).</li>
+      <li>Otestuj, či funguje s menami ako "Ján Novák" (medzera v mene).</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-14">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 14 · Blok 4</div>
+    <h1>Podmienky if</h1>
+    <p class="subtitle">Rozhodovanie v skriptoch: if, else, elif a testovanie podmienok.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">14.1</span> Syntax príkazu if</h2>
+  <p class="lead">Príkaz <code>if</code> spustí blok príkazov len vtedy, keď je podmienka pravdivá. Základná štruktúra vyzerá takto:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">vzor</span></div>
+    <div class="term-body"><span class="cmd">if</span> <span class="out">[ podmienka ]; then</span>
+    <span class="out">príkaz ak pravda</span>
+<span class="cmd">else</span>
+    <span class="out">príkaz ak nepravda</span>
+<span class="cmd">fi</span></div>
+  </div>
+
+  <p>Slovo <code>fi</code> na konci je "if" pozpäť. Áno, vážne. Shell má rád takéto vtipy. Pre viaceré vetvenia použiješ <code>elif</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">vzor</span></div>
+    <div class="term-body"><span class="cmd">if</span> <span class="out">[ podmienka1 ]; then</span>
+    <span class="out">príkaz1</span>
+<span class="cmd">elif</span> <span class="out">[ podmienka2 ]; then</span>
+    <span class="out">príkaz2</span>
+<span class="cmd">else</span>
+    <span class="out">príkaz3</span>
+<span class="cmd">fi</span></div>
+  </div>
+
+  <h2><span class="sec-num">14.2</span> Testovanie súborov</h2>
+  <p>Shell má zabudované testy, ktoré začínajú znakom <code>-</code>. Najčastejšie používané:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Test</th><th>Význam</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>-e</code></td><td>Súbor existuje</td><td><code>[ -e /etc/passwd ]</code></td></tr>
+        <tr><td><code>-f</code></td><td>Je to obyčajný súbor</td><td><code>[ -f prvy.sh ]</code></td></tr>
+        <tr><td><code>-d</code></td><td>Je to adresár</td><td><code>[ -d /home ]</code></td></tr>
+        <tr><td><code>-r</code></td><td>Súbor je čitateľný</td><td><code>[ -r prvy.sh ]</code></td></tr>
+        <tr><td><code>-w</code></td><td>Súbor je zapisovateľný</td><td><code>[ -w prvy.sh ]</code></td></tr>
+        <tr><td><code>-x</code></td><td>Súbor je spustiteľný</td><td><code>[ -x prvy.sh ]</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">if [ -e /etc/passwd ]; then echo "Existuje"; else echo "Nenájdené"; fi</span>
+<span class="out">Existuje</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">if [ -d /tmp ]; then echo "Adresár"; else echo "Nie je adresár"; fi</span>
+<span class="out">Adresár</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Kvôli čitateľnosti ale takto krátke if-y v skriptoch nepíšeme. Radšej:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">nano kontrola.sh</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">kontrola.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Kontrola, či existuje súbor</span>
+
+<span class="cmd">subor</span>=<span class="out">"/etc/passwd"</span>
+
+<span class="cmd">if</span> <span class="out">[ -e "$subor" ]; then</span>
+    <span class="cmd">echo</span> <span class="out">"Súbor $subor existuje."</span>
+<span class="cmd">else</span>
+    <span class="cmd">echo</span> <span class="out">"Súbor $subor nebol nájdený."</span>
+<span class="cmd">fi</span></div>
+  </div>
+
+  <h2><span class="sec-num">14.3</span> Porovnávanie reťazcov a čísel</h2>
+  <p>Na porovnávanie hodnôt sa používajú ďalšie operátory:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Typ</th><th>Operátor</th><th>Význam</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Stringy</td><td><code>=</code></td><td>rovna sa</td><td><code>[ "$a" = "ahoj" ]</code></td></tr>
+        <tr><td>Stringy</td><td><code>!=</code></td><td>nerovna sa</td><td><code>[ "$a" != "ahoj" ]</code></td></tr>
+        <tr><td>Čísla</td><td><code>-eq</code></td><td>rovna sa</td><td><code>[ "$a" -eq 5 ]</code></td></tr>
+        <tr><td>Čísla</td><td><code>-ne</code></td><td>nerovna sa</td><td><code>[ "$a" -ne 5 ]</code></td></tr>
+        <tr><td>Čísla</td><td><code>-gt</code></td><td>väčšie ako</td><td><code>[ "$a" -gt 5 ]</code></td></tr>
+        <tr><td>Čísla</td><td><code>-lt</code></td><td>menšie ako</td><td><code>[ "$a" -lt 5 ]</code></td></tr>
+        <tr><td>Čísla</td><td><code>-ge</code></td><td>väčšie alebo rovné</td><td><code>[ "$a" -ge 5 ]</code></td></tr>
+        <tr><td>Čísla</td><td><code>-le</code></td><td>menšie alebo rovné</td><td><code>[ "$a" -le 5 ]</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">Pozor: <code>&gt;</code> a <code>&lt;</code> nie sú porovnávacie operátory!</div>
+    V shelli sú <code>&gt;</code> a <code>&lt;</code> operátory presmerovania (output/input). Ak by si napísal <code>[ $a &gt; 5 ]</code>, shell by vytvoril prázdny súbor s názvom "5" a porovnal by niečo úplne iné. Na číselné porovnávanie vždy používaj <code>-gt</code>, <code>-lt</code> atď.
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cislo=7</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">if [ "$cislo" -gt 5 ]; then echo "Väčšie ako 5"; else echo "5 alebo menej"; fi</span>
+<span class="out">Väčšie ako 5</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">meno="Jano"</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">if [ "$meno" = "Jano" ]; then echo "Poznám ťa!"; fi</span>
+<span class="out">Poznám ťa!</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title"><code>test</code> je to isté ako <code>[ ]</code></div>
+    Príkaz <code>test -e /etc/passwd</code> robí presne to isté ako <code>[ -e /etc/passwd ]</code>. Zátvorky sú len alternatívny zápis. Na našom krúžku budeme používať <code>[ ]</code>, pretože je to častejšie v literatúre.
+  </div>
+
+  <h2><span class="sec-num">14.4</span> Praktický príklad</h2>
+  <p>Vytvor skript <code>kontrola_suboru.sh</code>, ktorý zistí, či zadaný súbor existuje a či je to súbor alebo adresár:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">kontrola_suboru.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Kontrola typu cesty</span>
+
+<span class="cmd">echo</span> <span class="out">-n</span> <span class="out">"Zadaj cestu: "</span>
+<span class="cmd">read</span> cesta
+
+<span class="cmd">if</span> <span class="out">[ ! -e "$cesta" ]; then</span>
+    <span class="cmd">echo</span> <span class="out">"Cesta $cesta neexistuje."</span>
+<span class="cmd">elif</span> <span class="out">[ -f "$cesta" ]; then</span>
+    <span class="cmd">echo</span> <span class="out">"Je to obyčajný súbor."</span>
+<span class="cmd">elif</span> <span class="out">[ -d "$cesta" ]; then</span>
+    <span class="cmd">echo</span> <span class="out">"Je to adresár."</span>
+<span class="cmd">else</span>
+    <span class="cmd">echo</span> <span class="out">"Niečo iné (socket, link...)."</span>
+<span class="cmd">fi</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">chmod +x kontrola_suboru.sh && ./kontrola_suboru.sh</span>
+<span class="out">Zadaj cestu: </span>/home/student
+<span class="out">Je to adresár.</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./kontrola_suboru.sh</span>
+<span class="out">Zadaj cestu: </span>/etc/hostname
+<span class="out">Je to obyčajný súbor.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Medzery okolo <code>[</code> a <code>]</code> sú povinné</div>
+    <code>[ "$a" = "b" ]</code> funguje. <code>["$a"="b"]</code> nie. Zátvorky sú v skutočnosti príkaz <code>test</code> a ako každý príkaz potrebujú medzery medzi argumentami. Bez medzier dostaneš "command not found" alebo chybný výsledok.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor skript, ktorý sa opýta na meno súboru a povie, či existuje.</li>
+      <li>Rozšír skript: ak existuje, povie či je to súbor alebo adresár (použi <code>-f</code> a <code>-d</code>).</li>
+      <li>Otestuj na rôznych cestách: <code>/etc</code>, <code>/tmp</code>, <code>/nieco</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-15">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 15 · Blok 4</div>
+    <h1>Cykly for a while</h1>
+    <p class="subtitle">Opakovanie príkazov: for cyklus, while, break a continue.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">15.1</span> For cyklus</h2>
+  <p class="lead">Cyklus <code>for</code> spustí rovnaké príkazy pre každú hodnotu v zozname. Základný vzor:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">vzor</span></div>
+    <div class="term-body"><span class="cmd">for</span> premenná <span class="cmd">in</span> <span class="out">hodnota1 hodnota2 hodnota3; do</span>
+    <span class="out">príkaz</span>
+<span class="cmd">done</span></div>
+  </div>
+
+  <p>Jednoduchý príklad, ktorý vypíše čísla 1, 2, 3:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">for i in 1 2 3; do echo "Číslo: $i"; done</span>
+<span class="out">Číslo: 1</span>
+<span class="out">Číslo: 2</span>
+<span class="out">Číslo: 3</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Na dlhšie telo cyklu použijeme viacriadkový zápis:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">for farba in cervena zelena modra; do</span>
+<span class="out">&gt;</span>    <span class="cmd">echo</span> <span class="out">"Mám rád $farbu"</span>
+<span class="out">&gt;</span> <span class="cmd">done</span>
+<span class="out">Mám rád cervena</span>
+<span class="out">Mám rád zelena</span>
+<span class="out">Mám rád modra</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">15.2</span> Postupnosť čísel: seq</h2>
+  <p>Namiesto vypisovania čísel jedno po druhom môžeš použiť <code>seq</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">seq 1 5</span>
+<span class="out">1</span>
+<span class="out">2</span>
+<span class="out">3</span>
+<span class="out">4</span>
+<span class="out">5</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">for i in $(seq 1 10); do echo -n "$i "; done</span>
+<span class="out">1 2 3 4 5 6 7 8 9 10</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Rozšírenie hviezdičky v cykle</div>
+    Keď napíšeš <code>for subor in *.txt; do</code>, shell najprv rozšíri <code>*.txt</code> na zoznam súborov (presne ako keď píšeš <code>ls *.txt</code>) a potom prejde každý z nich. Ak žiadne .txt súbory neexistujú, cyklus sa spustí raz s doslovným reťazcom <code>*.txt</code>. Na to pozor.
+  </div>
+
+  <h2><span class="sec-num">15.3</span> Prechádzanie súborov</h2>
+  <p>Praktický príklad: vypíšeme všetky shell skripty v aktuálnom adresári:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">for subor in *.sh; do</span>
+<span class="out">&gt;</span>    <span class="cmd">echo</span> <span class="out">"Skript: $subor"</span>
+<span class="out">&gt;</span>    <span class="cmd">chmod</span> <span class="out">+x "$subor"</span>
+<span class="out">&gt;</span> <span class="cmd">done</span>
+<span class="out">Skript: kontrola.sh</span>
+<span class="out">Skript: pozdrav.sh</span>
+<span class="out">Skript: prvy.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">15.4</span> While cyklus</h2>
+  <p><code>while</code> opakuje príkazy, kým je podmienka pravdivá. Často sa používa s počítadlom:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">pocitadlo.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Počítanie od 1 do 10</span>
+
+<span class="cmd">cislo</span>=<span class="out">1</span>
+
+<span class="cmd">while</span> <span class="out">[ "$cislo" -le 10 ]; do</span>
+    <span class="cmd">echo</span> <span class="out">"$cislo"</span>
+    <span class="cmd">cislo</span>=<span class="out">$((cislo + 1))</span>
+<span class="cmd">done</span>
+
+<span class="cmd">echo</span> <span class="out">"Hotovo!"</span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Aritmetická substitúcia</div>
+    Výraz <code>$((cislo + 1))</code> vykoná matematickú operáciu. Inak by <code>cislo=$cislo+1</code> bolo len spojenie reťazcov: "1+1" namiesto 2. Arithmetiku vždy dávaj do <code>$(( ))</code>.
+  </div>
+
+  <h2><span class="sec-num">15.5</span> break a continue</h2>
+  <p>Ako v ostatných programovacích jazykoch, aj tu máme prerušenie cyklu:</p>
+  <ul>
+    <li><code>break</code> - ukončí cyklus okamžite</li>
+    <li><code>continue</code> - preskočí zostávajúce príkazy a ide na ďalšiu iteráciu</li>
+  </ul>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">for i in 1 2 3 4 5; do</span>
+<span class="out">&gt;</span>    <span class="cmd">if</span> <span class="out">[ "$i" -eq 3 ]; then continue; fi</span>
+<span class="out">&gt;</span>    <span class="cmd">echo</span> <span class="out">"$i"</span>
+<span class="out">&gt;</span> <span class="cmd">done</span>
+<span class="out">1</span>
+<span class="out">2</span>
+<span class="out">4</span>
+<span class="out">5</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">15.6</span> Praktický príklad: hromadný rename</h2>
+  <p>Nasledujúci skript premenuje všetky <code>.txt</code> súbory na <code>.bak</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">rename.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Presun .txt na .bak</span>
+
+<span class="cmd">pocet</span>=<span class="out">0</span>
+
+<span class="cmd">for</span> subor <span class="cmd">in</span> <span class="out">*.txt; do</span>
+    <span class="cmd">if</span> <span class="out">[ -f "$subor" ]; then</span>
+        <span class="cmd">nove</span>=<span class="out">"${subor%.txt}.bak"</span>
+        <span class="cmd">mv</span> <span class="out">"$subor" "$nove"</span>
+        <span class="cmd">echo</span> <span class="out">"$subor → $nove"</span>
+        <span class="cmd">pocet</span>=<span class="out">$((pocet + 1))</span>
+    <span class="cmd">fi</span>
+<span class="cmd">done</span>
+
+<span class="cmd">echo</span> <span class="out">"Premenovaných: $pocet súborov"</span></div>
+  </div>
+
+  <p>Výraz <code>${subor%.txt}</code> odstráni príponu <code>.txt</code> z konca reťazca. Je to jednoduchšie ako <code>sed</code> alebo iné nástroje.</p>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor skript, ktorý pomocou cyklu <code>for</code> vypíše všetky súbory v aktuálnom adresári spolu s ich veľkosťou (použi <code>ls -lh</code>).</li>
+      <li>Vytvoř skript s <code>while</code>, ktorý sa pýta na meno, kým používateľ nezadá "koniec".</li>
+      <li>Otestuj skript <code>rename.sh</code> na vzorke súborov (vytvor pár .txt súborov cez <code>touch</code>).</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-16">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 16 · Blok 4</div>
+    <h1>Funkcie a parametre</h1>
+    <p class="subtitle">Vlastné funkcie, argumenty skriptu a návratové hodnoty.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 15 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">16.1</span> Vlastné funkcie</h2>
+  <p class="lead">Funkcia je blok kódu, ktorý si pomenúš a môžeš ho volať viackrát. Šetrí opakovanie a robí skripty čitateľnejšie.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">vzor</span></div>
+    <div class="term-body"><span class="out">meno_funkcie() {</span>
+    <span class="out">príkazy</span>
+<span class="out">}</span>
+
+<span class="comment"># Volanie funkcie (bez zátvoriek!)</span>
+<span class="cmd">meno_funkcie</span></div>
+  </div>
+
+  <p>Príklad s funkciou, ktorá vypíše uvítaciu správu:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">funkcie.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+
+<span class="out">privitanie() {</span>
+    <span class="cmd">echo</span> <span class="out">"========================="</span>
+    <span class="cmd">echo</span> <span class="out">"  Vitaj v našom skripte!"</span>
+    <span class="cmd">echo</span> <span class="out">"  Dátum: $(date +%d.%m.%Y)"</span>
+    <span class="cmd">echo</span> <span class="out">"========================="</span>
+<span class="out">}</span>
+
+<span class="out">zbohom() {</span>
+    <span class="cmd">echo</span> <span class="out">"Ďakujem za použitie skriptu."</span>
+    <span class="cmd">echo</span> <span class="out">"Čau!"</span>
+<span class="out">}</span>
+
+<span class="comment"># Volanie funkcií</span>
+<span class="cmd">privitanie</span>
+<span class="cmd">echo</span> <span class="out">"Tu niečo robíme..."</span>
+<span class="cmd">zbohom</span></div>
+  </div>
+
+  <p>Funkciu definuješ pred tým, ako ju zavoláš. Volanie je jednoducho názov funkcie bez zátvoriek. Argumenty pre funkciu sa odovzdávajú rovnako ako pre skript, cez medzery za názvom.</p>
+
+  <h2><span class="sec-num">16.2</span> Parametre skriptu</h2>
+  <p>Keď spustíš <code>./skript.sh prvy druhy treti</code>, jednotlivé slová sa dostanú do špeciálnych premenných:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Premenná</th><th>Význam</th><th>Príklad</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>$0</code></td><td>Názov spusteného skriptu</td><td><code>./skript.sh</code></td></tr>
+        <tr><td><code>$1</code></td><td>Prvý argument</td><td><code>prvy</code></td></tr>
+        <tr><td><code>$2</code></td><td>Druhý argument</td><td><code>druhy</code></td></tr>
+        <tr><td><code>$#</code></td><td>Počet argumentov</td><td><code>3</code></td></tr>
+        <tr><td><code>$@</code></td><td>Všetky argumenty</td><td><code>prvy druhy treti</code></td></tr>
+        <tr><td><code>$?</code></td><td>Návratový kód posledného príkazu</td><td><code>0</code> (úspech)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">pozdrav.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Skript s argumentmi</span>
+
+<span class="cmd">echo</span> <span class="out">"Skript: $0"</span>
+<span class="cmd">echo</span> <span class="out">"Počet argumentov: $#"</span>
+<span class="cmd">echo</span> <span class="out">"Prvý: $1"</span>
+<span class="cmd">echo</span> <span class="out">"Druhý: $2"</span>
+<span class="cmd">echo</span> <span class="out">"Všetky: $@"</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">chmod +x pozdrav.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./pozdrav.sh Jana Peter</span>
+<span class="out">Skript: ./pozdrav.sh</span>
+<span class="out">Počet argumentov: 2</span>
+<span class="out">Prvý: Jana</span>
+<span class="out">Druhý: Peter</span>
+<span class="out">Všetky: Jana Peter</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">16.3</span> Návratové hodnoty</h2>
+  <p>Každý príkaz v Linuxe po skončení vráti <strong>exit status</strong>. Štandardne platí:</p>
+  <ul>
+    <li><code>0</code> - príkaz prešiel úspešne</li>
+    <li><code>1 a viac</code> - niečo sa pokazilo</li>
+  </ul>
+  <p>Hodnotu uložíš príkazom <code>return</code> (vo funkcii) alebo <code>exit</code> (zo skriptu). Prečítaš ju cez <code>$?</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls /etc/passwd</span>
+<span class="out">/etc/passwd</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo $?</span>
+<span class="out">0</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls /nieco_neexistujuce</span>
+<span class="err">ls: cannot access '/nieco_neexistujuce': No such file or directory</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo $?</span>
+<span class="out">2</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title"><code>$?</code> je 0 len keď všetko prešlo</div>
+    Príkaz <code>echo $?</code> vráti 0, ak posledný príkaz bol úspešný. Akékoľvek iné číslo (1, 2, 127...) znamená problém. Toto je základ, na ktorom stojí väčšina kontrol v shell skriptoch.
+  </div>
+
+  <p>Vo funkcii môžeš vrátiť hodnotu cez <code>return</code>. Pozor, return vie vrátiť len číslo 0-255. Na vrátenie reťazca sa používa <code>echo</code> a <code>$(...)</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">pocitaj.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+
+<span class="out">secti() {</span>
+    <span class="cmd">echo</span> <span class="out">$(($1 + $2))</span>
+<span class="out">}</span>
+
+<span class="cmd">vysledok</span>=<span class="out">$(secti 5 3)</span>
+<span class="cmd">echo</span> <span class="out">"5 + 3 = $vysledok"</span></div>
+  </div>
+
+  <h2><span class="sec-num">16.4</span> Praktický príklad: spracovanie argumentov</h2>
+  <p>Skript, ktorý pozdraví prvý a druhý argument, ale overí, či boli zadané:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">argumenty.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Spracovanie argumentov</span>
+
+<span class="out">pouzivaj() {</span>
+    <span class="cmd">echo</span> <span class="out">"Použitie: $0 &lt;meno&gt; &lt;priezvisko&gt;"</span>
+<span class="out">}</span>
+
+<span class="cmd">if</span> <span class="out">[ "$#" -lt 2 ]; then</span>
+    <span class="cmd">echo</span> <span class="err">"Chýbajú argumenty!"</span>
+    <span class="cmd">pouzivaj</span>
+    <span class="cmd">exit</span> <span class="out">1</span>
+<span class="cmd">fi</span>
+
+<span class="cmd">echo</span> <span class="out">"Ahoj, $1 $2!"</span>
+<span class="cmd">echo</span> <span class="out">"Tvoje celé meno má $(echo "$1 $2" | wc -c) znakov (vrátane medzery a nového riadku)."</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">chmod +x argumenty.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./argumenty.sh</span>
+<span class="err">Chýbajú argumenty!</span>
+<span class="out">Použitie: ./argumenty.sh &lt;meno&gt; &lt;priezvisko&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./argumenty.sh Ján Novák</span>
+<span class="out">Ahoj, Ján Novák!</span>
+<span class="out">Tvoje celé meno má 12 znakov (vrátane medzery a nového riadku).</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Vždy kontroluj počet argumentov</div>
+    Ak skript potrebuje argumenty a používateľ ich nepošle, dostaneš prázdne premenné a nepredvídateľné správanie. Kontrola cez <code>$#</code> na začiatku skriptu je zvyk, ktorý sa oplatí.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor skript, ktorý berie jeden argument (meno) a píše "Ahoj, &lt;meno&gt;!". Otestuj aj bez argumentu.</li>
+      <li>Uprav skript tak, aby pri dvoch argumentoch pozdravil oba: "Ahoj &lt;meno&gt; &lt;priezvisko&gt;!"</li>
+      <li>Vytvor funkciu <code>sekaj()</code>, ktorá prijme dve čísla a vráti ich súčet cez <code>echo</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-17">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 17 · Blok 4</div>
+    <h1>Praktický skript: záloha</h1>
+    <p class="subtitle">Zostavíme funkčný zálohovací skript od nuly po riadkoch.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 40 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">17.1</span> Čo budeme robiť</h2>
+  <p class="lead">Na tejto hodine vytvoríme skript, ktorý automaticky zálohuje vybraný adresár do komprimovaného archívu. Názov archívu bude obsahovať dátum, aby sme vždy vedeli, kedy bola záloha vytvorená.</p>
+  <p>Zálohovanie je príklad reálneho prípadu, kedy sa skript oplatí. Namiesto toho, aby si každý deň ručne písal <code>tar</code> príkaz, necháš to na skript.</p>
+
+  <h2><span class="sec-num">17.2</span> Príkaz tar</h2>
+  <p><code>tar</code> je štandardný nástroj na vytváranie archívov. Jeho základné príznaky:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Príznak</th><th>Význam</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>-c</code></td><td>Vytvor archív (create)</td></tr>
+        <tr><td><code>-z</code></td><td>Komprimuj cez gzip</td></tr>
+        <tr><td><code>-f</code></td><td>Názov výstupného súboru (file)</td></tr>
+        <tr><td><code>-x</code></td><td>Rozbaľ archív (extract)</td></tr>
+        <tr><td><code>-v</code></td><td>Podrobný výpis (verbose)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Jednoduchý príkaz na zálohu celého adresára:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tar -czf zaloha_2026-09-08.tar.gz Documents/</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -lh zaloha_2026-09-08.tar.gz</span>
+<span class="out">-rw-r--r-- 1 student student 12K Sep  8 10:00 zaloha_2026-09-08.tar.gz</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Poradie príznakov <code>-czf</code></div>
+    <code>-c</code> vytvorí, <code>-z</code> zbalí cez gzip, <code>-f</code> určuje meno súboru. Príznak <code>-f</code> musí byť vždy posledný pred názvom súboru, lebo berie nasledujúci argument ako názov. <code>-cfz zaloha.tar.gz</code> by nefungovalo správne.
+  </div>
+
+  <h2><span class="sec-num">17.3</span> Dátum v názve</h2>
+  <p>Na automatické pridanie dátumu do názvu použijeme <code>$(date +%F)</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">date +%F</span>
+<span class="out">2026-09-08</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "zaloha_$(date +%F).tar.gz"</span>
+<span class="out">zaloha_2026-09-08.tar.gz</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Formát <code>%F</code> je skratka pre <code>%Y-%m-%d</code>, teda rok-mesiac-deň. Takýto názov sa pekne zoradí chronologicky.</p>
+
+  <h2><span class="sec-num">17.4</span> Celý skript: záloha.sh</h2>
+  <p>Poďme si to celé zostaviť. Vytvor súbor <code>zaloha.sh</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">zaloha.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Jednoduchý zálohovací skript</span>
+
+<span class="comment"># Nastavenie</span>
+<span class="cmd">zdroj</span>=<span class="out">"/home/student/Documents"</span>
+<span class="cmd">ciel</span>=<span class="out">"/home/student/zalohy"</span>
+<span class="cmd">nazov</span>=<span class="out">"zaloha_$(date +%F).tar.gz"</span>
+
+<span class="comment"># 1. Over, či zdrojový priečinok existuje</span>
+<span class="cmd">if</span> <span class="out">[ ! -d "$zdroj" ]; then</span>
+    <span class="cmd">echo</span> <span class="err">"Chyba: Adresár $zdroj neexistuje!"</span>
+    <span class="cmd">exit</span> <span class="out">1</span>
+<span class="cmd">fi</span>
+
+<span class="comment"># 2. Vytvor cieľový adresár, ak neexistuje</span>
+<span class="cmd">if</span> <span class="out">[ ! -d "$ciel" ]; then</span>
+    <span class="cmd">mkdir</span> <span class="out">-p "$ciel"</span>
+    <span class="cmd">echo</span> <span class="out">"Vytvorený adresár: $ciel"</span>
+<span class="cmd">fi</span>
+
+<span class="comment"># 3. Vytvor zálohu</span>
+<span class="cmd">echo</span> <span class="out">"Zálohujem $zdroj..."</span>
+<span class="cmd">tar</span> <span class="out">-czf "$ciel/$nazov" -C "$(dirname "$zdroj")" "$(basename "$zdroj")"</span>
+
+<span class="comment"># 4. Over, či archív vznikol</span>
+<span class="cmd">if</span> <span class="out">[ -f "$ciel/$nazov" ]; then</span>
+    <span class="cmd">velkost</span>=<span class="out">$(du -h "$ciel/$nazov" | cut -f1)</span>
+    <span class="cmd">echo</span> <span class="out">"Záloha úspešná!"</span>
+    <span class="cmd">echo</span> <span class="out">"Súbor: $ciel/$nazov"</span>
+    <span class="cmd">echo</span> <span class="out">"Veľkosť: $velkost"</span>
+<span class="cmd">else</span>
+    <span class="cmd">echo</span> <span class="err">"Chyba: Záloha nebola vytvorená!"</span>
+    <span class="cmd">exit</span> <span class="out">1</span>
+<span class="cmd">fi</span></div>
+  </div>
+
+  <h2><span class="sec-num">17.5</span> Rozbor po riadkoch</h2>
+  <p>Prejdime si kľúčové časti:</p>
+
+  <p><strong><code>mkdir -p</code></strong> vytvorí adresár vrátane všetkých nadriadených. Bez <code>-p</code> by <code>mkdir /home/student/zalohy</code> fungovalo, ale <code>mkdir /home/student/zalohy/test</code> by zlyhalo, ak <code>zalohy</code> ešte neexistuje.</p>
+
+  <p><strong><code>-C "$(dirname "$zdroj")"</code></strong> zmení pracovný adresár pred archiváciou. Vďaka tomu archív obsahuje priečinok <code>Documents/</code> a nie úplnú cestu <code>/home/student/Documents/</code>. Pri rozbaľovaní by to spôsobilo nepríjemnú štruktúru.</p>
+
+  <p><strong><code>du -h</code></strong> zobrazí veľkosť súboru v čitateľnom formáte (KB, MB, GB). <code>cut -f1</code> vezme len prvý stĺpec (číslo veľkosti) bez názvu súboru.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">chmod +x zaloha.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./zaloha.sh</span>
+<span class="out">Zálohujem /home/student/Documents...</span>
+<span class="out">Záloha úspešná!</span>
+<span class="out">Súbor: /home/student/zalohy/zaloha_2026-09-08.tar.gz</span>
+<span class="out">Veľkosť: 12K</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">17.6</span> Rozbaľovanie zálohy</h2>
+  <p>Na rozbalenie archívu slúži <code>tar -xzf</code>:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cd /tmp && tar -xzf /home/student/zalohy/zaloha_2026-09-08.tar.gz</span>
+<span class="prompt">student@debian:/tmp$</span> <span class="cmd">ls</span>
+<span class="out"><span class="dir">Documents</span></span>
+<span class="prompt">student@debian:/tmp$</span> <span class="cmd">ls Documents/</span>
+<span class="out">poznamky.txt  seminar.txt  ulohy.txt</span>
+<span class="prompt">student@debian:/tmp$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Záloha vs. archív</div>
+    <strong>Záloha</strong> je archív, ktorý vytvoríš na ochranu dát. <strong>Archív</strong> je len zbalený súbor (a možno komprimovaný). Rozdiel je v účele, nie v technológii. Rovnaký príkaz <code>tar</code> sa používa na oboje.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Uprav <code>zaloha.sh</code> tak, aby okrem <code>Documents</code> zálohoval aj adresár <code>Desktop</code>.</li>
+      <li>Pridaj kontrolu veľkosti zálohy: ak je archív väčší ako 100 MB, vypíš varovanie.</li>
+      <li>Vyskúšaj rozbaľovať zálohu na iné miesto a over, že súbory sú tam.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-18">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 18 · Blok 4</div>
+    <h1>Mini-projekt: skript</h1>
+    <p class="subtitle">Samostatná práca: zostavíme "Systémového reportéra".</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 5 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 50 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 5 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">18.1</span> Zadanie projektu</h2>
+  <p class="lead">Dnes si všetko vezmeš do vlastných rúk. Tvojou úlohou je napísať skript <code>report.sh</code>, ktorý vypíše prehľad o aktuálnom stave systému.</p>
+
+  <p>Skript má vypísať tieto informácie:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Informácia</th><th>Ako získať</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Dátum a čas</td><td><code>date</code></td></tr>
+        <tr><td>Meno používateľa</td><td><code>whoami</code></td></tr>
+        <tr><td>Názov počítača</td><td><code>hostname</code></td></tr>
+        <tr><td>Vyťaženie pamäte</td><td><code>free -h | head -2</code></td></tr>
+        <tr><td>Miesto na disku</td><td><code>df -h /</code></td></tr>
+        <tr><td>Procesy používateľa</td><td><code>ps -u $(whoami)</code></td></tr>
+        <tr><td>Počet súborov v adresári</td><td><code>ls | wc -l</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Skript ulož ako <code>~/report.sh</code> a nastav mu oprávnenie <code>chmod 755</code>.</p>
+
+  <h2><span class="sec-num">18.2</span> Štruktúra riešenia</h2>
+  <p>Rozdeľ si skript na funkcie. Každá funkcia sa postará o jednu sekciu reportu. Toto je ozaj dobrý návyk, ktorý sa ti zíde v každom väčšom skripte.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">report.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Systémový reportér</span>
+
+<span class="out">sekcia() {</span>
+    <span class="cmd">echo</span> <span class="out">""</span>
+    <span class="cmd">echo</span> <span class="out">"=== $1 ==="</span>
+<span class="out">}</span>
+
+<span class="out">sekcia</span> <span class="out">"Dátum a čas"</span>
+<span class="cmd">date</span>
+
+<span class="out">sekcia</span> <span class="out">"Používateľ"</span>
+<span class="cmd">echo</span> <span class="out">"Meno: $(whoami)"</span>
+<span class="cmd">echo</span> <span class="out">"Počítač: $(hostname)"</span>
+
+<span class="out">sekcia</span> <span class="out">"Pamäť"</span>
+<span class="cmd">free</span> <span class="out">-h | head -2</span>
+
+<span class="out">sekcia</span> <span class="out">"Disk"</span>
+<span class="cmd">df</span> <span class="out">-h /</span>
+
+<span class="out">sekcia</span> <span class="out">"Procesy"</span>
+<span class="cmd">ps</span> <span class="out">-u "$(whoami)" --no-headers | wc -l</span>
+<span class="cmd">echo</span> <span class="out">"Bežiacich procesov: $(ps -u "$(whoami)" --no-headers | wc -l)"</span>
+
+<span class="out">sekcia</span> <span class="out">"Súbory v aktuálnom adresári"</span>
+<span class="cmd">echo</span> <span class="out">"Počet: $(ls | wc -l)"</span>
+
+<span class="cmd">echo</span> <span class="out">""</span>
+<span class="cmd">echo</span> <span class="out">"=== Koniec reportu ==="</span></div>
+  </div>
+
+  <p>Funkcia <code>sekcia()</code> len pekne formatuje nadpisy. Vďaka nej nemusíš písať <code>echo "=== ... ==="</code> stále dokola. Kód zostáva čistý a ľahko sa mení.</p>
+
+  <h2><span class="sec-num">18.3</span> Spustenie a overenie</h2>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">chmod 755 report.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">./report.sh</span>
+<span class="out"></span>
+<span class="out">=== Dátum a čas ===</span>
+<span class="out">Tue Sep  8 10:30:00 CEST 2026</span>
+<span class="out"></span>
+<span class="out">=== Používateľ ===</span>
+<span class="out">Meno: student</span>
+<span class="out">Počítač: debian</span>
+<span class="out"></span>
+<span class="out">=== Pamäť ===</span>
+<span class="out">               total        used        free      shared  buff/cache   available</span>
+<span class="out">Mem:           3.8Gi       420Mi       2.9Gi        12Mi       480Mi       3.1Gi</span>
+<span class="out"></span>
+<span class="out">=== Disk ===</span>
+<span class="out">Filesystem      Size  Used Avail Use% Mounted on</span>
+<span class="out">/dev/sda6        19G  2.8G   15G  16% /</span>
+<span class="out"></span>
+<span class="out">=== Procesy ===</span>
+<span class="out">Bežiacich procesov: 4</span>
+<span class="out"></span>
+<span class="out">=== Súbory v aktuálnom adresári ===</span>
+<span class="out">Počet: 8</span>
+<span class="out"></span>
+<span class="out">=== Koniec reportu ===</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">18.4</span> Pomocné tipy</h2>
+  <p>Ak sa niečo nedarí, skús postupovať takto:</p>
+  <ul>
+    <li>Najprv otestuj každý príkaz zvlášť v termináli. Funguje <code>free -h | head -2</code>? Funguje <code>ps -u $(whoami)</code>?</li>
+    <li>Pridávaj funkcie postupne. Najprv dátum, potom meno, potom pamäť. Nechaj vždy otestovať.</li>
+    <li>Ak niečo nefunguje, pridaj <code>echo</code> pred problematický riadok a pozri, akú hodnotu má premenná.</li>
+    <li>Na ladenie môžeš dočasne pridať <code>set -x</code> na začiatok skriptu. Shell bude vypisovať každý príkaz pred jeho spustením.</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-title">Rozdeľ si prácu na funkcie</div>
+    Ak píšeš celý skript naraz a nefunguje, je ťažké nájsť chybu. Funkcie ti umožnia testovať každú časť zvlášť. Napíš jednu, otestuj, pridaj ďalšiu. Takto sa pracuje aj v reálnom svete.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Dokonči <code>report.sh</code> tak, aby fungoval bez chýb.</li>
+      <li>Pridaj sekciu, ktorá vypíše počet procesov, ktoré majú viac ako 1 bežiaci inštanciu (použi <code>ps aux</code>).</li>
+      <li>Uprav <code>sekcia()</code> tak, aby pridala prázdny riadok pred a po nadpise pre lepšiu čitateľnosť.</li>
+      <li>Ako bonus: ulož výstup skriptu do súboru cez <code>./report.sh > report.txt</code>.</li>
+    </ol>
+  </div>
+</section>

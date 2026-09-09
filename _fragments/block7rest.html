@@ -1,0 +1,480 @@
+<section class="lesson" id="lesson-30">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 30 · Blok 7</div>
+    <h1>Vlastný systemd servis</h1>
+    <p class="subtitle">Vytvoríme si vlastnú službu, ktorú vie systemd spúšťať, zastavovať a reštartovať.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">30.1</span> Rýchle zopakovanie systemd</h2>
+  <p class="lead">V hodine 21 sme sa naučili ovládať hotové služby. Dnes si vytvoríme úplne vlastnú. systemd je správca služieb - vie ich spúšťať pri štarte, reštartovať pri páde a zaznamenávať ich výstup.</p>
+  <p>Základné príkazy už poznáš:</p>
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status ssh</span>
+<span class="out">● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (<span class="path">/lib/systemd/system/ssh.service</span>; enabled)
+     Active: <span class="cmd">active (running)</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl restart ssh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl stop ssh && systemctl start ssh</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+  <p>Dnes to posunieme ďalej: namiesto hotovej služby si napíšeme vlastný skript a vlastnú definíciu služby v systemd.</p>
+
+  <h2><span class="sec-num">30.2</span> Náš skript</h2>
+  <p>Najprv si pripravíme skript, ktorý bude naša služba spúšťať. Každých 5 sekúnd zapíše aktuálny čas do súboru v domovskom adresári.</p>
+  <p>Vytvoríme ho v <code>/usr/local/bin</code> - to je štandardné miesto pre vlastné programy.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo nano /usr/local/bin/casopis.sh</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">/usr/local/bin/casopis.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="comment"># Služba: každých 5 s zapíše čas do log súboru</span>
+<span class="cmd">while</span> <span class="out">true</span>; <span class="cmd">do</span>
+  <span class="cmd">echo</span> <span class="out">"$(date '+%F %T') - služba beží"</span> &gt;&gt; /home/student/casopis.log
+  <span class="cmd">sleep</span> <span class="out">5</span>
+<span class="cmd">done</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo chmod +x /usr/local/bin/casopis.sh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -l /usr/local/bin/casopis.sh</span>
+<span class="out">-rwxr-xr-x 1 root root 119 sep  8 14:30 <span class="path">/usr/local/bin/casopis.sh</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Prečo /usr/local/bin?</div>
+    Do <code>/usr/local/bin</code> patria programy, ktoré nainštaluješ ručne (nie cez apt/dnf). Odtiaľ ich vie spustiť každý používateľ bez toho, aby musel písať celú cestu.
+  </div>
+
+  <h2><span class="sec-num">30.3</span> Unit súbor</h2>
+  <p>Teraz príde to hlavné - definícia služby pre systemd. Súbory služieb sú v <code>/etc/systemd/system/</code> a majú príponu <code>.service</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo nano /etc/systemd/system/casopis.service</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">/etc/systemd/system/casopis.service</span></div>
+    <div class="term-body"><span class="out">[Unit]</span>
+<span class="out">Description=Môj prvý vlastný servis</span>
+<span class="out">After=network.target</span>
+<span class="out"></span>
+<span class="out">[Service]</span>
+<span class="out">ExecStart=/usr/local/bin/casopis.sh</span>
+<span class="out">Restart=always</span>
+<span class="out"></span>
+<span class="out">[Install]</span>
+<span class="out">WantedBy=multi-user.target</span></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Sekcia</th><th>Riadok</th><th>Význam</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>[Unit]</code></td><td><code>Description</code></td><td>Popis služby (vidíš ho v status)</td></tr>
+        <tr><td><code>[Unit]</code></td><td><code>After</code></td><td>Spusti až potom, čo je sieť hore</td></tr>
+        <tr><td><code>[Service]</code></td><td><code>ExecStart</code></td><td>Ktorý program sa spustí</td></tr>
+        <tr><td><code>[Service]</code></td><td><code>Restart</code></td><td>Reštartovať vždy, keď skript spadne</td></tr>
+        <tr><td><code>[Install]</code></td><td><code>WantedBy</code></td><td>Pri ktorom "cieľe" sa služba spúšťa (multi-user = po prihlásení do systému)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="sec-num">30.4</span> Spustenie služby</h2>
+  <p>Po vytvorení unit súboru musíš vždy povedať systemd, že sa zmenil: <code>daemon-reload</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl daemon-reload</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl start casopis</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl enable casopis</span>
+<span class="out">Created symlink /etc/systemd/system/multi-user.target.wants/casopis.service → /etc/systemd/system/casopis.service.</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status casopis</span>
+<span class="out">● casopis.service - Môj prvý vlastný servis
+     Loaded: loaded (<span class="path">/etc/systemd/system/casopis.service</span>; enabled)
+     Active: <span class="cmd">active (running)</span>
+   Main PID: 4821 (casopis.sh)</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cat /home/student/casopis.log</span>
+<span class="out">2026-09-08 14:31:02 - služba beží
+2026-09-08 14:31:07 - služba beží
+2026-09-08 14:31:12 - služba beží</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl stop casopis</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl is-active casopis</span>
+<span class="out">inactive</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl start casopis</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Služba beží, loguje do súboru a vieš ju kedykoľvek zastaviť a spustiť. Všimnite si, že <code>enable</code> (spúšťa sa pri štarte) je iná vec ako <code>start</code> (spúšťa sa hneď teraz).</p>
+
+  <div class="callout warn">
+    <div class="callout-title">daemon-reload je povinný</div>
+    Vždy, keď zmeníš unit súbor, musíš spustiť <code>sudo systemctl daemon-reload</code>. Inak si systemd pamätá starú verziu a tvoje zmeny sa neprejavia.
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">Pozor na nekonečný cyklus s Restart=always</div>
+    Ak skript okamžite skončí s chybou a máš <code>Restart=always</code>, systemd ho bude reštartovať stále dokola. Nekonečný cyklus s <code>sleep 5</code> je v poriadku, ale dávaj pozor, aby skript nemal logiku, ktorá okamžite zlyhá.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Vytvor si vlastnú službu <code>moja-sluzba.service</code>, ktorá loguje dátum a čas do <code>~/moja.log</code>.</li>
+      <li>Pridaj do unit súboru <code>Restart=always</code> a <code>RestartSec=3</code> (počká 3 s pred reštartom).</li>
+      <li>Over <code>systemctl status moja-sluzba</code> a skús službu zastaviť a znova spustiť.</li>
+      <li>Bonus: zapíš si, čo sa stane, keď zmeníš <code>ExecStart</code> na neexistujúci súbor a spustíš <code>systemctl daemon-reload</code>.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-31">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 31 · Blok 7</div>
+    <h1>Logovanie a monitoring</h1>
+    <p class="subtitle">Kde Linux ukladá logy, ako ich čítať a ako sledovať stav systému.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Teória 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prax 35 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">31.1</span> Prečo logovať?</h2>
+  <p class="lead">Keď niečo nefunguje, logy sú prvé miesto, kam sa pozrieš. Log je záznam udalostí - kto sa prihlásil, ktorá služba spadla, čo sa dialo v systéme. Každý správca servera trávi čas čítaním logov.</p>
+  <p>V Linuxe sú logy na dvoch miestach: v <code>/var/log</code> (tradičné súbory) a v samotnom systemd (príkaz <code>journalctl</code>).</p>
+
+  <h2><span class="sec-num">31.2</span> journalctl - logy systemd</h2>
+  <p><code>journalctl</code> číta logy, ktoré zbiera systemd. Je to najrýchlejší spôsob, ako zistiť, čo sa deje.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">journalctl -n 15</span>
+<span class="out">-- Logs begin at sep 8 08:00:00, end at sep 8 14:35:00 --
+sep 8 14:34:55 debian systemd[1]: Started casopis.service - Môj prvý vlastný servis.
+sep 8 14:35:00 debian casopis.sh[4821]: 2026-09-08 14:35:00 - služba beží</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">journalctl -u casopis</span>
+<span class="out">-- Logs begin at sep 8 08:00:00 --
+sep 8 14:31:00 debian systemd[1]: Started casopis.service - Môj prvý vlastný servis.
+sep 8 14:33:12 debian systemd[1]: Stopped casopis.service.</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">journalctl -u casopis -f</span>
+<span class="out"><span class="comment"># sleduje logy naživo, ukončí sa Ctrl+C</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>-n 15</code> ukáže posledných 15 riadkov. <code>-u casopis</code> filter na konkrétnu službu. <code>-f</code> (follow) sleduje logy naživo - skvelé pri debugovaní.</p>
+
+  <h2><span class="sec-num">31.3</span> Logy v /var/log</h2>
+  <p>Súbory v <code>/var/log</code> sú tradičnejšie logy, písané priamo programami.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls /var/log/</span>
+<span class="out"><span class="dir">auth.log</span>  <span class="dir">kern.log</span>  <span class="dir">syslog</span>  <span class="dir">apt/</span>  <span class="dir">nginx/</span>  <span class="dir">journal/</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo tail -n 10 /var/log/auth.log</span>
+<span class="out">sep  8 14:30:12 debian sudo:   student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/nano /usr/local/bin/casopis.sh
+sep  8 14:31:02 debian systemd-logind[401]: New session 5 of user student.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Súbor</th><th>Čo obsahuje</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>auth.log</code></td><td>Prihlásenia, sudo, zmeny používateľov</td></tr>
+        <tr><td><code>kern.log</code></td><td>Správy z jadra, hardvér, ovládače</td></tr>
+        <tr><td><code>syslog</code></td><td>Všeobecné systémové správy</td></tr>
+        <tr><td><code>apt/</code></td><td>História inštalácií balíkov</td></tr>
+        <tr><td><code>nginx/</code></td><td>Logy web servera (ktorý si postavil v hodine 29)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Prečo sudo?</div>
+    Väčšina logov v <code>/var/log</code> je čitateľná len pre root. Bežný používateľ by ich mohol čítať a zistiť heslá alebo citlivé informácie o systéme.
+  </div>
+
+  <h2><span class="sec-num">31.4</span> logrotate - prečo logy nerastú donekonečna</h2>
+  <p>Logy by bez starostlivosti rástli, až kým by nezaplnili disk. K tomu slúži <code>logrotate</code> - starý log sa po čase "otočí" (zazipuje a nakoniec vymaže).</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls /etc/logrotate.d/</span>
+<span class="out">apt  nginx  rsyslog  sudo  ufw</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /etc/logrotate.d/nginx</span>
+<span class="out">/var/log/nginx/*.log {
+    daily
+    rotate 14
+    compress
+    missingok
+    notifempty
+}</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Preklad: logy nginx sa rotujú <strong>denne</strong>, ponechá sa <strong>14</strong> starých verzií, staré sa <strong>komprimujú</strong>. Nginx má vlastnú konfiguráciu, iné programy tiež.</p>
+
+  <h2><span class="sec-num">31.5</span> Monitoring systému</h2>
+  <p>Na sledovanie aktuálneho stavu systému slúži niekoľko príkazov, ktoré už poznáš. Poďme si ich dať dokopy:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">uptime</span>
+<span class="out"> 14:35:12 up 6:35,  2 users,  load average: 0.00, 0.01, 0.05</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">free -h</span>
+<span class="out">               total        used        free      shared  buff/cache   available
+Mem:           3.8Gi       520Mi       2.8Gi        12Mi       500Mi       3.0Gi
+Swap:         2.0Gi          0B       2.0Gi</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">df -h /</span>
+<span class="out">Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda6        19G  3.1G   15G  17% /</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">watch -n 2 free -h</span>
+<span class="out"><span class="comment"># každé 2 sekundy obnoví výpis, ukončí sa Ctrl+C</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p><code>watch</code> opakuje príkaz stále dokola s prestávkou - super na sledovanie, ako sa systém mení. <code>uptime</code> ukáže, ako dlho systém beží a akú má záťaž.</p>
+
+  <div class="callout warn">
+    <div class="callout-title">Prvý krok pri riešení problému</div>
+    Keď ti niečo nefunguje: 1) <code>systemctl status služba</code>, 2) <code>journalctl -u služba -n 50</code>, 3) Google s presným textom chyby. Log ti vždy povie viac, než hádanie.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Spusti <code>journalctl -u moja-sluzba</code> (z hodiny 30) a nájdi čas posledného spustenia.</li>
+      <li>Pozri si posledných 10 riadkov <code>/var/log/auth.log</code> a nájdi v nich svoje sudo príkazy.</li>
+      <li>Spusti <code>watch -n 3 uptime</code> a pozoruj 15 sekúnd. Zapíš si medzi akými hodnotami load sa pohybuje.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-32">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 32 · Blok 7</div>
+    <h1>Záverečný projekt</h1>
+    <p class="subtitle">Postavíš si kompletného mini-servera s web stránkou, vlastnou službou, zálohou a firewallom.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-theory"></span> Zadanie 10 min</span>
+      <span class="meta-pill"><span class="dot dot-demo"></span> Samostatná práca 40 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Domáca úloha 10 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">32.1</span> Zadanie</h2>
+  <p class="lead">Toto je tvoja skúška. Postavíš malý, ale funkčný server, ktorý používa všetko, čo sme sa za 31 hodín naučili. Na ďalšej hodine ho odprezentuješ.</p>
+  <p>Projekt má štyri časti. Prejdi ich postupne a každú otestuj, až potom pokračuj ďalej.</p>
+
+  <h2><span class="sec-num">32.2</span> Časť 1: Web server</h2>
+  <p>Nginx z hodiny 29 musí bežať a na <code>localhost</code> musí odpovedať tvoja vlastná stránka s tvojím menom, triedou a malým popisom.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl is-active nginx</span>
+<span class="out">active</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">curl localhost | head -n 5</span>
+<span class="out">&lt;!DOCTYPE html&gt;
+&lt;html lang="sk"&gt;
+&lt;head&gt;&lt;title&gt;Projekt Janka&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">32.3</span> Časť 2: Vlastná služba</h2>
+  <p>Služba <code>uptime-log</code> (vlastný názov si zvoľ) bude každú minútu zapisovať aktuálny <code>uptime</code> do súboru <code>~/uptime.log</code>. Využiješ znalosti z hodiny 30.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">/usr/local/bin/uptime-log.sh</span></div>
+    <div class="term-body"><span class="comment">#!/bin/bash</span>
+<span class="cmd">while</span> <span class="out">true</span>; <span class="cmd">do</span>
+  <span class="cmd">echo</span> <span class="out">"$(date '+%F %T') $(uptime -p)"</span> &gt;&gt; /home/student/uptime.log
+  <span class="cmd">sleep</span> <span class="out">60</span>
+<span class="cmd">done</span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl daemon-reload</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl start uptime-log</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo systemctl enable uptime-log</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemctl is-active uptime-log</span>
+<span class="out">active</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">32.4</span> Časť 3: Záloha</h2>
+  <p>Napíš skript <code>zaloha.sh</code> (z hodiny 17), ktorý zazipuje celý <code>/var/www/html</code> do priečinka <code>~/backup</code> so zadným dátumom v názve. Skript spustíš ručne.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">mkdir -p ~/backup</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo tar -czf ~/backup/web_$(date +%F).tar.gz /var/www/html</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -lh ~/backup/</span>
+<span class="out">total 12K
+-rw-r--r-- 1 root root 3.2K sep  8 14:40 <span class="path">web_2026-09-08.tar.gz</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">tar -tzf ~/backup/web_2026-09-08.tar.gz</span>
+<span class="out">var/www/html/index.html
+var/www/html/index.nginx-debian.html</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">32.5</span> Časť 4: Firewall</h2>
+  <p>Zapni firewall (z hodiny 28) a povol v ňom SSH a HTTP, aby si sa vedel k serveru pripojiť a aby šla stránka otvoriť.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian/Mint (ufw)</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw allow ssh</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw allow 80</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw enable</span>
+<span class="out">Firewall is active and enabled on system startup</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw status</span>
+<span class="out">Status: active
+22/tcp        ALLOW       Anywhere
+80/tcp        ALLOW       Anywhere</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora (firewalld)</span></div>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --permanent --add-service=ssh</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --permanent --add-service=http</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --reload</span>
+<span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --list-all</span>
+<span class="out">ports: 22/tcp 80/tcp</span>
+<span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">32.6</span> Dokumentácia</h2>
+  <p>Vytvor <code>README.txt</code> v domovskom adresári a do neho napíš odpovede na tieto otázky:</p>
+  <ul>
+    <li>Aký názov si dal svojej službe a čo robí?</li>
+    <li>Ako overíš, že web server beží?</li>
+    <li>Kde a ako sa robí záloha?</li>
+    <li>Ako sa volá tvoja služba v systemd a ako ju zastavíš?</li>
+  </ul>
+
+  <div class="callout warn">
+    <div class="callout-title">Postupuj po krokoch</div>
+    Nezvládneš všetko naraz. Poradie: web → služba → záloha → firewall → README. Každú časť otestuj hneď po dokončení, nekumuluj chyby na koniec.
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Čo môžeš použiť</div>
+    Všetko: man stránky, --help, svoje poznámky, skripty z minulých hodín. Čo nemôžeš: odpisovať od spolužiaka kompletné riešenie. Môžeš sa poradiť, ale kód si napíš sám - na prezentácii ťa nechám vysvetliť, ako to funguje.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Domáca úloha</div>
+    <ol>
+      <li>Dokonči projekt tak, aby všetky 4 časti fungovali.</li>
+      <li>Dopíš README.txt.</li>
+      <li>Priprav si 2-minútovú prezentáciu: čo si postavil, čo ťa bavilo, čo ťa stálo najviac.</li>
+      <li>Odporúčanie: spusti projekt odznova od nuly ešte raz doma - to ťa naučí viac ako všetko ostatné.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="lesson" id="lesson-33">
+  <div class="lesson-header">
+    <div class="eyebrow">Hodina 33 · Blok 7</div>
+    <h1>Prezentácia a záver</h1>
+    <p class="subtitle">Posledná hodina: ukážeš, čo si postavil, a oslávime celý kurz.</p>
+    <div class="meta">
+      <span class="meta-pill"><span class="dot dot-demo"></span> Prezentácie 40 min</span>
+      <span class="meta-pill"><span class="dot dot-task"></span> Diskusia a záver 15 min</span>
+    </div>
+  </div>
+
+  <h2><span class="sec-num">33.1</span> Prezentácia projektu</h2>
+  <p class="lead">Každý z vás má 2 minúty. Premietame na tabuľu, ostatní pozerajú. Tvoj VM je pripravený, projekt beží, ty ho predvedieš.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl status uptime-log --no-pager | head -n 6</span>
+<span class="out">● uptime-log.service - Zapisuje uptime do logu
+     Loaded: loaded (<span class="path">/etc/systemd/system/uptime-log.service</span>; enabled)
+     Active: <span class="cmd">active (running)</span>
+   Main PID: 5102 (uptime-log.sh)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">curl localhost</span>
+<span class="out">&lt;!DOCTYPE html&gt;
+&lt;html lang="sk"&gt;
+&lt;head&gt;&lt;title&gt;Projekt Janka&lt;/title&gt;&lt;/head&gt;</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">cat /home/student/uptime.log</span>
+<span class="out">2026-09-08 14:41:01 up 6 hours, 44 minutes
+2026-09-08 14:42:01 up 6 hours, 45 minutes</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Odprezentuj štyri veci: <strong>web stránku</strong> (curl + otvor v prehliadači), <strong>službu</strong> (status + log), <strong>zálohu</strong> (ukáž .tar.gz a obsah) a <strong>firewall</strong> (status). Povedz aj jednu vec, ktorá ťa prekvapila alebo ktorej si nerozumel.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Skvelá práca</div>
+    Postaviť funkčný server s vlastnou službou, web stránkou a zálohou je viac, než dokáže väčšina dospelých. Si na to hrdý - zaslúžiš si to.
+  </div>
+
+  <h2><span class="sec-num">33.2</span> Čo sme sa naučili za 33 hodín</h2>
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Blok</th><th>Hodiny</th><th>Čo vieš</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1 · Úvod</td><td>1-3</td><td>VM, inštalácia, prvý login, terminál</td></tr>
+        <tr><td>2 · Terminál</td><td>4-8</td><td>cesty, súbory, wildcards, rúry, man</td></tr>
+        <tr><td>3 · Práva</td><td>9-12</td><td>používatelia, sudo, chmod, chown</td></tr>
+        <tr><td>4 · Skriptovanie</td><td>13-18</td><td>premenné, if, cykly, funkcie, skripty</td></tr>
+        <tr><td>5 · Balíky a procesy</td><td>19-22</td><td>apt/dnf, procesy, systemd, cron</td></tr>
+        <tr><td>6 · Sieť a admin</td><td>23-28</td><td>IP, SSH, súborové systémy, nano/vim, tmux, firewall</td></tr>
+        <tr><td>7 · Nasadenie</td><td>29-33</td><td>nginx, vlastná služba, logy, projekt</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="sec-num">33.3</span> Čo ďalej?</h2>
+  <p>Kurz končí, ale Linux sa nekončí. Tu je pár nápadov, kam pokračovať:</p>
+  <ul>
+    <li><strong>Homelab</strong> - starý počítač alebo Raspberry Pi ako domáci server (Nextcloud, Plex, AdGuard)</li>
+    <li><strong>Self-hosting</strong> - vlastný cloud, vlastné web stránky, vlastný email</li>
+    <li><strong>Certifikáty</strong> - Linux Foundation, LPI Linux Essentials (prvá, ľahká certifikácia)</li>
+    <li><strong>Pokročilé skriptovanie</strong> - awk, sed, jq, automatizácia kadečoho</li>
+    <li><strong>Containery</strong> - Docker a pod, na čom beží moderný internet</li>
+    <li><strong>Vyskúšaj inú distribúciu</strong> - Arch? Gentoo? Ventoy a USB kľúč s desiatimi ISO</li>
+  </ul>
+
+  <div class="callout warn">
+    <div class="callout-title">Naše pravidlá z hodiny 1 stále platia</div>
+    Pýtaj sa. Rozbíjaj si veci vo VM. Čítaj man stránky. Vždy si zapisuj. A hlavne: <strong>skús to sám</strong>, ešte predtým, než sa spýtaš.
+  </div>
+
+  <div class="homework">
+    <div class="homework-title">🏠 Posledná domáca úloha</div>
+    <ol>
+      <li>Napíš 5 vecí, ktoré ťa na krúžku najviac bavili alebo prekvapili.</li>
+      <li>Napíš 1 vec, ktorú chceš v Linuxe vyskúšať ďalej (nemusíš to urobiť hneď, stačí nápad).</li>
+      <li>Odovzdaj túto úlohu učiteľovi. Je to jediná "písomka" z celého kurzu.</li>
+    </ol>
+  </div>
+</section>
