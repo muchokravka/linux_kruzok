@@ -223,11 +223,11 @@ firefox-esr/stable,now 115.15.0esr-1 amd64 [installed]
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Aktualizuj zoznam balíkov (<code>apt update</code> alebo <code>dnf check-update</code>).</li>
-      <li>Nainštaluj program <code>htop</code> (správca procesov, budeme ho potrebovať nabudúce).</li>
-      <li>Spusti <code>htop</code> a preskúmaj jeho rozhranie. Ukonči ho klávesom <kbd>q</kbd>.</li>
-      <li>Vyskúšaj vyhľadať balík, ktorý ťa zaujíma cez <code>apt search</code> alebo <code>dnf search</code>.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>apt update</code> a <code>apt upgrade</code>.</li>
+      <li>Čo je repozitár a čo sa stane, keď balík, ktorý chceš nainštalovať, v repozitári nie je?</li>
+      <li>Čo sú závislosti balíka a prečo je dobré, že ich systém rieši automaticky?</li>
+      <li>Vysvetli, prečo je na Debiane/Minte <code>apt</code> a na Fedore <code>dnf</code> - v čom je princíp rovnaký?</li>
     </ol>
   </div>
 </section>
@@ -383,12 +383,11 @@ nohup: appending output to 'nohup.out'</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti <code>sleep 100</code> na pozadí pomocou <code>&amp;</code>.</li>
-      <li>Nájdij ho cez <code>ps aux | grep sleep</code> a zapíš si jeho PID.</li>
-      <li>Zabij ho cez <code>kill</code> (bez <code>-9</code>).</li>
-      <li>Over cez <code>ps aux | grep sleep</code>, že zmizol.</li>
-      <li>Vyskúšaj <code>htop</code> a nájdi tam proces, ktorý zaberá najviac CPU.</li>
+        <ol>
+      <li>Vysvetli, čo je proces a čo znamená PID a PPID.</li>
+      <li>Aký je rozdiel medzi <code>kill</code> a <code>kill -9</code>? Prečo sa <code>-9</code> neodporúča ako prvá voľba?</li>
+      <li>Čo sa stane, keď spustíš príkaz s <code>&amp;</code> na konci? A čo spraví <kbd>Ctrl</kbd>+<kbd>Z</kbd>?</li>
+      <li>Vysvetli, na čo slúži <code>ps aux</code> a čo v ňom vidíš pri svojom používateľovi.</li>
     </ol>
   </div>
 </section>
@@ -527,11 +526,11 @@ Sep 08 11:10:15 debian kernel: [12345.678] USB disconnect, address 2</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Zisti, ktoré služby na tvojom systéme bežia: <code>systemctl list-units --type=service --state=running</code>.</li>
-      <li>Vyber jednu službu a pozri si jej detailný stav cez <code>systemctl status nazov</code>.</li>
-      <li>Pozri si posledných 20 logov tejto služby cez <code>journalctl -u nazov -n 20</code>.</li>
-      <li>Skús <code>systemd-analyze blame</code> a zapíš si, ktorá služba sa spúšťa najdlhšie.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>systemctl start</code> a <code>systemctl enable</code> - kedy sa čo použije?</li>
+      <li>Čo je systemd unit a aké typy jednotiek poznáš (okrem služieb)?</li>
+      <li>Na čo slúži <code>journalctl -u sluzba</code> a kedy pridáš <code>-f</code>?</li>
+      <li>Prečo sa <code>enable</code> nevzťahuje len na aktuálny beh, ale aj na štart systému?</li>
     </ol>
   </div>
 </section>
@@ -682,11 +681,11 @@ Thu Sep  8 11:00:01 CEST 2026</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Ak máš z hodiny 18 skript <code>report.sh</code>, nastav cron na jeho spustenie raz denne o 7:00.</li>
-      <li>Otestuj: nastav cron na spustenie každú minútu, počkaj 2 minúty, over cez <code>cat</code> na výstupnom súbore.</li>
-      <li>Po otestovaní testovací riadok vymaž cez <code>crontab -e</code>.</li>
-      <li>Vypíš svoj finálny crontab cez <code>crontab -l</code> a zapíš si, čo tam máš.</li>
+        <ol>
+      <li>Rozlúšti cron riadok: <code>30 7 * * 1 /usr/local/bin/zaloha.sh</code> - kedy presne sa spustí?</li>
+      <li>Vymenuj 5 polí cron riadku a čo každé znamená.</li>
+      <li>Napíš cron riadok, ktorý spustí skript každý deň o 18:00.</li>
+      <li>Prečo je cron na serveroch dôležitý? Uveď aspoň 2 reálne príklady použitia.</li>
     </ol>
   </div>
 </section>

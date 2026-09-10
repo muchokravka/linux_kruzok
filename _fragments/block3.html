@@ -121,10 +121,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti v termináli <code>whoami</code> a <code>id</code>. Zapíš si svoje uid a gid čísla.</li>
-      <li>Skús <code>sudo ls /root</code>. Vidíš obsah root adresára? Ak nie, zisti prečo.</li>
-      <li>Napíš na papier alebo do poznámok <strong>2 rozdiely</strong> medzi root a bežným používateľom.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi bežným používateľom a rootom. Napíš 3 veci, ktoré môže len root.</li>
+      <li>Prečo sa neodporúča pracovať stále ako root? Uveď aspoň 2 dôvody.</li>
+      <li>Čo robí <code>sudo</code> a aké heslo ťa pri ňom systém pýta?</li>
+      <li>Vysvetli rozdiel medzi <code>sudo</code> a <code>su</code>.</li>
     </ol>
   </div>
 </section>
@@ -256,11 +257,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor súbor <code>skript.sh</code> s obsahom <code>echo "Ahoj z krúžku"</code> cez nano alebo cez echo.</li>
-      <li>Nastav mu práva <code>chmod 755</code> a spusti ho cez <code>./skript.sh</code>.</li>
-      <li>Vysvetli na papieri, čo znamená <code>rwxr-xr-x</code> (aké práva má vlastník, skupina a ostatní?).</li>
-      <li>Zisti, čo sa stane keď skriptu odoberieš právo <code>x</code>. Skús ho spustiť.</li>
+        <ol>
+      <li>Rozlúšti práva <code>-rwxr-xr-x</code> znak po znaku: čo v jednotlivých skupinách znamená r, w, x?</li>
+      <li>Vysvetli číselný zápis práv: prečo <code>r=4</code>, <code>w=2</code>, <code>x=1</code> a koľko je teda <code>chmod 755</code>?</li>
+      <li>Čo sa stane, keď skript nemá právo <code>x</code> a ako to opravíš?</li>
+      <li>Prečo musí mať adresár právo <code>x</code>, aby si doňho mohol vojsť (<code>cd</code>)?</li>
     </ol>
   </div>
 </section>
@@ -373,11 +374,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor súbor <code>test.txt</code> a nastav mu práva <code>chmod 600</code>. Zapíš, aké zmeny vidíš v <code>ls -l</code>.</li>
-      <li>Potom mu nastav <code>chmod 755</code>. Porovnaj obe hodnoty a napíš rozdiel.</li>
-      <li>Napíš, prečo nemajú nové súbory právo spustenia <code>x</code>.</li>
-      <li>Skús <code>ls -la /usr/bin/ls</code> a zapíš jeho práva a vlastníka.</li>
+        <ol>
+      <li>Vysvetli, čo robí <code>chown student:dokumenty subor.txt</code> - čo sa zmení a pre koho.</li>
+      <li>Prečo majú nové súbory predvolene práva ako <code>-rw-r--r--</code> a nie <code>-rwxr-xr-x</code>? Čo s tým má spoločné <code>umask</code>?</li>
+      <li>Kedy by si súboru nastavil práva <code>600</code> a kedy <code>644</code>? Uveď príklad pre každý prípad.</li>
+      <li>Prečo je nebezpečné meniť <code>chown</code> na systémových súboroch?</li>
     </ol>
   </div>
 </section>
@@ -526,11 +527,10 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti celý projekt "firma" od začiatku doma bez pozerania do poznámok. Od vytvorenia priečinkov až po spustenie skriptu.</li>
-      <li>Zapíš si, ktoré príkazy ťa zdržali alebo si na ne zabudol. To sú veci, na ktorých musíš ešte zapracovať.</li>
-      <li>Pridaj do firmy nový priečinok <code>utajene</code> s právami <code>700</code> (len ty, nikto iný). Vysvetli, prečo si zvolil/a takéto práva.</li>
-      <li>Otestuj: prepni sa na iného používateľa cez <code>su</code> a skús vstúpiť do <code>firma/dokumenty</code>. Malo by to byť zamietnuté.</li>
+        <ol>
+      <li>Nakresli štruktúru priečinku <code>firma</code> (dokumenty, skripty, verejne) a ku každému pripíš, aké práva by si nastavil a prečo.</li>
+      <li>Vysvetli na príklade, prečo je kombinácia <code>755</code> pre adresár bezpečná, ale <code>777</code> nie.</li>
+      <li>Zhrň 3 najdôležitejšie veci, ktoré si sa naučil v blokoch 1-3.</li>
     </ol>
   </div>
 </section>

@@ -98,10 +98,11 @@ LISTEN  0       128     127.0.0.1:631        0.0.0.0:*</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Zisti svoju IP adresu cez <code>ip a</code> a zapíš si ju.</li>
-      <li>Zisti svoju gateway cez <code>ip route</code> a zapíš si ju.</li>
-      <li>Pingni <code>1.1.1.1</code> a zapíš si priemerný čas odpovede.</li>
+        <ol>
+      <li>Vysvetli vlastnými slovami, čo je IP adresa, gateway a DNS - na čo slúžia?</li>
+      <li>Prečo je <code>localhost</code> vždy <code>127.0.0.1</code> a na čo je dobrý?</li>
+      <li>Čo znamená riadok <code>default via 192.168.1.1</code> z výpisu <code>ip route</code>?</li>
+      <li>Kedy by si použil <code>ping</code> a čo ti odpoveď (alebo jej absencia) prezradí?</li>
     </ol>
   </div>
 </section>
@@ -219,10 +220,11 @@ moj_adresar/subor2.txt                       100%   34     0.3KB/s   00:00</span
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vygeneruj SSH kľúč cez <code>ssh-keygen -t ed25519</code>.</li>
-      <li>Nakopíruj ho na localhost cez <code>ssh-copy-id root@localhost</code>.</li>
-      <li>Pripoj sa cez <code>ssh root@localhost</code> a over, že sa pripojíš bez hesla.</li>
+        <ol>
+      <li>Prečo je komunikácia cez SSH šifrovaná a čo by sa mohlo stať, keby nebola?</li>
+      <li>Vysvetli rozdiel medzi súkromným a verejným kľúčom pri SSH. Ktorý nikdy nikomu nedávaš?</li>
+      <li>Prečo je prihlasovanie cez kľúče bezpečnejšie ako cez heslá?</li>
+      <li>Akou formou sa zadáva vzdialené pripojenie? Napíš príklad <code>ssh ...</code> a rozlúšti jednotlivé časti.</li>
     </ol>
   </div>
 </section>
@@ -323,10 +325,11 @@ UUID=e5f6a7b8-...  none  swap  sw  0  0</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>V domovskom adresári spusti <code>du -sh *</code> a nájdi najväčší priečinok.</li>
-      <li>Zapíš si, koľko miesta zaberá a čo v ňom je.</li>
-      <li>Spusti <code>df -h</code> a zapíš si, koľko voľného miesta máš na <code>/</code>.</li>
+        <ol>
+      <li>Vysvetli vlastnými slovami, čo je mount a čo súborový systém.</li>
+      <li>Aký je rozdiel medzi <code>df -h</code> a <code>du -sh</code>? Kedy použiť ktorý?</li>
+      <li>Prečo je <code>/etc/fstab</code> dôležitý a prečo by si ho bez uváženia nemeňoval?</li>
+      <li>Čo je swap a na čo slúži?</li>
     </ol>
   </div>
 </section>
@@ -426,10 +429,11 @@ Dnes sme sa ucilo nano a vim.
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor si poznámky z dnešnej hodiny v <code>nano</code> a ulož ich.</li>
-      <li>Otvori ich v <code>vim</code> a prečítaj si ich.</li>
-      <li>Spusti <code>vimtutor</code> a prejdi si prvých päť lekcií.</li>
+        <ol>
+      <li>Prečo sa vôbec učíme editovať text v termináli, keď existujú grafické editory? Uveď 2 dôvody.</li>
+      <li>Vysvetli rozdiel medzi módom insert a normal vo vime. Ktorou klávesou sa medzi nimi prepínaš?</li>
+      <li>Kedy by si použil <code>nano</code> a kedy <code>vim</code>? Na čo je <code>vimtutor</code>?</li>
+      <li>Napíš spamäti 3 užitočné klávesové skratky pre nano a 3 pre vim.</li>
     </ol>
   </div>
 </section>
@@ -507,10 +511,11 @@ Dnes sme sa ucilo nano a vim.
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti tmux reláciu s názvom <code>test</code>.</li>
-      <li>Rozdeľ okno vertikálne cez <kbd>Ctrl</kbd>+<kbd>B</kbd> a <kbd>%</kbd>.</li>
-      <li>V jednej polovici spusti <code>htop</code> a v druhej <code>ls</code>.</li>
+        <ol>
+      <li>Prečo proces spustený na popredí zomrie, keď sa odpojíš cez SSH? Čo s tým spraví tmux?</li>
+      <li>Vysvetli, čo znamená detach a attach v tmux - aký je medzi nimi rozdiel?</li>
+      <li>Kedy sa ti v reálnej administrácii oplatí tmux? Uveď 2 príklady.</li>
+      <li>Prečo je pri dlhých príkazoch (napr. inštalácia) nebezpečné jednoducho zavrieť terminál?</li>
     </ol>
   </div>
 </section>
@@ -617,10 +622,11 @@ To                         Action      From
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Zapni firewall cez <code>sudo ufw enable</code> (alebo <code>systemctl start firewalld</code> na Fedore).</li>
-      <li>Povol SSH cez <code>sudo ufw allow ssh</code>.</li>
-      <li>Over status cez <code>sudo ufw status</code> a zapíš si, čo vidíš.</li>
+        <ol>
+      <li>Prečo by firewall nemal mať otvorené všetky porty? Čo sa môže stať pri zle nastavenom serveri?</li>
+      <li>Vysvetli pravidlo „povoliť len to, čo naozaj potrebuješ“ na príklade SSH a web servera.</li>
+      <li>Napíš 3 bezpečnostné pravidlá, ktoré by si dodržal na vlastnom serveri.</li>
+      <li>Prečo sú pravidelné aktualizácie systému dôležité pre bezpečnosť?</li>
     </ol>
   </div>
 </section>

@@ -138,11 +138,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor si vlastnú službu <code>moja-sluzba.service</code>, ktorá loguje dátum a čas do <code>~/moja.log</code>.</li>
-      <li>Pridaj do unit súboru <code>Restart=always</code> a <code>RestartSec=3</code> (počká 3 s pred reštartom).</li>
-      <li>Over <code>systemctl status moja-sluzba</code> a skús službu zastaviť a znova spustiť.</li>
-      <li>Bonus: zapíš si, čo sa stane, keď zmeníš <code>ExecStart</code> na neexistujúci súbor a spustíš <code>systemctl daemon-reload</code>.</li>
+        <ol>
+      <li>Čo robí <code>ExecStart</code> a čo <code>Restart=always</code> v unit súbore?</li>
+      <li>Prečo je <code>daemon-reload</code> povinný po zmene unit súboru?</li>
+      <li>Načrtni, čo všetko treba na vlastný servis: skript, unit súbor, príkazy. Napíš postup v 5 krokoch.</li>
+      <li>Čo sa stane, keď máš <code>Restart=always</code> a skript okamžite skončí s chybou? Aké je riziko?</li>
     </ol>
   </div>
 </section>
@@ -264,10 +264,11 @@ Swap:         2.0Gi          0B       2.0Gi</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti <code>journalctl -u moja-sluzba</code> (z hodiny 30) a nájdi čas posledného spustenia.</li>
-      <li>Pozri si posledných 10 riadkov <code>/var/log/auth.log</code> a nájdi v nich svoje sudo príkazy.</li>
-      <li>Spusti <code>watch -n 3 uptime</code> a pozoruj 15 sekúnd. Zapíš si medzi akými hodnotami load sa pohybuje.</li>
+        <ol>
+      <li>Prečo sú logy pre správcu systému také dôležité? Uveď príklad situácie, keď ťa log zachráni.</li>
+      <li>Vysvetli, čo robí <code>journalctl -u sluzba</code>, <code>-n 50</code> a <code>-f</code> - čo každý prepínač pridá?</li>
+      <li>Prečo existuje logrotate a čo by sa stalo, keby logy rotované neboli?</li>
+      <li>Vymenuj aspoň 3 príkazy na monitoring systému a čo každý ukazuje.</li>
     </ol>
   </div>
 </section>
@@ -388,11 +389,11 @@ var/www/html/index.nginx-debian.html</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Dokonči projekt tak, aby všetky 4 časti fungovali.</li>
-      <li>Dopíš README.txt.</li>
-      <li>Priprav si 2-minútovú prezentáciu: čo si postavil, čo ťa bavilo, čo ťa stálo najviac.</li>
-      <li>Odporúčanie: spusti projekt odznova od nuly ešte raz doma - to ťa naučí viac ako všetko ostatné.</li>
+        <ol>
+      <li>Naplánuj záverečný projekt na papier: 4 časti v poradí a ako každú otestuješ.</li>
+      <li>Ktorá časť projektu je podľa teba najťažšia a ako ju chceš zvládnuť?</li>
+      <li>Priprav si 2-minútovú prezentáciu: čo ukážeš a v akom poradí?</li>
+      <li>Prečo je lepšie dokončiť a otestovať každú časť hneď, ako nechať všetko na koniec?</li>
     </ol>
   </div>
 </section>
@@ -435,7 +436,7 @@ var/www/html/index.nginx-debian.html</span>
     Postaviť funkčný server s vlastnou službou, web stránkou a zálohou je viac, než dokáže väčšina dospelých. Si na to hrdý - zaslúžiš si to.
   </div>
 
-  <h2><span class="sec-num">33.2</span> Čo sme sa naučili za 33 hodín</h2>
+  <h2><span class="sec-num">33.2</span> Čo sme sa naučili za celý kurz</h2>
   <div class="table-wrap">
     <table class="lesson-table">
       <thead>
@@ -471,10 +472,10 @@ var/www/html/index.nginx-debian.html</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Posledná domáca úloha</div>
-    <ol>
+        <ol>
       <li>Napíš 5 vecí, ktoré ťa na krúžku najviac bavili alebo prekvapili.</li>
-      <li>Napíš 1 vec, ktorú chceš v Linuxe vyskúšať ďalej (nemusíš to urobiť hneď, stačí nápad).</li>
-      <li>Odovzdaj túto úlohu učiteľovi. Je to jediná "písomka" z celého kurzu.</li>
+      <li>Napíš 1 vec, ktorú chceš v Linuxe vyskúšať ďalej, a prečo práve to.</li>
+      <li>Ktorá hodina ti dala najviac a čo by si poradil budúcim študentom krúžku?</li>
     </ol>
   </div>
 </section>

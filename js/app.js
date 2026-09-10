@@ -2,6 +2,9 @@
   "use strict";
 
   var lessonIds = null;
+  var ticking = false;
+  var SCROLL_OFFSET = 92;
+  var ACTIVE_TOLERANCE = 4;
 
   function collectLessons() {
     var lessons = document.querySelectorAll(".lesson");
@@ -11,10 +14,7 @@
     });
   }
 
-  function updateActive() {
-    var hash = window.location.hash.replace("#", "");
-    var target = hash || lessonIds[0] || "";
-
+  function highlightLesson(target) {
     var links = document.querySelectorAll(".timeline-group .lessons a");
     var activeLesson = null;
 
@@ -37,13 +37,57 @@
         group.classList.add("open");
       }
     }
+  }
+
+  function updateActive() {
+    var hash = window.location.hash.replace("#", "");
+    var target = hash || lessonIds[0] || "";
+
+    highlightLesson(target);
 
     if (target) {
       var el = document.getElementById(target);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        var top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+        window.scrollTo({ top: top, behavior: "smooth" });
       }
     }
+  }
+
+  function lessonFromScroll() {
+    var sections = document.querySelectorAll(".lesson");
+    if (!sections.length) return null;
+
+    var offset = SCROLL_OFFSET;
+    var current = sections[0].id;
+
+    var threshold = offset + ACTIVE_TOLERANCE;
+
+    for (var i = 0; i < sections.length; i++) {
+      var top = sections[i].getBoundingClientRect().top;
+      if (top <= threshold) {
+        current = sections[i].id;
+      } else {
+        break;
+      }
+    }
+
+    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    if (window.scrollY >= maxScroll - 4) {
+      current = sections[sections.length - 1].id;
+    }
+
+    return current;
+  }
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      var id = lessonFromScroll();
+      if (id) highlightLesson(id);
+      ticking = false;
+    });
   }
 
   function initAccordions() {
@@ -87,6 +131,7 @@
     updateActive();
 
     window.addEventListener("hashchange", updateActive);
+    window.addEventListener("scroll", onScroll, { passive: true });
   }
 
   if (document.readyState === "loading") {

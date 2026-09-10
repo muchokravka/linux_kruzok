@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Linux krúžok - 33 hodín praktického kurzu Linuxu pre strednú školu.">
-  <title>Linux krúžok · 33 hodín</title>
+  <meta name="description" content="Linux krúžok - 34 hodín praktického kurzu Linuxu pre strednú školu.">
+  <title>Linux krúžok · 34 hodín</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -30,6 +30,7 @@
       <div class="timeline-group open">
         <button class="group-label"><span class="caret">▶</span>Blok 1 · Úvod a inštalácia</button>
         <ul class="lessons">
+          <li><a href="#lesson-0"><span class="num">0</span> Výber Linuxu</a></li>
           <li><a href="#lesson-1"><span class="num">1</span> Čo je Linux a VM</a></li>
           <li><a href="#lesson-2"><span class="num">2</span> Inštalácia do VM</a></li>
           <li><a href="#lesson-3"><span class="num">3</span> Prvý login a terminál</a></li>
@@ -113,6 +114,98 @@
     <main class="main">
 
       <!-- ===== LESSON 1 (vzor) ===== -->
+      <!-- ===== LESSON 0 ===== -->
+      <section class="lesson" id="lesson-0">
+        <div class="lesson-header">
+          <div class="eyebrow">Hodina 0 · Blok 1</div>
+          <h1>Výber Linuxu</h1>
+          <p class="subtitle">Pozrieme sa, aké distribúcie existujú, vyskúšame si ich priamo v prehliadači a každý si vyberie tú svoju.</p>
+          <div class="meta">
+            <span class="meta-pill"><span class="dot dot-theory"></span> Teória 20 min</span>
+            <span class="meta-pill"><span class="dot dot-demo"></span> Prax 30 min</span>
+            <span class="meta-pill"><span class="dot dot-task"></span> Úloha 10 min</span>
+          </div>
+        </div>
+
+        <h2><span class="sec-num">0.1</span> Prečo si vyberať?</h2>
+        <p class="lead">Linux nie je jeden program, ale celá rodina systémov. Distribúcia je výber jadra, programov, správcu balíkov a prostredia - a každá má iný charakter.</p>
+        <p>Tri hlavné rodiny, ktoré dnes stretneš:</p>
+        <ul>
+          <li><strong>Debian / Ubuntu / Mint</strong> - balíkový systém <code>apt</code>, najviac učebných materiálov, veľmi stabilné.</li>
+          <li><strong>Fedora / RHEL</strong> - balíkový systém <code>dnf</code>, novšie verzie softvéru, používa ho veľa firiem.</li>
+          <li><strong>Arch</strong> - balíkový systém <code>pacman</code>, pre pokročilých, všetko si skladáš sám.</li>
+        </ul>
+        <p>Na krúžku bude každý pracovať na vlastnej VM s distribuciou, ktorú si vyberie. Neexistuje jedna správna voľba - dôležité je, aby ti vyhovovala, pretože na nej stráviš celý kurz.</p>
+
+        <div class="callout info">
+          <div class="callout-title">Čo si všímať pri výbere</div>
+          <ul>
+            <li><strong>Desktop prostredie</strong> - ako systém vyzerá a ovláda sa (GNOME, KDE, Cinnamon, XFCE...).</li>
+            <li><strong>Stabilita vs novinky</strong> - Debian a Mint dávajú overené verzie, Fedora novšie.</li>
+            <li><strong>Balíkový systém</strong> - <code>apt</code> alebo <code>dnf</code>, oba sa v kurze naučíš.</li>
+            <li><strong>Podpora a komunita</strong> - čím väčšia, tým ľahšie nájdeš odpoveď na problém.</li>
+          </ul>
+        </div>
+
+        <h2><span class="sec-num">0.2</span> Traja kandidáti</h2>
+        <p>Na krúžku si môžeš vybrať z troch distribúcií. Všetky sú na učenie výborné, líšia sa prostredím a filozofiou:</p>
+
+        <div class="table-wrap">
+          <table class="lesson-table">
+            <thead>
+              <tr><th></th><th>Debian</th><th>Fedora</th><th>Linux Mint</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Balíkový systém</strong></td><td><code>apt</code></td><td><code>dnf</code></td><td><code>apt</code></td></tr>
+              <tr><td><strong>Predvolené prostredie</strong></td><td>GNOME</td><td>GNOME</td><td>Cinnamon</td></tr>
+              <tr><td><strong>Stabilita</strong></td><td>veľmi stabilná</td><td>novšie verzie</td><td>veľmi stabilná</td></tr>
+              <tr><td><strong>Hodí sa pre</strong></td><td>univerzálne použitie</td><td>kto chce novinky</td><td>začiatočníkov, prechod z Windows</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2><span class="sec-num">0.3</span> Vyskúšaj si ich - distrosea</h2>
+        <p>Nemusíš nič inštalovať. Na stránke <a href="https://distrosea.com" target="_blank" rel="noopener">distrosea.com</a> beží Linux priamo v prehliadači (WebVM) - klikneš a o pár sekúnd vidíš plný systém.</p>
+        <p>U každého z troch kandidátov vyskúšaj:</p>
+        <ol>
+          <li>Nájdi a otvor <strong>terminál</strong>.</li>
+          <li>Spusti <code>cat /etc/os-release</code> a pozri, ktorá verzia systému beží.</li>
+          <li>Poobzeraj sa po pracovnej ploche - páči sa ti, ako sa ovláda?</li>
+        </ol>
+
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">distrosea - webový terminál</span></div>
+          <div class="term-body"><span class="prompt">user@debian:~$</span> <span class="cmd">cat /etc/os-release</span>
+<span class="out">PRETTY_NAME="<span class="path">Debian GNU/Linux</span> 12 (bookworm)"
+NAME="Debian GNU/Linux"</span>
+<span class="comment"># na Fedore uvidíš "Fedora Linux ...", na Minte "Linux Mint ..."</span>
+<span class="prompt">user@debian:~$</span> <span class="term-cursor"></span></div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Tip pri rozhodovaní</div>
+          Nie si si istý? Zvoľ Debian alebo Mint - obe sú veľmi stabilné a máš k nim najviac návodov. Fedoru zvoľ, ak chceš skúsiť novšie verzie softvéru a balíkový systém <code>dnf</code>.
+        </div>
+
+        <h2><span class="sec-num">0.4</span> Rozhodnutie</h2>
+        <p>Na konci hodiny sa každý rozhodne a zapíše si svoju voľbu. Domov si stiahne ISO obraz svojej distribúcie z oficiálnej stránky: <a href="https://debian.org" target="_blank" rel="noopener">debian.org</a>, <a href="https://fedoraproject.org" target="_blank" rel="noopener">fedoraproject.org</a> alebo <a href="https://linuxmint.com" target="_blank" rel="noopener">linuxmint.com</a>.</p>
+
+        <div class="callout warn">
+          <div class="callout-title">Pozor na dáta</div>
+          ISO obraz má 2-4 GB. Ak nemáš rýchly internet doma, nič sa nedeje - ISO stiahneme spolu na ďalšej hodine.
+        </div>
+
+        <div class="homework">
+          <div class="homework-title">🏠 Domáca úloha</div>
+          <ol>
+            <li>Napíš 3 dôvody, prečo si vybral svoju distribúciu.</li>
+            <li>Čo ťa na <a href="https://distrosea.com" target="_blank" rel="noopener">distrosea.com</a> najviac prekvapilo?</li>
+            <li>Ktoré desktop prostredie ti sadlo najviac a prečo?</li>
+            <li>Vysvetli vlastnými slovami, čo je balíkový systém a prečo sa ním distribúcie líšia.</li>
+          </ol>
+        </div>
+      </section>
+
       <section class="lesson" id="lesson-1">
         <div class="lesson-header">
           <div class="eyebrow">Hodina 1 · Blok 1</div>
@@ -181,11 +274,12 @@
 
         <div class="homework">
           <div class="homework-title">🏠 Domáca úloha</div>
-          <ol>
-            <li>Otvori terminál a napíš <code>uname -a</code>. Čo ti vypísal? Zapíš si to.</li>
-            <li>Utekaj <code>hostname</code> a zapíš názov svojho stroja.</li>
-            <li>Prídeš na krúžok s nainštalovanou distribúciou podľa vlastného výberu (Debian, Fedora alebo Mint) vo VM.</li>
-          </ol>
+              <ol>
+      <li>Vysvetli vlastnými slovami: čo je jadro (kernel) a čo je distribúcia.</li>
+      <li>Nakresli strom hlavných adresárov (<code>/</code>, <code>/home</code>, <code>/etc</code>, <code>/var</code>, <code>/usr</code>) a ku každému pripíš, na čo slúži.</li>
+      <li>Prečo je na učenie bezpečnejšie používať VM ako reálny počítač? Napíš aspoň dva dôvody.</li>
+      <li>Rozhodni sa, ktorú distribúciu (Debian, Fedora alebo Mint) chceš inštalovať, a napíš, prečo si vybral práve ju.</li>
+    </ol>
         </div>
       </section>
 
@@ -286,10 +380,11 @@ tmpfs           1.9G     0  1.9G   0% /dev/shm
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Dokonči inštaláciu Linuxu do VM, ak si nestihol na hodine.</li>
-      <li>Prihlás sa do terminálu a spusti <code>cat /etc/os-release</code>. Zapíš si názov a verziu svojej distribúcie.</li>
-      <li>Ak máš nainštalovaný <code>neofetch</code>, spusti ho a odfotografuj výstup. Ak nie, nič sa nedeje, dozvieme sa o ňom neskôr.</li>
+        <ol>
+      <li>Napíš postup inštalácie VM v 5 krokoch vlastnými slovami, ako keby si ho vysvetľoval spolužiakovi.</li>
+      <li>Vysvetli rozdiel medzi host a guest počítačom.</li>
+      <li>Čo je ISO obraz a na čo slúži pri inštalácii?</li>
+      <li>Prečo je pre začiatočníka bezpečné zvoliť pri inštalácii automatické rozdelenie disku?</li>
     </ol>
   </div>
 </section>
@@ -407,10 +502,11 @@ drwxr-xr-x 2 student student 4096 Sep  8 10:00 <span class="dir">Downloads</span
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Otvor terminál a preskúmaj svoj domovský adresár príkazom <code>ls -la ~</code>.</li>
-      <li>Zapíš si názvy troch skrytých súborov (tie, čo začínajú bodkou), ktoré si našiel.</li>
-      <li>Skús použiť <kbd>Tab</kbd> na doplnenie názvu súboru. Funguje to?</li>
+        <ol>
+      <li>Rozlúšti prompt <code>student@debian:~$</code> - čo znamená každá časť?</li>
+      <li>Napíš spamäti aspoň 3 príkazy z hodiny a čo robia.</li>
+      <li>Prečo začínajú skryté súbory bodkou a ako ich zobrazíš?</li>
+      <li>Vysvetli, na čo slúži tab completion a prečo šetrí čas.</li>
     </ol>
   </div>
 </section>
@@ -555,10 +651,11 @@ drwxr-xr-x 1 student  student  4096 sep  8 10:00 <span class="dir">home</span></
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Prejdi do adresára <code>/etc</code> a zisti, aká je absolútna cesta pomocou <code>pwd</code>.</li>
-      <li>Vráť sa do domovského adresára cez <code>cd -</code> a over, že si tam.</li>
-      <li>Vypíš obsah adresára <code>/tmp</code> pomocou <code>ls /tmp</code>.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi absolútnou a relatívnou cestou. Uveď príklad oboch.</li>
+      <li>Nakresli strom adresárov <code>/home/student/Dokumenty</code> a ukáž šípkami, kam sa dostaneš príkazmi <code>cd /</code>, <code>cd ..</code> a <code>cd -</code>.</li>
+      <li>Čo vypíše <code>pwd</code> po príkazoch <code>cd /etc</code> a potom <code>cd -</code>? Vysvetli, prečo.</li>
+      <li>Prečo sa oplatí poznať <code>ls -lh</code> namiesto obyčajného <code>ls</code>?</li>
     </ol>
   </div>
 </section>
@@ -663,11 +760,11 @@ projekt/src/main.c</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor adresár <code>cvicenie</code> a v ňom 5 súborov pomocou <code>touch</code> (napr. <code>a.txt</code> až <code>e.txt</code>).</li>
-      <li>Skopíruj celý adresár <code>cvicenie</code> ako <code>cvicenie_backup</code>.</li>
-      <li>Premenuj <code>cvicenie_backup</code> na <code>archiv</code>.</li>
-      <li>Vymaž adresár <code>archiv</code> pomocou <code>rm -r</code> a over výpisom <code>ls</code>.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi príkazmi <code>cp</code> a <code>mv</code>. Kedy použiť ktorý?</li>
+      <li>Napíš, čo sa stane: <code>mkdir pokus && cd pokus && touch a.txt && ls</code> - čo postupne spraví každý príkaz?</li>
+      <li>Prečo je <code>rm -rf</code> nebezpečný príkaz? Rozlúšti, čo znamená <code>-r</code> a <code>-f</code>.</li>
+      <li>Na čo slúži príkaz <code>file</code> a kedy sa ti môže hodiť?</li>
     </ol>
   </div>
 </section>
@@ -789,10 +886,11 @@ systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Otvor súbor <code>/etc/passwd</code> cez <code>less</code> a nájdi riadok, v ktorom je tvoj používateľ.</li>
-      <li>Vytvor 6 súborov: <code>dat1.txt</code>, <code>dat2.txt</code>, <code>dat10.txt</code>, <code>report.txt</code>, <code>report2.txt</code>, <code>notes.md</code>.</li>
-      <li>Nájdi wildcard príkaz, ktorý vypíše len súbory s <code>report</code> v názve.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>cat</code> a <code>less</code>. Kedy použiť ktorý?</li>
+      <li>Kedy použiješ <code>head</code> a kedy <code>tail</code>? Uveď príklad použitia <code>tail -f</code>.</li>
+      <li>Máš súbory <code>ahoj.txt</code>, <code>obraz.png</code>, <code>test.txt</code>, <code>skript.sh</code>. Čo vypíše <code>ls *.txt</code> a čo <code>ls ?est.*</code>?</li>
+      <li>Vysvetli vlastnými slovami, čo rozširuje wildcards - shell alebo program?</li>
     </ol>
   </div>
 </section>
@@ -927,10 +1025,11 @@ netstat (8)         - Print network connections, routing tables, ...</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Otvor manuál pre <code>ls</code> a nájdi prepínač na zoradenie súborov podľa času. Vyskúšaj ho.</li>
-      <li>Stlač <kbd>Ctrl</kbd>+<kbd>R</kbd> a vyhľadaj v histórii príkaz <code>man</code>.</li>
-      <li>Použi <code>apropos</code> na vyhľadanie príkazov súvisiacich s <code>"copy"</code>.</li>
+        <ol>
+      <li>Prečo je dôležité vedieť čítať manuálové stránky (<code>man</code>) aj bez internetu?</li>
+      <li>Čo znamená <code>!!</code> a <code>!42</code>? Kedy by si ich použil a kedy by si musel byť opatrný?</li>
+      <li>Vysvetli, ako funguje vyhľadávanie v histórii cez <kbd>Ctrl</kbd>+<kbd>R</kbd>.</li>
+      <li>Napíš aspoň 2 klávesové skratky na navigáciu v man stránke (napr. vyhľadávanie, ukončenie).</li>
     </ol>
   </div>
 </section>
@@ -1056,11 +1155,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Napíš <code>history | grep cd</code> a výstup ulož do súboru <code>cd_history.txt</code> cez <code>&gt;</code>.</li>
-      <li>Vypíš zoznam súborov v <code>/etc</code> a ulož výstup do <code>etc_list.txt</code> cez <code>ls -la /etc &gt; etc_list.txt</code>.</li>
-      <li>Over obsah súboru pomocou <code>cat etc_list.txt</code>.</li>
-      <li>Vyskúšaj <code>ls /neexistujuci 2&gt;/dev/null</code>. Čo sa stalo s chybovým výstupom?</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>&gt;</code> a <code>&gt;&gt;</code> pri presmerovaní výstupu.</li>
+      <li>Nakresli, ako pretekajú dáta cez rúru v príkaze <code>ls -la | grep txt</code>. Ktorý výstup ide kam?</li>
+      <li>Vysvetli rozdiel medzi stdout a stderr. Uveď príklad, kedy sa ti zobrazí stderr.</li>
+      <li>Prečo je kombinácia <code>history | grep apt</code> užitočná? Čo presne robí?</li>
     </ol>
   </div>
 </section>
@@ -1188,10 +1287,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti v termináli <code>whoami</code> a <code>id</code>. Zapíš si svoje uid a gid čísla.</li>
-      <li>Skús <code>sudo ls /root</code>. Vidíš obsah root adresára? Ak nie, zisti prečo.</li>
-      <li>Napíš na papier alebo do poznámok <strong>2 rozdiely</strong> medzi root a bežným používateľom.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi bežným používateľom a rootom. Napíš 3 veci, ktoré môže len root.</li>
+      <li>Prečo sa neodporúča pracovať stále ako root? Uveď aspoň 2 dôvody.</li>
+      <li>Čo robí <code>sudo</code> a aké heslo ťa pri ňom systém pýta?</li>
+      <li>Vysvetli rozdiel medzi <code>sudo</code> a <code>su</code>.</li>
     </ol>
   </div>
 </section>
@@ -1323,11 +1423,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor súbor <code>skript.sh</code> s obsahom <code>echo "Ahoj z krúžku"</code> cez nano alebo cez echo.</li>
-      <li>Nastav mu práva <code>chmod 755</code> a spusti ho cez <code>./skript.sh</code>.</li>
-      <li>Vysvetli na papieri, čo znamená <code>rwxr-xr-x</code> (aké práva má vlastník, skupina a ostatní?).</li>
-      <li>Zisti, čo sa stane keď skriptu odoberieš právo <code>x</code>. Skús ho spustiť.</li>
+        <ol>
+      <li>Rozlúšti práva <code>-rwxr-xr-x</code> znak po znaku: čo v jednotlivých skupinách znamená r, w, x?</li>
+      <li>Vysvetli číselný zápis práv: prečo <code>r=4</code>, <code>w=2</code>, <code>x=1</code> a koľko je teda <code>chmod 755</code>?</li>
+      <li>Čo sa stane, keď skript nemá právo <code>x</code> a ako to opravíš?</li>
+      <li>Prečo musí mať adresár právo <code>x</code>, aby si doňho mohol vojsť (<code>cd</code>)?</li>
     </ol>
   </div>
 </section>
@@ -1440,11 +1540,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor súbor <code>test.txt</code> a nastav mu práva <code>chmod 600</code>. Zapíš, aké zmeny vidíš v <code>ls -l</code>.</li>
-      <li>Potom mu nastav <code>chmod 755</code>. Porovnaj obe hodnoty a napíš rozdiel.</li>
-      <li>Napíš, prečo nemajú nové súbory právo spustenia <code>x</code>.</li>
-      <li>Skús <code>ls -la /usr/bin/ls</code> a zapíš jeho práva a vlastníka.</li>
+        <ol>
+      <li>Vysvetli, čo robí <code>chown student:dokumenty subor.txt</code> - čo sa zmení a pre koho.</li>
+      <li>Prečo majú nové súbory predvolene práva ako <code>-rw-r--r--</code> a nie <code>-rwxr-xr-x</code>? Čo s tým má spoločné <code>umask</code>?</li>
+      <li>Kedy by si súboru nastavil práva <code>600</code> a kedy <code>644</code>? Uveď príklad pre každý prípad.</li>
+      <li>Prečo je nebezpečné meniť <code>chown</code> na systémových súboroch?</li>
     </ol>
   </div>
 </section>
@@ -1593,11 +1693,10 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti celý projekt "firma" od začiatku doma bez pozerania do poznámok. Od vytvorenia priečinkov až po spustenie skriptu.</li>
-      <li>Zapíš si, ktoré príkazy ťa zdržali alebo si na ne zabudol. To sú veci, na ktorých musíš ešte zapracovať.</li>
-      <li>Pridaj do firmy nový priečinok <code>utajene</code> s právami <code>700</code> (len ty, nikto iný). Vysvetli, prečo si zvolil/a takéto práva.</li>
-      <li>Otestuj: prepni sa na iného používateľa cez <code>su</code> a skús vstúpiť do <code>firma/dokumenty</code>. Malo by to byť zamietnuté.</li>
+        <ol>
+      <li>Nakresli štruktúru priečinku <code>firma</code> (dokumenty, skripty, verejne) a ku každému pripíš, aké práva by si nastavil a prečo.</li>
+      <li>Vysvetli na príklade, prečo je kombinácia <code>755</code> pre adresár bezpečná, ale <code>777</code> nie.</li>
+      <li>Zhrň 3 najdôležitejšie veci, ktoré si sa naučil v blokoch 1-3.</li>
     </ol>
   </div>
 </section>
@@ -1751,10 +1850,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript <code>pozdrav.sh</code>, ktorý sa opýta na meno a vypíše pozdrav.</li>
-      <li>Uprav skript tak, aby okrem pozdravu zobrazil aj aktuálny dátum vo formáte DD.MM.YYYY (použi <code>date +%d.%m.%Y</code>).</li>
-      <li>Otestuj, či funguje s menami ako "Ján Novák" (medzera v mene).</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>'$meno'</code> a <code>"$meno"</code> - v ktorom prípade sa premenná rozšíri na hodnotu?</li>
+      <li>Čo je shebang <code>#!/bin/bash</code> a prečo sa dáva na začiatok skriptu?</li>
+      <li>Napíš na papier malý skript: pozdraví používateľa menom zadaným cez <code>read</code> a vypíše dnešný dátum. Bez počítača, len syntax.</li>
+      <li>Prečo pri priradení <code>meno=Jano</code> nesmú byť medzery okolo <code>=</code>?</li>
     </ol>
   </div>
 </section>
@@ -1927,10 +2027,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript, ktorý sa opýta na meno súboru a povie, či existuje.</li>
-      <li>Rozšír skript: ak existuje, povie či je to súbor alebo adresár (použi <code>-f</code> a <code>-d</code>).</li>
-      <li>Otestuj na rôznych cestách: <code>/etc</code>, <code>/tmp</code>, <code>/nieco</code>.</li>
+        <ol>
+      <li>Nakresli vetviaci diagram <code>if</code> / <code>else</code> pre skript, ktorý skontroluje, či súbor existuje.</li>
+      <li>Vysvetli rozdiel medzi <code>[ "$a" = "b" ]</code> a <code>[ "$a" -gt 5 ]</code> - na čo sa porovnáva v oboch.</li>
+      <li>Prečo sú medzery okolo <code>[</code> a <code>]</code> povinné? Čo by sa stalo bez nich?</li>
+      <li>Vysvetli, kedy použiješ <code>elif</code> namiesto ďalšieho samostatného <code>if</code>.</li>
     </ol>
   </div>
 </section>
@@ -2086,10 +2187,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript, ktorý pomocou cyklu <code>for</code> vypíše všetky súbory v aktuálnom adresári spolu s ich veľkosťou (použi <code>ls -lh</code>).</li>
-      <li>Vytvoř skript s <code>while</code>, ktorý sa pýta na meno, kým používateľ nezadá "koniec".</li>
-      <li>Otestuj skript <code>rename.sh</code> na vzorke súborov (vytvor pár .txt súborov cez <code>touch</code>).</li>
+        <ol>
+      <li>Čo vypíše tento cyklus? <code>for i in 1 2 3; do echo "Pokus $i"; done</code> - rozpíš každý krok.</li>
+      <li>Kedy použiješ <code>for</code> a kedy <code>while</code>? Uveď príklad pre oba.</li>
+      <li>Vysvetli, čo robí <code>break</code> a <code>continue</code> v cykle - aký je medzi nimi rozdiel?</li>
+      <li>Napíš hlavičku cyklu <code>for</code>, ktorý prejde všetky súbory <code>*.txt</code> v aktuálnom adresári.</li>
     </ol>
   </div>
 </section>
@@ -2269,10 +2371,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript, ktorý berie jeden argument (meno) a píše "Ahoj, &lt;meno&gt;!". Otestuj aj bez argumentu.</li>
-      <li>Uprav skript tak, aby pri dvoch argumentoch pozdravil oba: "Ahoj &lt;meno&gt; &lt;priezvisko&gt;!"</li>
-      <li>Vytvor funkciu <code>sekaj()</code>, ktorá prijme dve čísla a vráti ich súčet cez <code>echo</code>.</li>
+        <ol>
+      <li>Čo znamenajú <code>$1</code>, <code>$2</code>, <code>$#</code> a <code>$0</code> pri skripte?</li>
+      <li>Napíš na papier funkciu, ktorá prijíma 2 čísla a vypíše ich súčet, plus volanie funkcie. Bez počítača.</li>
+      <li>Čo znamená návratová hodnota <code>$?</code> a čo ti prezradí o minulom príkaze?</li>
+      <li>Prečo je <code>$?</code> rovný 0, keď príkaz prešiel, a 1 alebo viac, keď zlyhal?</li>
     </ol>
   </div>
 </section>
@@ -2421,10 +2524,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Uprav <code>zaloha.sh</code> tak, aby okrem <code>Documents</code> zálohoval aj adresár <code>Desktop</code>.</li>
-      <li>Pridaj kontrolu veľkosti zálohy: ak je archív väčší ako 100 MB, vypíš varovanie.</li>
-      <li>Vyskúšaj rozbaľovať zálohu na iné miesto a over, že súbory sú tam.</li>
+        <ol>
+      <li>Rozlúšti prepínače <code>tar -czf</code>: čo robí <code>c</code>, <code>z</code> a <code>f</code>?</li>
+      <li>Prečo je dobré dávať do názvu zálohy dátum? Aké problémy by nastali bez neho?</li>
+      <li>Nakresli postup zálohovacieho skriptu ako flowchart (kontrola priečinka → tvorba archívu → výpis výsledku).</li>
+      <li>Prečo je lepšie zálohovať do archívu (tar.gz) ako len kopírovať priečinok?</li>
     </ol>
   </div>
 </section>
@@ -2552,11 +2656,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Dokonči <code>report.sh</code> tak, aby fungoval bez chýb.</li>
-      <li>Pridaj sekciu, ktorá vypíše počet procesov, ktoré majú viac ako 1 bežiaci inštanciu (použi <code>ps aux</code>).</li>
-      <li>Uprav <code>sekcia()</code> tak, aby pridala prázdny riadok pred a po nadpise pre lepšiu čitateľnosť.</li>
-      <li>Ako bonus: ulož výstup skriptu do súboru cez <code>./report.sh > report.txt</code>.</li>
+        <ol>
+      <li>Naplánuj na papier, aké sekcie by mal mať <code>report.sh</code> a ktorý príkaz v každej sekcii bude.</li>
+      <li>Prečo sa oplatí rozdeliť skript na menšie funkcie namiesto jedného dlhého kódu?</li>
+      <li>Vysvetli, čo robí <code>date +%F</code> a ako by si ho využil v skripte.</li>
+      <li>Ktorá časť shell scriptingu ti doteraz robí najväčší problém a prečo?</li>
     </ol>
   </div>
 </section>
@@ -2786,11 +2890,11 @@ firefox-esr/stable,now 115.15.0esr-1 amd64 [installed]
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Aktualizuj zoznam balíkov (<code>apt update</code> alebo <code>dnf check-update</code>).</li>
-      <li>Nainštaluj program <code>htop</code> (správca procesov, budeme ho potrebovať nabudúce).</li>
-      <li>Spusti <code>htop</code> a preskúmaj jeho rozhranie. Ukonči ho klávesom <kbd>q</kbd>.</li>
-      <li>Vyskúšaj vyhľadať balík, ktorý ťa zaujíma cez <code>apt search</code> alebo <code>dnf search</code>.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>apt update</code> a <code>apt upgrade</code>.</li>
+      <li>Čo je repozitár a čo sa stane, keď balík, ktorý chceš nainštalovať, v repozitári nie je?</li>
+      <li>Čo sú závislosti balíka a prečo je dobré, že ich systém rieši automaticky?</li>
+      <li>Vysvetli, prečo je na Debiane/Minte <code>apt</code> a na Fedore <code>dnf</code> - v čom je princíp rovnaký?</li>
     </ol>
   </div>
 </section>
@@ -2946,12 +3050,11 @@ nohup: appending output to 'nohup.out'</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti <code>sleep 100</code> na pozadí pomocou <code>&amp;</code>.</li>
-      <li>Nájdij ho cez <code>ps aux | grep sleep</code> a zapíš si jeho PID.</li>
-      <li>Zabij ho cez <code>kill</code> (bez <code>-9</code>).</li>
-      <li>Over cez <code>ps aux | grep sleep</code>, že zmizol.</li>
-      <li>Vyskúšaj <code>htop</code> a nájdi tam proces, ktorý zaberá najviac CPU.</li>
+        <ol>
+      <li>Vysvetli, čo je proces a čo znamená PID a PPID.</li>
+      <li>Aký je rozdiel medzi <code>kill</code> a <code>kill -9</code>? Prečo sa <code>-9</code> neodporúča ako prvá voľba?</li>
+      <li>Čo sa stane, keď spustíš príkaz s <code>&amp;</code> na konci? A čo spraví <kbd>Ctrl</kbd>+<kbd>Z</kbd>?</li>
+      <li>Vysvetli, na čo slúži <code>ps aux</code> a čo v ňom vidíš pri svojom používateľovi.</li>
     </ol>
   </div>
 </section>
@@ -3090,11 +3193,11 @@ Sep 08 11:10:15 debian kernel: [12345.678] USB disconnect, address 2</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Zisti, ktoré služby na tvojom systéme bežia: <code>systemctl list-units --type=service --state=running</code>.</li>
-      <li>Vyber jednu službu a pozri si jej detailný stav cez <code>systemctl status nazov</code>.</li>
-      <li>Pozri si posledných 20 logov tejto služby cez <code>journalctl -u nazov -n 20</code>.</li>
-      <li>Skús <code>systemd-analyze blame</code> a zapíš si, ktorá služba sa spúšťa najdlhšie.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>systemctl start</code> a <code>systemctl enable</code> - kedy sa čo použije?</li>
+      <li>Čo je systemd unit a aké typy jednotiek poznáš (okrem služieb)?</li>
+      <li>Na čo slúži <code>journalctl -u sluzba</code> a kedy pridáš <code>-f</code>?</li>
+      <li>Prečo sa <code>enable</code> nevzťahuje len na aktuálny beh, ale aj na štart systému?</li>
     </ol>
   </div>
 </section>
@@ -3245,11 +3348,11 @@ Thu Sep  8 11:00:01 CEST 2026</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Ak máš z hodiny 18 skript <code>report.sh</code>, nastav cron na jeho spustenie raz denne o 7:00.</li>
-      <li>Otestuj: nastav cron na spustenie každú minútu, počkaj 2 minúty, over cez <code>cat</code> na výstupnom súbore.</li>
-      <li>Po otestovaní testovací riadok vymaž cez <code>crontab -e</code>.</li>
-      <li>Vypíš svoj finálny crontab cez <code>crontab -l</code> a zapíš si, čo tam máš.</li>
+        <ol>
+      <li>Rozlúšti cron riadok: <code>30 7 * * 1 /usr/local/bin/zaloha.sh</code> - kedy presne sa spustí?</li>
+      <li>Vymenuj 5 polí cron riadku a čo každé znamená.</li>
+      <li>Napíš cron riadok, ktorý spustí skript každý deň o 18:00.</li>
+      <li>Prečo je cron na serveroch dôležitý? Uveď aspoň 2 reálne príklady použitia.</li>
     </ol>
   </div>
 </section>
@@ -3354,10 +3457,11 @@ LISTEN  0       128     127.0.0.1:631        0.0.0.0:*</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Zisti svoju IP adresu cez <code>ip a</code> a zapíš si ju.</li>
-      <li>Zisti svoju gateway cez <code>ip route</code> a zapíš si ju.</li>
-      <li>Pingni <code>1.1.1.1</code> a zapíš si priemerný čas odpovede.</li>
+        <ol>
+      <li>Vysvetli vlastnými slovami, čo je IP adresa, gateway a DNS - na čo slúžia?</li>
+      <li>Prečo je <code>localhost</code> vždy <code>127.0.0.1</code> a na čo je dobrý?</li>
+      <li>Čo znamená riadok <code>default via 192.168.1.1</code> z výpisu <code>ip route</code>?</li>
+      <li>Kedy by si použil <code>ping</code> a čo ti odpoveď (alebo jej absencia) prezradí?</li>
     </ol>
   </div>
 </section>
@@ -3475,10 +3579,11 @@ moj_adresar/subor2.txt                       100%   34     0.3KB/s   00:00</span
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vygeneruj SSH kľúč cez <code>ssh-keygen -t ed25519</code>.</li>
-      <li>Nakopíruj ho na localhost cez <code>ssh-copy-id root@localhost</code>.</li>
-      <li>Pripoj sa cez <code>ssh root@localhost</code> a over, že sa pripojíš bez hesla.</li>
+        <ol>
+      <li>Prečo je komunikácia cez SSH šifrovaná a čo by sa mohlo stať, keby nebola?</li>
+      <li>Vysvetli rozdiel medzi súkromným a verejným kľúčom pri SSH. Ktorý nikdy nikomu nedávaš?</li>
+      <li>Prečo je prihlasovanie cez kľúče bezpečnejšie ako cez heslá?</li>
+      <li>Akou formou sa zadáva vzdialené pripojenie? Napíš príklad <code>ssh ...</code> a rozlúšti jednotlivé časti.</li>
     </ol>
   </div>
 </section>
@@ -3579,10 +3684,11 @@ UUID=e5f6a7b8-...  none  swap  sw  0  0</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>V domovskom adresári spusti <code>du -sh *</code> a nájdi najväčší priečinok.</li>
-      <li>Zapíš si, koľko miesta zaberá a čo v ňom je.</li>
-      <li>Spusti <code>df -h</code> a zapíš si, koľko voľného miesta máš na <code>/</code>.</li>
+        <ol>
+      <li>Vysvetli vlastnými slovami, čo je mount a čo súborový systém.</li>
+      <li>Aký je rozdiel medzi <code>df -h</code> a <code>du -sh</code>? Kedy použiť ktorý?</li>
+      <li>Prečo je <code>/etc/fstab</code> dôležitý a prečo by si ho bez uváženia nemeňoval?</li>
+      <li>Čo je swap a na čo slúži?</li>
     </ol>
   </div>
 </section>
@@ -3682,10 +3788,11 @@ Dnes sme sa ucilo nano a vim.
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor si poznámky z dnešnej hodiny v <code>nano</code> a ulož ich.</li>
-      <li>Otvori ich v <code>vim</code> a prečítaj si ich.</li>
-      <li>Spusti <code>vimtutor</code> a prejdi si prvých päť lekcií.</li>
+        <ol>
+      <li>Prečo sa vôbec učíme editovať text v termináli, keď existujú grafické editory? Uveď 2 dôvody.</li>
+      <li>Vysvetli rozdiel medzi módom insert a normal vo vime. Ktorou klávesou sa medzi nimi prepínaš?</li>
+      <li>Kedy by si použil <code>nano</code> a kedy <code>vim</code>? Na čo je <code>vimtutor</code>?</li>
+      <li>Napíš spamäti 3 užitočné klávesové skratky pre nano a 3 pre vim.</li>
     </ol>
   </div>
 </section>
@@ -3763,10 +3870,11 @@ Dnes sme sa ucilo nano a vim.
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti tmux reláciu s názvom <code>test</code>.</li>
-      <li>Rozdeľ okno vertikálne cez <kbd>Ctrl</kbd>+<kbd>B</kbd> a <kbd>%</kbd>.</li>
-      <li>V jednej polovici spusti <code>htop</code> a v druhej <code>ls</code>.</li>
+        <ol>
+      <li>Prečo proces spustený na popredí zomrie, keď sa odpojíš cez SSH? Čo s tým spraví tmux?</li>
+      <li>Vysvetli, čo znamená detach a attach v tmux - aký je medzi nimi rozdiel?</li>
+      <li>Kedy sa ti v reálnej administrácii oplatí tmux? Uveď 2 príklady.</li>
+      <li>Prečo je pri dlhých príkazoch (napr. inštalácia) nebezpečné jednoducho zavrieť terminál?</li>
     </ol>
   </div>
 </section>
@@ -3873,10 +3981,11 @@ To                         Action      From
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Zapni firewall cez <code>sudo ufw enable</code> (alebo <code>systemctl start firewalld</code> na Fedore).</li>
-      <li>Povol SSH cez <code>sudo ufw allow ssh</code>.</li>
-      <li>Over status cez <code>sudo ufw status</code> a zapíš si, čo vidíš.</li>
+        <ol>
+      <li>Prečo by firewall nemal mať otvorené všetky porty? Čo sa môže stať pri zle nastavenom serveri?</li>
+      <li>Vysvetli pravidlo „povoliť len to, čo naozaj potrebuješ“ na príklade SSH a web servera.</li>
+      <li>Napíš 3 bezpečnostné pravidlá, ktoré by si dodržal na vlastnom serveri.</li>
+      <li>Prečo sú pravidelné aktualizácie systému dôležité pre bezpečnosť?</li>
     </ol>
   </div>
 </section>
@@ -3989,11 +4098,11 @@ To                         Action      From
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Nainštaluj nginx a spusti ho cez <code>systemctl</code>.</li>
-      <li>Over, že beží pomocou <code>curl localhost</code>.</li>
-      <li>Vytvor vlastnú HTML stránku v <code>/var/www/html/index.html</code> so svojím menom a triedou.</li>
-      <li>Skús pridať obrázok alebo zoznam do stránky.</li>
+        <ol>
+      <li>Vysvetli model klient-server na príklade vlastnej web stránky z hodiny.</li>
+      <li>Čo znamená port 80 a port 443? Aký je medzi nimi rozdiel?</li>
+      <li>Ako overíš z terminálu, že web server beží? Prečo <code>curl localhost</code> stačí ako test?</li>
+      <li>Kde leží obsah stránok nginx a prečo doň musíš písať ako root?</li>
     </ol>
   </div>
 </section>
@@ -4138,11 +4247,11 @@ To                         Action      From
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor si vlastnú službu <code>moja-sluzba.service</code>, ktorá loguje dátum a čas do <code>~/moja.log</code>.</li>
-      <li>Pridaj do unit súboru <code>Restart=always</code> a <code>RestartSec=3</code> (počká 3 s pred reštartom).</li>
-      <li>Over <code>systemctl status moja-sluzba</code> a skús službu zastaviť a znova spustiť.</li>
-      <li>Bonus: zapíš si, čo sa stane, keď zmeníš <code>ExecStart</code> na neexistujúci súbor a spustíš <code>systemctl daemon-reload</code>.</li>
+        <ol>
+      <li>Čo robí <code>ExecStart</code> a čo <code>Restart=always</code> v unit súbore?</li>
+      <li>Prečo je <code>daemon-reload</code> povinný po zmene unit súboru?</li>
+      <li>Načrtni, čo všetko treba na vlastný servis: skript, unit súbor, príkazy. Napíš postup v 5 krokoch.</li>
+      <li>Čo sa stane, keď máš <code>Restart=always</code> a skript okamžite skončí s chybou? Aké je riziko?</li>
     </ol>
   </div>
 </section>
@@ -4264,10 +4373,11 @@ Swap:         2.0Gi          0B       2.0Gi</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Spusti <code>journalctl -u moja-sluzba</code> (z hodiny 30) a nájdi čas posledného spustenia.</li>
-      <li>Pozri si posledných 10 riadkov <code>/var/log/auth.log</code> a nájdi v nich svoje sudo príkazy.</li>
-      <li>Spusti <code>watch -n 3 uptime</code> a pozoruj 15 sekúnd. Zapíš si medzi akými hodnotami load sa pohybuje.</li>
+        <ol>
+      <li>Prečo sú logy pre správcu systému také dôležité? Uveď príklad situácie, keď ťa log zachráni.</li>
+      <li>Vysvetli, čo robí <code>journalctl -u sluzba</code>, <code>-n 50</code> a <code>-f</code> - čo každý prepínač pridá?</li>
+      <li>Prečo existuje logrotate a čo by sa stalo, keby logy rotované neboli?</li>
+      <li>Vymenuj aspoň 3 príkazy na monitoring systému a čo každý ukazuje.</li>
     </ol>
   </div>
 </section>
@@ -4388,11 +4498,11 @@ var/www/html/index.nginx-debian.html</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Dokonči projekt tak, aby všetky 4 časti fungovali.</li>
-      <li>Dopíš README.txt.</li>
-      <li>Priprav si 2-minútovú prezentáciu: čo si postavil, čo ťa bavilo, čo ťa stálo najviac.</li>
-      <li>Odporúčanie: spusti projekt odznova od nuly ešte raz doma - to ťa naučí viac ako všetko ostatné.</li>
+        <ol>
+      <li>Naplánuj záverečný projekt na papier: 4 časti v poradí a ako každú otestuješ.</li>
+      <li>Ktorá časť projektu je podľa teba najťažšia a ako ju chceš zvládnuť?</li>
+      <li>Priprav si 2-minútovú prezentáciu: čo ukážeš a v akom poradí?</li>
+      <li>Prečo je lepšie dokončiť a otestovať každú časť hneď, ako nechať všetko na koniec?</li>
     </ol>
   </div>
 </section>
@@ -4435,7 +4545,7 @@ var/www/html/index.nginx-debian.html</span>
     Postaviť funkčný server s vlastnou službou, web stránkou a zálohou je viac, než dokáže väčšina dospelých. Si na to hrdý - zaslúžiš si to.
   </div>
 
-  <h2><span class="sec-num">33.2</span> Čo sme sa naučili za 33 hodín</h2>
+  <h2><span class="sec-num">33.2</span> Čo sme sa naučili za celý kurz</h2>
   <div class="table-wrap">
     <table class="lesson-table">
       <thead>
@@ -4471,13 +4581,16 @@ var/www/html/index.nginx-debian.html</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Posledná domáca úloha</div>
-    <ol>
+        <ol>
       <li>Napíš 5 vecí, ktoré ťa na krúžku najviac bavili alebo prekvapili.</li>
-      <li>Napíš 1 vec, ktorú chceš v Linuxe vyskúšať ďalej (nemusíš to urobiť hneď, stačí nápad).</li>
-      <li>Odovzdaj túto úlohu učiteľovi. Je to jediná "písomka" z celého kurzu.</li>
+      <li>Napíš 1 vec, ktorú chceš v Linuxe vyskúšať ďalej, a prečo práve to.</li>
+      <li>Ktorá hodina ti dala najviac a čo by si poradil budúcim študentom krúžku?</li>
     </ol>
   </div>
 </section>
+
+
+
 
     </main>
   </div>

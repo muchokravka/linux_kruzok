@@ -138,10 +138,11 @@ drwxr-xr-x 1 student  student  4096 sep  8 10:00 <span class="dir">home</span></
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Prejdi do adresára <code>/etc</code> a zisti, aká je absolútna cesta pomocou <code>pwd</code>.</li>
-      <li>Vráť sa do domovského adresára cez <code>cd -</code> a over, že si tam.</li>
-      <li>Vypíš obsah adresára <code>/tmp</code> pomocou <code>ls /tmp</code>.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi absolútnou a relatívnou cestou. Uveď príklad oboch.</li>
+      <li>Nakresli strom adresárov <code>/home/student/Dokumenty</code> a ukáž šípkami, kam sa dostaneš príkazmi <code>cd /</code>, <code>cd ..</code> a <code>cd -</code>.</li>
+      <li>Čo vypíše <code>pwd</code> po príkazoch <code>cd /etc</code> a potom <code>cd -</code>? Vysvetli, prečo.</li>
+      <li>Prečo sa oplatí poznať <code>ls -lh</code> namiesto obyčajného <code>ls</code>?</li>
     </ol>
   </div>
 </section>
@@ -246,11 +247,11 @@ projekt/src/main.c</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor adresár <code>cvicenie</code> a v ňom 5 súborov pomocou <code>touch</code> (napr. <code>a.txt</code> až <code>e.txt</code>).</li>
-      <li>Skopíruj celý adresár <code>cvicenie</code> ako <code>cvicenie_backup</code>.</li>
-      <li>Premenuj <code>cvicenie_backup</code> na <code>archiv</code>.</li>
-      <li>Vymaž adresár <code>archiv</code> pomocou <code>rm -r</code> a over výpisom <code>ls</code>.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi príkazmi <code>cp</code> a <code>mv</code>. Kedy použiť ktorý?</li>
+      <li>Napíš, čo sa stane: <code>mkdir pokus && cd pokus && touch a.txt && ls</code> - čo postupne spraví každý príkaz?</li>
+      <li>Prečo je <code>rm -rf</code> nebezpečný príkaz? Rozlúšti, čo znamená <code>-r</code> a <code>-f</code>.</li>
+      <li>Na čo slúži príkaz <code>file</code> a kedy sa ti môže hodiť?</li>
     </ol>
   </div>
 </section>
@@ -372,10 +373,11 @@ systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Otvor súbor <code>/etc/passwd</code> cez <code>less</code> a nájdi riadok, v ktorom je tvoj používateľ.</li>
-      <li>Vytvor 6 súborov: <code>dat1.txt</code>, <code>dat2.txt</code>, <code>dat10.txt</code>, <code>report.txt</code>, <code>report2.txt</code>, <code>notes.md</code>.</li>
-      <li>Nájdi wildcard príkaz, ktorý vypíše len súbory s <code>report</code> v názve.</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>cat</code> a <code>less</code>. Kedy použiť ktorý?</li>
+      <li>Kedy použiješ <code>head</code> a kedy <code>tail</code>? Uveď príklad použitia <code>tail -f</code>.</li>
+      <li>Máš súbory <code>ahoj.txt</code>, <code>obraz.png</code>, <code>test.txt</code>, <code>skript.sh</code>. Čo vypíše <code>ls *.txt</code> a čo <code>ls ?est.*</code>?</li>
+      <li>Vysvetli vlastnými slovami, čo rozširuje wildcards - shell alebo program?</li>
     </ol>
   </div>
 </section>
@@ -510,10 +512,11 @@ netstat (8)         - Print network connections, routing tables, ...</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Otvor manuál pre <code>ls</code> a nájdi prepínač na zoradenie súborov podľa času. Vyskúšaj ho.</li>
-      <li>Stlač <kbd>Ctrl</kbd>+<kbd>R</kbd> a vyhľadaj v histórii príkaz <code>man</code>.</li>
-      <li>Použi <code>apropos</code> na vyhľadanie príkazov súvisiacich s <code>"copy"</code>.</li>
+        <ol>
+      <li>Prečo je dôležité vedieť čítať manuálové stránky (<code>man</code>) aj bez internetu?</li>
+      <li>Čo znamená <code>!!</code> a <code>!42</code>? Kedy by si ich použil a kedy by si musel byť opatrný?</li>
+      <li>Vysvetli, ako funguje vyhľadávanie v histórii cez <kbd>Ctrl</kbd>+<kbd>R</kbd>.</li>
+      <li>Napíš aspoň 2 klávesové skratky na navigáciu v man stránke (napr. vyhľadávanie, ukončenie).</li>
     </ol>
   </div>
 </section>
@@ -639,11 +642,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Napíš <code>history | grep cd</code> a výstup ulož do súboru <code>cd_history.txt</code> cez <code>&gt;</code>.</li>
-      <li>Vypíš zoznam súborov v <code>/etc</code> a ulož výstup do <code>etc_list.txt</code> cez <code>ls -la /etc &gt; etc_list.txt</code>.</li>
-      <li>Over obsah súboru pomocou <code>cat etc_list.txt</code>.</li>
-      <li>Vyskúšaj <code>ls /neexistujuci 2&gt;/dev/null</code>. Čo sa stalo s chybovým výstupom?</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>&gt;</code> a <code>&gt;&gt;</code> pri presmerovaní výstupu.</li>
+      <li>Nakresli, ako pretekajú dáta cez rúru v príkaze <code>ls -la | grep txt</code>. Ktorý výstup ide kam?</li>
+      <li>Vysvetli rozdiel medzi stdout a stderr. Uveď príklad, kedy sa ti zobrazí stderr.</li>
+      <li>Prečo je kombinácia <code>history | grep apt</code> užitočná? Čo presne robí?</li>
     </ol>
   </div>
 </section>

@@ -147,10 +147,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript <code>pozdrav.sh</code>, ktorý sa opýta na meno a vypíše pozdrav.</li>
-      <li>Uprav skript tak, aby okrem pozdravu zobrazil aj aktuálny dátum vo formáte DD.MM.YYYY (použi <code>date +%d.%m.%Y</code>).</li>
-      <li>Otestuj, či funguje s menami ako "Ján Novák" (medzera v mene).</li>
+        <ol>
+      <li>Vysvetli rozdiel medzi <code>'$meno'</code> a <code>"$meno"</code> - v ktorom prípade sa premenná rozšíri na hodnotu?</li>
+      <li>Čo je shebang <code>#!/bin/bash</code> a prečo sa dáva na začiatok skriptu?</li>
+      <li>Napíš na papier malý skript: pozdraví používateľa menom zadaným cez <code>read</code> a vypíše dnešný dátum. Bez počítača, len syntax.</li>
+      <li>Prečo pri priradení <code>meno=Jano</code> nesmú byť medzery okolo <code>=</code>?</li>
     </ol>
   </div>
 </section>
@@ -323,10 +324,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript, ktorý sa opýta na meno súboru a povie, či existuje.</li>
-      <li>Rozšír skript: ak existuje, povie či je to súbor alebo adresár (použi <code>-f</code> a <code>-d</code>).</li>
-      <li>Otestuj na rôznych cestách: <code>/etc</code>, <code>/tmp</code>, <code>/nieco</code>.</li>
+        <ol>
+      <li>Nakresli vetviaci diagram <code>if</code> / <code>else</code> pre skript, ktorý skontroluje, či súbor existuje.</li>
+      <li>Vysvetli rozdiel medzi <code>[ "$a" = "b" ]</code> a <code>[ "$a" -gt 5 ]</code> - na čo sa porovnáva v oboch.</li>
+      <li>Prečo sú medzery okolo <code>[</code> a <code>]</code> povinné? Čo by sa stalo bez nich?</li>
+      <li>Vysvetli, kedy použiješ <code>elif</code> namiesto ďalšieho samostatného <code>if</code>.</li>
     </ol>
   </div>
 </section>
@@ -482,10 +484,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript, ktorý pomocou cyklu <code>for</code> vypíše všetky súbory v aktuálnom adresári spolu s ich veľkosťou (použi <code>ls -lh</code>).</li>
-      <li>Vytvoř skript s <code>while</code>, ktorý sa pýta na meno, kým používateľ nezadá "koniec".</li>
-      <li>Otestuj skript <code>rename.sh</code> na vzorke súborov (vytvor pár .txt súborov cez <code>touch</code>).</li>
+        <ol>
+      <li>Čo vypíše tento cyklus? <code>for i in 1 2 3; do echo "Pokus $i"; done</code> - rozpíš každý krok.</li>
+      <li>Kedy použiješ <code>for</code> a kedy <code>while</code>? Uveď príklad pre oba.</li>
+      <li>Vysvetli, čo robí <code>break</code> a <code>continue</code> v cykle - aký je medzi nimi rozdiel?</li>
+      <li>Napíš hlavičku cyklu <code>for</code>, ktorý prejde všetky súbory <code>*.txt</code> v aktuálnom adresári.</li>
     </ol>
   </div>
 </section>
@@ -665,10 +668,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Vytvor skript, ktorý berie jeden argument (meno) a píše "Ahoj, &lt;meno&gt;!". Otestuj aj bez argumentu.</li>
-      <li>Uprav skript tak, aby pri dvoch argumentoch pozdravil oba: "Ahoj &lt;meno&gt; &lt;priezvisko&gt;!"</li>
-      <li>Vytvor funkciu <code>sekaj()</code>, ktorá prijme dve čísla a vráti ich súčet cez <code>echo</code>.</li>
+        <ol>
+      <li>Čo znamenajú <code>$1</code>, <code>$2</code>, <code>$#</code> a <code>$0</code> pri skripte?</li>
+      <li>Napíš na papier funkciu, ktorá prijíma 2 čísla a vypíše ich súčet, plus volanie funkcie. Bez počítača.</li>
+      <li>Čo znamená návratová hodnota <code>$?</code> a čo ti prezradí o minulom príkaze?</li>
+      <li>Prečo je <code>$?</code> rovný 0, keď príkaz prešiel, a 1 alebo viac, keď zlyhal?</li>
     </ol>
   </div>
 </section>
@@ -817,10 +821,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Uprav <code>zaloha.sh</code> tak, aby okrem <code>Documents</code> zálohoval aj adresár <code>Desktop</code>.</li>
-      <li>Pridaj kontrolu veľkosti zálohy: ak je archív väčší ako 100 MB, vypíš varovanie.</li>
-      <li>Vyskúšaj rozbaľovať zálohu na iné miesto a over, že súbory sú tam.</li>
+        <ol>
+      <li>Rozlúšti prepínače <code>tar -czf</code>: čo robí <code>c</code>, <code>z</code> a <code>f</code>?</li>
+      <li>Prečo je dobré dávať do názvu zálohy dátum? Aké problémy by nastali bez neho?</li>
+      <li>Nakresli postup zálohovacieho skriptu ako flowchart (kontrola priečinka → tvorba archívu → výpis výsledku).</li>
+      <li>Prečo je lepšie zálohovať do archívu (tar.gz) ako len kopírovať priečinok?</li>
     </ol>
   </div>
 </section>
@@ -948,11 +953,11 @@
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
-    <ol>
-      <li>Dokonči <code>report.sh</code> tak, aby fungoval bez chýb.</li>
-      <li>Pridaj sekciu, ktorá vypíše počet procesov, ktoré majú viac ako 1 bežiaci inštanciu (použi <code>ps aux</code>).</li>
-      <li>Uprav <code>sekcia()</code> tak, aby pridala prázdny riadok pred a po nadpise pre lepšiu čitateľnosť.</li>
-      <li>Ako bonus: ulož výstup skriptu do súboru cez <code>./report.sh > report.txt</code>.</li>
+        <ol>
+      <li>Naplánuj na papier, aké sekcie by mal mať <code>report.sh</code> a ktorý príkaz v každej sekcii bude.</li>
+      <li>Prečo sa oplatí rozdeliť skript na menšie funkcie namiesto jedného dlhého kódu?</li>
+      <li>Vysvetli, čo robí <code>date +%F</code> a ako by si ho využil v skripte.</li>
+      <li>Ktorá časť shell scriptingu ti doteraz robí najväčší problém a prečo?</li>
     </ol>
   </div>
 </section>
