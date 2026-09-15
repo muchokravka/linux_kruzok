@@ -245,6 +245,125 @@ projekt/src/main.c</span>
     <code>sudo rm -rf /</code> vymaže celý tvoj systém. Toto je prvý príkaz, ktorý by si mal poznať, aby si ho nikdy náhodou nenapísal.
   </div>
 
+  <h2><span class="sec-num">5.5</span> Všetko je súbor: adresár /dev</h2>
+  <p class="lead">Linux pristupuje k hardvéru rovnako ako k obyčajným súborom. Žiadne špeciálne rozhranie, žiadne zvláštne API. Jednoducho čítaš a zapisuješ.</p>
+  <p>Jednou z kľúčových filozofií Linuxu je: <strong>"Všetko je súbor."</strong> Každé hardvérové zariadenie, ktoré je pripojené k počítaču, sa sprístupňuje vo forme špeciálneho súboru v adresári <code>/dev</code>. Čítaš z neho, zapisuješ do neho a tým komunikuješ so zariadením. Jednotné rozhranie cez klasické súborové operácie (file I/O) znamená, že nepotrebuješ žiadnu špeciálnu knižnicu ani ovládač v používateľskom priestore.</p>
+
+  <p>Adresár <code>/dev</code> obsahuje <strong>device files</strong>, teda špeciálne súbory reprezentujúce hardvér. Kvôli bezpečnostným právam je rozumné ho len prezerať, nie upravovať. Pozri sa naň takto:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -l /dev</span>
+<span class="out">brw-rw---- 1 root disk    8, 0 sep  8 08:00 <span class="dir">sda</span>
+crw-rw-rw- 1 root tty     5, 0 sep  8 08:00 <span class="dir">tty</span>
+crw-rw-rw- 1 root root    1, 3 sep  8 08:00 <span class="dir">null</span>
+crw-rw-rw- 1 root root    1, 5 sep  8 08:00 <span class="dir">zero</span>
+crw-rw-rw- 1 root root    1, 8 sep  8 08:00 <span class="dir">random</span>
+crw-rw-rw- 1 root root    1, 9 sep  8 08:00 <span class="dir">urandom</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>V prvom stĺpci výpisu vidíš typ zariadenia. Existujú dva hlavné typy:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Znak</th><th>Typ</th><th>Ako komunikuje</th><th>Príklady</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>b</code></td><td>Blokové</td><td>Blokového zariadenia sa číta/zapisuje po blokoch (napr. 512 bajtov naraz). Vhodné pre disky.</td><td><code>/dev/sda</code>, <code>/dev/nvme0n1</code></td></tr>
+        <tr><td><code>c</code></td><td>Znakové</td><td>Znakové zariadenia komunikujú po jednom znaku. Používajú sa pre terminály, zvuk, klávesnice.</td><td><code>/dev/tty</code>, <code>/dev/snd/*</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Niektoré zariadenia v <code>/dev</code> sú obzvlášť užitočné aj pre bežnú prácu v termináli.</p>
+
+  <ul>
+    <li><strong><code>/dev/null</code></strong> je "čierna diera". Všetko, čo do nej pošleš, zmizne. Potlačíš ňou nechcený výstup: <code>echo ahoj > /dev/null</code>. Potlačíš aj chyby: <code>command 2>/dev/null</code>.</li>
+    <li><strong><code>/dev/zero</code></strong> produkuje nekonečný prúd nulových bajtov. Hodí sa na vytvorenie testovacích súborov: <code>dd if=/dev/zero of=test.bin bs=1M count=10</code> ti vytvorí 10 MB plný nul.</li>
+    <li><strong><code>/dev/random</code></strong> a <strong><code>/dev/urandom</code></strong> generujú náhodné dáta. <code>/dev/random</code> môže prerušiť čakanie, ak systém nedostal dosť entropy (od jadra 5.6, tj. od roku 2020, blokuje už len na začiatku štartu systému). <code>/dev/urandom</code> je rýchlejší a vždy dostupný, takže sa používa častejšie.</li>
+    <li><strong><code>/dev/tty</code></strong> je aktuálny terminál. Hodí sa, keď chceš napriek redirekcii niečo zobraziť priamo na obrazovku: <code>echo AHOJ > /dev/tty</code>.</li>
+  </ul>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cat /dev/urandom | head -c 32 | hexdump</span>
+<span class="out">0000000 3a7f 94b1 0ff6 2e8a c7d4 53a1 b8e9 1d6f
+0000010 a45c 7203 e9b8 5f16 0d84 6ba2 31e7 c9f0</span>
+<span class="comment"># náhodné dáta</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Nikdy nečítaj surový disk</div>
+    Príkaz <code>cat /dev/sda</code> by načítal celý RAW obsah tvojho disku. Nikdy to nespúšťaj naozaj, mohol by si čítať citlivé dáta a navyše to trvá veľmi dlho. Toto je len ukážka sily filozofie "všetko je súbor" aj v takejto forme. Na čítanie diskov sa používajú špecializované nástroje ako <code>dd</code> alebo <code>xxd</code> s rozumnými obmedzeniami.
+  </div>
+
+  <p>Zaujímavosťou je aj <code>/proc</code>. Je to <strong>virtuálny súborový systém</strong> generovaný priamo jadrom. Súbory tam neležia na disku, jadro ich generuje na požiadanie. Môžeš v ňom čítať informácie o systéme:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">head -n 5 /proc/cpuinfo</span>
+<span class="out">processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 142
+model name	: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">head -n 5 /proc/meminfo</span>
+<span class="out">MemTotal:       16384000 kB
+MemFree:         8234568 kB
+MemAvailable:   13456000 kB
+Buffers:          512000 kB
+Cached:          4096000 kB</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">5.6</span> Odkazy: hardlink a symlink</h2>
+  <p class="lead">Súbory v Linuxe sa dajú odkazovať viacerými spôsobmi. hardlink a symlink sú dva rozdielne mechanizmy s rozdielnym správaním.</p>
+  <p><strong>Hardlink</strong> je druhé meno pre TEN ISTÝ súbor. Oba názvy odkazujú na rovnaký inode (interný identifikátor súboru na disku). Hardlink funguje len v rámci jedného súborového systému a vytvoríš ho príkazom:</p>
+
+  <p><code>ln subor odkaz</code></p>
+
+  <p><strong>Symlink</strong> (symbolický odkaz) je malý súbor, ktorý obsahuje cestu k inému súboru alebo adresáru. Funguje podobne ako zástupca (shortcut) vo Windowse. V <code>ls -l</code> ho spoznáš podľa písmena <code>l</code> na začiatku a šípky <code>-></code> ukazujúcej cieľ. Vytvoríš ho takto:</p>
+
+  <p><code>ln -s ciel odkaz</code></p>
+
+  <p>Hlavný rozdiel sa prejaví, keď pôvodný súbor vymažeš:</p>
+  <ul>
+    <li><strong>Hardlink</strong> stále funguje. Dáta na disku zmiznú až vtedy, keď zmizne posledný názov (hardlink), ktorý na ne ukazuje.</li>
+    <li><strong>Symlink</strong> sa "pretrhne" (broken). Ukazuje na cestu, ktorá už neexistuje. Takýto symlink zobrazí chybu pri pokuse o čítanie.</li>
+  </ul>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Vlastnosť</th><th>hardlink</th><th>symlink</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Vytvorenie</td><td><code>ln subor odkaz</code></td><td><code>ln -s ciel odkaz</code></td></tr>
+        <tr><td>Typ v <code>ls -l</code></td><td>Vyzerá ako obyčajný súbor</td><td>Začína <code>l</code>, ukazuje <code>-></code> cieľ</td></tr>
+        <tr><td>Keď zmizne pôvodný súbor</td><td>Funguje ďalej (rovnaký inode)</td><td>Pretrhne sa (broken symlink)</td></tr>
+        <tr><td>Cez súborové systémy</td><td>Nie (len v rámci jedného FS)</td><td>Áno (ukazuje na cestu)</td></tr>
+        <tr><td>Aktualizácia cieľa</td><td>Nie (pevne viazaný na inode)</td><td>Áno (upravíš cestu)</td></tr>
+        <tr><td>Veľkosť</td><td>0 bajtov (iba odkaz)</td><td>Veľkosť textu cesty</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "Ahoj" > subor.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ln subor.txt hardlink.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ln -s subor.txt symlink.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -l subor.txt hardlink.txt symlink.txt</span>
+<span class="out">-rw-r--r-- 2 student student 6 sep 15 10:00 <span class="dir">subor.txt</span>
+-rw-r--r-- 2 student student 6 sep 15 10:00 <span class="dir">hardlink.txt</span>
+lrwxrwxrwx 1 student student 9 sep 15 10:00 <span class="dir">symlink.txt</span> -> subor.txt</span>
+<span class="comment"># všimni počet odkazov (2) a šípku pri symlinke</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
         <ol>

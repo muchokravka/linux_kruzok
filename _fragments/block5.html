@@ -381,6 +381,32 @@ nohup: appending output to 'nohup.out'</span>
     <code>kill PID</code> = jemné ukončenie (SIGTERM). <code>kill -9 PID</code> = okamžité ukončenie (SIGKILL). <code>pkill nazov</code> = zabiť všetky procesy podľa názvu. <code>killall nazov</code> = to isté, ale presnejšie.
   </div>
 
+  <h2><span class="sec-num">20.6</span> Ako vzniká proces</h2>
+  <p class="lead">Každý proces vzniká tak, že ho vytvorí iný proces. Žiadny proces jednoducho nevznikne z ničoho. Jadro na to používa dve systémové volania: <code>fork()</code> a <code>exec</code>.</p>
+  <ul>
+    <li><strong><code>fork()</code></strong> vytvorí kópiu rodičovského procesu. Nový proces dostane vlastné PID a dedí obsah pamäte rodiča.</li>
+    <li><strong><code>exec</code></strong> (napr. <code>execl()</code>, <code>execv()</code>) nahradí aktuálny obraz programu novým programom. Proces zostane ten istý (rovnaké PID), ale beží už niečo úplne iné.</li>
+  </ul>
+  <p>Keď v termináli napíšeš nejaký príkaz, tvoj shell (proces) najprv zavolá <code>fork()</code> a vytvorí kópiu seba samého. V tomto dieťati hneď zavolá <code>exec()</code> a nahradí svoj obraz tým príkazom, ktorý si zadal. Preto má každý proces okrem <strong>PID</strong> aj <strong>PPID</strong> (parent PID, číslo rodičovského procesu). Všetky procesy tak tvoria <strong>strom</strong>, na čele celého stromu je PID 1, čo je <code>systemd</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ps -ef --forest</span>
+<span class="out">UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 Sep07 ?        00:00:12 /sbin/init ── systemd
+root         345       1  0 Sep07 ?        00:00:05  └─ sshd
+root        1200     345  0 10:00 ?        00:00:00      └─ sshd: student [priv]
+student     1234    1200  0 10:00 pts/0    00:00:00      │   └─ -bash
+student     5678    1234  0 10:05 pts/0    00:00:00      │       └─ ps -ef --forest</span>
+<span class="comment"># strom procesov: každý má rodiča</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Zombie procesy</div>
+    Keď "zabiješ" nejaký proces, jadro to oznámi jeho rodičovi. Rodič musí zavolať <code>wait()</code>, aby si prevzal informáciu o ukončení dieťaťa. Ak tak neurobí, dieťa sa stane <strong>zombie</strong> procesom. V <code>top</code> alebo <code>htop</code> ho uvidíš ako <code>Z</code> v stave procesu alebo ako "defunct". Väčšinou sa o to postará sám systém, ale ak zombie zostane visieť, znamená to chybu v rodičovskom procese.
+  </div>
+
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
         <ol>
@@ -522,6 +548,51 @@ Sep 08 11:10:15 debian kernel: [12345.678] USB disconnect, address 2</span>
   <div class="callout warn">
     <div class="callout-title">root oprávnenia</div>
     Na ovládanie služieb potrebuješ <code>sudo</code>. Čítanie logov cez <code>journalctl</code> väčšinou funguje aj ako normálny používateľ, ale niekedy potrebuješ <code>sudo journalctl</code> pre staršie záznamy.
+  </div>
+
+  <h2><span class="sec-num">21.5</span> Ako prebieha boot</h2>
+  <p class="lead">Keď stlačíš tlačidlo napájania, nedostaneš sa k shellu okamžite. Systém prechádza niekoľkými krokmi, než sa spustí.</p>
+  <ol>
+    <li><strong>BIOS alebo UEFI</strong> sa spustí a vykoná základné testy hardvéru (POST, Power-On Self Test). Overí, že RAM, disk a ďalšie komponenty fungujú.</li>
+    <li><strong>Nájde bootloader</strong> zvyčajne v MBR (Master Boot Record) alebo EFI partícii.</li>
+    <li><strong>Spustí bootloader</strong>, napríklad GRUB2, systemd-boot alebo LILO.</li>
+    <li><strong>Bootloader načíta kernel</strong> a voliteľne <strong>initramfs</strong>, čo je malý dočasný koreňový systém.</li>
+    <li><strong>Kernel inicializuje hardvér</strong> a ovládače a nakoniec spustí <strong>init systém</strong> (u nás <code>systemd</code>), a tým celý systém.</li>
+  </ol>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl --version</span>
+<span class="out">systemd 252 (252.30-1~deb12u2)
++PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFSETUP +FUTEX +GETTEXT +IDN2 -ICONV +CRYPTO +LIBCRYPTSETUP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFSETUP +FUTEX +IDN2 +PCRE2</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemd-analyze</span>
+<span class="out">Startup finished in 4.123s (kernel) + 8.456s (userspace) = 12.580s
+graphical.target reached after 11.234s in userspace.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">GRUB2 a initramfs</div>
+    Väčšina distribúcií dnes používa práve <strong>GRUB2</strong> ako bootloader. <strong>initramfs</strong> je malý dočasný systém, ktorý kernel potrebuje na to, aby dokázal načítať ovládače diskov a prístup ku koreňovému systému. Bez neho by kernel možno nevedel, na ktorom disku má hľadať tvoj systém.
+  </div>
+
+  <h2><span class="sec-num">21.6</span> Iné init systémy a daemoni</h2>
+  <p class="lead"><code>systemd</code> nie je jediný init systém, ktorý existuje. Linuxová komunita má viacero alternatív.</p>
+  <ul>
+    <li><strong>SysVinit</strong>, klasický UNIX-ovský init. Používa <strong>runlevely</strong> (stav systému, napríklad podľa Red Hat konvencie 3 = iba terminál, 5 = grafické rozhranie; Debian má naproti tomu 2-5 rovnaké) a skripty v <code>/etc/init.d/</code>. Jednoduchý, ale pomalší, pretože spúšťa služby postupne za sebou.</li>
+    <li><strong>OpenRC</strong>, ľahký init systém založený na shell skriptoch. Podporuje paralelné spúšťanie služieb. Typický pre Gentoo, Devuan a ďalšie distribúcie, ktoré nechcú systemd.</li>
+    <li><strong>runit</strong>, extrémne rýchly a minimalistický init. Služby spúšťa paralelne a automaticko restartuje tie, ktoré spadnú. Používa ho Void Linux.</li>
+  </ul>
+  <p>Základným pojmom je <strong>daemon</strong>. Daemon je proces, ktorý beží na pozadí bez priamej interakcie s používateľom. Práve tie spravuješ príkazmi <code>systemctl</code>. Vybrané príklady:</p>
+  <ul>
+    <li><strong>CUPS</strong>, tlačový server, ktorý spravuje tlačiarne a tlačové úlohy.</li>
+    <li><strong>XOrg / X11</strong>, služba na vykresľovanie grafického rozhrania. Zastaralá architektúra, ale stále veľmi rozšírená.</li>
+    <li><strong>Wayland</strong>, novšia náhrada XOrg. Postupne ju preberajú distribúcie (Fedora, Ubuntu) ako predvolený zobrazovací server.</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-title">Čo je daemon?</div>
+    Daemon je len proces bežiaci na pozadí bez interakcie s používateľom. Práve tie spravuješ príkazmi <code>systemctl</code>. Keď zapneš <code>sshd</code>, spúšťaš daemon, ktorý čaká na SSH pripojenia. Keď vypneš <code>cups</code>, vypínaš daemon pre tlač. Všetko sú to jednoduché procesy, akurát žiadne nevyžadujú tvoju prítomnosť.
   </div>
 
   <div class="homework">

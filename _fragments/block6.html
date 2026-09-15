@@ -243,7 +243,7 @@ moj_adresar/subor2.txt                       100%   34     0.3KB/s   00:00</span
 
   <h2><span class="sec-num">25.1</span> Čo je mount a súborový systém?</h2>
   <p class="lead">Súborový systém určuje, ako sú dáta uložené na disku. Linux najčastejšie používa <code>ext4</code>. Mount znamená pripojiť disk do adresárovej štruktúry.</p>
-  <p>Na rozdiel od Windowsu, kde má každý disk písmeno, v Linuxe sa disky pripájajú do existujúcich adresárov. Napríklad tvoj hlavný disk je pripojený na <code>/</code> a swap je špeciálny oddiel, ktorý slúži ako rozšírená pamäť.</p>
+  <p>Na rozdiel od Windowsu, kde má každý disk písmeno, v Linuxe sa disky pripájajú do existujúcich adresárov. Napríklad tvoj hlavný disk je pripojený na <code>/</code> a swap je špeciálny oddiel, ktorý slúži ako virtuálna pamäť (diskový doplnok RAM).</p>
 
   <h2><span class="sec-num">25.2</span> lsblk a blkid</h2>
   <p><code>lsblk</code> ukáže disky a oddiely v prehľadnej stromovej štruktúre. <code>blkid</code> ukáže identifikátory oddielov.</p>
@@ -322,6 +322,37 @@ UUID=e5f6a7b8-...  none  swap  sw  0  0</span>
   </div>
 
   <p><code>if=/dev/zero</code> znamená vstup plný núl, <code>bs=1M</code> veľkosť bloku a <code>count=100</code> počet blokov, teda 100 MB. Súbor sme hneď odstránili, aby sme nezaplnili disk.</p>
+
+  <h2><span class="sec-num">25.6</span> Prehľad súborových systémov</h2>
+  <p>Na disku môže byť viac formátov a každý má inú filozofiu. Toto sú tie, na ktoré v Linuxe najčastejšie narazíš.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Formát</th><th>Kde ho stretneš</th><th>Poznámka</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>ext4</code></td><td>systémový disk <code>/</code> a <code>/home</code></td><td>moderný žurnalovací súborový systém, natívny pre Linux, dnešný štandard</td></tr>
+        <tr><td><code>ext2</code></td><td>staršie systémy, embedded</td><td>bez žurnalovania, výborná podpora v jadre</td></tr>
+        <tr><td><code>btrfs</code></td><td><code>/home</code>, <code>/var</code>, NAS servery</td><td>žurnalovací, podporuje snapshoty</td></tr>
+        <tr><td><code>xfs</code></td><td>veľké dáta, serverové disky</td><td>silný žurnalovací FS, bežný na Linux serveroch</td></tr>
+        <tr><td><code>swap</code></td><td>swapovací súbor/partícia</td><td>disková virtuálna pamäť (paging), dnes častejšie swapfile (obdoba <code>pagefile.sys</code> vo Windows)</td></tr>
+        <tr><td><code>FAT32</code> / <code>exFAT</code></td><td>USB kľúče, pamäťové karty</td><td>univerzálna podpora všade</td></tr>
+        <tr><td><code>NTFS</code></td><td>Windows disky</td><td>žurnalovací, v Linuxe výborná podpora cez <code>ntfs-3g</code>, rozumie aj Windows právam</td></tr>
+        <tr><td><code>SquashFS</code></td><td>live CD / read-only systémy</td><td>komprimovaný súborový systém v obraze</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Ktorý si vybrať?</div>
+    Pre systémový disk <code>ext4</code>, pre zdieľané dáta medzi OS <code>NTFS</code>/<code>exFAT</code>, pre snapshoty <code>btrfs</code>.
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Formátovanie zmaže všetky dáta</div>
+    Súborový systém disku sa mení formátovaním, ktoré <strong>zmaže všetky dáta</strong>. Nikdy neformátuj disk, ktorého obsah nechceš stratiť. Na kurze to nepotrebuješ robiť.
+  </div>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>

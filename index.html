@@ -128,7 +128,7 @@
         </div>
 
         <h2><span class="sec-num">0.1</span> Prečo si vyberať?</h2>
-        <p class="lead">Linux nie je jeden program, ale celá rodina systémov. Distribúcia je výber jadra, programov, správcu balíkov a prostredia - a každá má iný charakter.</p>
+        <p class="lead">Linux nie je operačný systém je to iba jadro(kernel). Keď o rozšírime o programy GNU stane sa s neho operačný systém ktorý voláme GNU/Linux. Ale pre jednocuchosť budeme chápať pod linuxom jeho distribúcie.</p>
         <p>Tri hlavné rodiny, ktoré dnes stretneš:</p>
         <ul>
           <li><strong>Debian / Ubuntu / Mint</strong> - balíkový systém <code>apt</code>, najviac učebných materiálov, veľmi stabilné.</li>
@@ -193,6 +193,57 @@ NAME="Debian GNU/Linux"</span>
         <div class="callout warn">
           <div class="callout-title">Pozor na dáta</div>
           ISO obraz má 2-4 GB. Ak nemáš rýchly internet doma, nič sa nedeje - ISO stiahneme spolu na ďalšej hodine.
+        </div>
+
+        <h2><span class="sec-num">0.5</span> Rodiny distribúcií</h2>
+        <p class="lead">Distribúcie sa delia na rodiny podľa toho, od koho pochádzajú. Každá rodina zdedila od svojho predka balíkový systém, štruktúru a filozofiu, takže keď spoznáš jednu, ľahšie pochopíš aj jej sesternice.</p>
+
+        <ul>
+          <li><strong>Rodina Debian</strong> - Debian (1993, autor <em>Ian Murdock</em>, jedna z najstarších, konzervatívna a stabilná, obľúbená na serveroch). Odvodené: <code>Ubuntu</code>, <code>Mint</code>, <code>Raspbian</code>, <code>Kali</code> (penetračné testovanie), <code>Clonezilla</code> (klonovanie diskov), <code>RescueCD</code> (záchrana systému).</li>
+          <li><strong>Rodina Red Hat</strong> - Red Hat (1994, najstaršia komerčná, dnes pod IBM). Odvodené: <code>Fedora</code>, <code>CentOS</code>.</li>
+          <li><strong>Rodina Slackware</strong> - Slackware (1993, autor <em>Volkerding</em>, spartánske, pre „pravých" linuxákov). Odvodené: <code>SUSE</code>, <code>Slax</code>.</li>
+          <li><strong>Rodina Arch</strong> - Arch (2002, „linux na mieru", pre pokročilých). Odvodené: <code>Manjaro</code>, <code>BlackArch</code>.</li>
+          <li><strong>Gentoo</strong> - (2002) všetko si kompiluješ sám, najrýchlejšie, ale najnáročnejšie na údržbu.</li>
+          <li><strong>LFS</strong> (Linux From Scratch) - nie distribúcia, ale sada nástrojov na zostavenie vlastnej distribúcie.</li>
+        </ul>
+
+        <p>A špeciálne účelové distribúcie:</p>
+        <ul>
+          <li><strong>Slax</strong> - beží z USB priamo v RAM.</li>
+          <li><strong>Puppy</strong> a <strong>DSL</strong> - pre staré PC, DSL zvládne 64 MB RAM.</li>
+          <li><strong>Zorin</strong> - moderné, pre začiatočníkov.</li>
+          <li><strong>PoP_OS!</strong> - od System76, výborná podpora NVIDIA.</li>
+          <li><strong>Kubuntu</strong> - Ubuntu s KDE prostredím.</li>
+          <li><strong>Devuan</strong> - Debian bez <code>systemd</code>.</li>
+          <li><strong>Hannah Montana Linux</strong> - recesia. Takýchto projektov je viac.</li>
+        </ul>
+
+        <div class="callout info">
+          <div class="callout-title">Pre nás</div>
+          Na krúžku používame Debian, Fedoru a Mint, ale svet Linuxu je oveľa väčší a každá rodina má svoje miesto.
+        </div>
+
+        <h2><span class="sec-num">0.6</span> Desktop prostredia</h2>
+        <p>Grafické prostredia (desktop) sa delia podľa frameworku - sady knižníc, na ktorej sú postavené. Dve hlavné rodiny sú <strong>QT</strong> a <strong>GTK+</strong>.</p>
+
+        <p><strong>Rodina QT</strong></p>
+        <ul>
+          <li><strong>KDE Plasma</strong> - vyzerá podobne ako Windows, prvé úspešné grafické prostredie na Linuxe, plne prispôsobiteľné kliknutím. Dnešná Plasma 6 beží na QT6, je komplexnejšia - vhodná na výkonnejšie PC.</li>
+          <li><strong>LXQt</strong> - ľahké, pre slabší hardvér.</li>
+        </ul>
+
+        <p><strong>Rodina GTK+</strong></p>
+        <ul>
+          <li><strong>GNOME</strong> - vznikol ako odpoveď na uzavretosť QT, GTK je plne open-source pod GNU/GPL, pripomína viac macOS, bez externých nástrojov ťažšie prispôsobiteľné, dnes na GTK4.</li>
+          <li><strong>MATE</strong> - fork starého GNOME 2, rýchle.</li>
+          <li><strong>Cinnamon</strong> - vyvíjané Mintom, využíva hardvérovú akceleráciu, pomalé na nekompatibilnej grafike.</li>
+          <li><strong>Xfce</strong> - samostatné, rýchle, obľúbené na staršom hardvéri.</li>
+          <li><strong>LXDE/LXQt</strong> - ľahké pre slabší HW.</li>
+        </ul>
+
+        <div class="callout warn">
+          <div class="callout-title">Pod kapotou je to rovnaké</div>
+          Samotné prostredie neovplyvňuje, čo beží „pod kapotou" - príkazy sú rovnaké v GNOME aj v KDE.
         </div>
 
         <div class="homework">
@@ -270,6 +321,70 @@ NAME="Debian GNU/Linux"</span>
         <div class="callout warn">
           <div class="callout-title">Zapamätaj si</div>
           <code>whoami</code> ti povie aktuálneho používateľa, <code>pwd</code> (print working directory) aktuálnu cestu a <code>ls /</code> vypíše obsah root adresára.
+        </div>
+
+        <h2><span class="sec-num">1.5</span> GNU/Linux - prečo sa to tak volá?</h2>
+        <p class="lead">Keď počuješ „Linux", väčšinou myslíš celý systém. Ale presný názov tohto systému je <strong>GNU/Linux</strong> - a za týmto spojovníkom sa skrýva zaujímavý príbeh.</p>
+        <p>Linux je iba <strong>jadro</strong> (kernel) - monolitické, teda jeden veľký program, ktorý riadi úplne všetko. Jeho rodokmeň siaha k systému <strong>UN*X</strong>: UNIX vznikol v roku 1969 v <em>AT&amp;T Bell Labs</em> (autori <em>Ken Thompson</em> a <em>Dennis Ritchie</em>) a stal sa základom modernej výpočtovej techniky. Pre IBM PC ho zjednodušene skopíroval <strong>MINIX</strong> (klon UNIX) - a práve z MINIXu vyšiel v roku 1991 <em>Linus Torvalds</em>, ktorý napísal vlastné jadro a nazval ho Linux.</p>
+        <p><strong>GNU</strong> je naopak slobodný projekt <em>Richarda Stallmana</em> - nie jadro, ale sada nástrojov a programov na prácu s OS: editory, shelly, kompilátory, debugery. Keď skombinuješ GNU nástroje + Linux jadro, dostaneš <strong>GNU/Linux</strong> - kompletný operačný systém. Mimochodom, aj moderný Android je distribúcia vychádzajúca z Linux jadra.</p>
+
+        <div class="callout info">
+          <div class="callout-title">Prečo sa to hovorí?</div>
+          Keď povieš „Linux", väčšinou myslíš celý systém - jadro aj všetky programy okolo neho. Keď chceš byť presný, je to <strong>GNU/Linux</strong>.
+        </div>
+
+        <p>A čo je vlastne <strong>distribúcia</strong>? Je to jadro + GNU nástroje + správca balíkov + grafické prostredie. Presne toto ti ukáže tento krúžok.</p>
+
+        <div class="callout warn">
+          <div class="callout-title">Zapamätaj si</div>
+          Linux = jadro. GNU = nástroje. GNU/Linux = celý systém. Distribúcia = jadro + GNU + správca balíkov + prostredie.
+        </div>
+
+        <h2><span class="sec-num">1.6</span> Pod kapotou: kernel a userspace</h2>
+        <p>Operačný systém sa delí na dve úrovne. Keď toto pochopíš, prestaneš sa báť terminálu:</p>
+        <ul>
+          <li><strong>Kernel space</strong> - tu beží jadro. Má priamy prístup k hardvéru, spravuje pamäť, procesy, súborové systémy a sieť. Beží v privilegovanom režime (<em>ring 0</em>).</li>
+          <li><strong>Userspace</strong> - tu bežia všetky ostatné programy (<code>bash</code>, <code>systemd</code>, <code>sshd</code>, prehliadač). Bežia v obmedzenom režime (<em>ring 3</em>) a s jadrom komunikujú cez <strong>syscalls</strong> (systémové volania).</li>
+        </ul>
+
+        <div class="callout info">
+          <div class="callout-title">Prečo to potrebuješ vedieť</div>
+          Keď pochopíš, že tvoje príkazy bežia v userspace a o hardvér sa stará jadro, pochopíš aj to, prečo napríklad spadnutý program <strong>nezničí celý systém</strong>.
+        </div>
+
+        <h2><span class="sec-num">1.7</span> Možnosti skúšania Linuxu</h2>
+        <p>Linux sa dá vyskúšať tromi hlavnými spôsobmi. Každý má svoje výhody a nevýhody - výber závisí od toho, čo chceš:</p>
+
+        <div class="table-wrap">
+          <table class="lesson-table">
+            <thead>
+              <tr><th>Spôsob</th><th>Výhoda</th><th>Nevýhoda</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Virtuálny stroj</strong></td><td>Najmenej invazívne, všetko sa dá zmazať a začať odznova</td><td>Vyžaduje výkonnejší počítač</td></tr>
+              <tr><td><strong>Live USB</strong></td><td>Absolútne neinvazívne - nabehneš z USB bez inštalácie</td><td>Pri „live" režime sa dáta stratia po vypnutí</td></tr>
+              <tr><td><strong>Dualboot</strong></td><td>Plný výkon, Linux beží natívne</td><td>Riziko pri inštalácii, bootloader</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Virtuálny stroj (VM)</h3>
+        <p>Počítač vo vnútri tvojho počítača. Najlepšie na učenie:</p>
+        <ul>
+          <li><strong>VirtualBox</strong> - jednoduchá inštalácia, dobrá podpora, zadarmo. Skvelá voľba na začiatok.</li>
+          <li><strong>VMware Workstation/Fusion</strong> - komerčné, ale výborná grafika a stabilita.</li>
+          <li><strong>QEMU/Proxmox</strong> - pokročilé, ideálne na virtualizáciu, zložitejšia konfigurácia.</li>
+        </ul>
+
+        <h3>Live USB</h3>
+        <p>Nahráš ISO na USB kľúč (napr. <code>dd</code> alebo <code>balenaEtcher</code>) a nabootuješ z neho. Absolútne nič sa na tvojom PC nezmení. Pozor: v „live" režime sa dáta po vypnutí stratia - výnimkou sú distribúcie typu <strong>Slax</strong>, ktoré ukladajú dáta priamo na kľúč.</p>
+
+        <h3>Dualboot</h3>
+        <p>Súbežná inštalácia s iným OS. Pri bootovaní si vyberieš, čo spustíš. Pozor: odporúča sa nainštalovať najprv Windows/macOS a Linux až ako druhý, pretože Windows bootloader nevie bootovať Linux - GRUB/LILO treba inštalovať manuálne.</p>
+
+        <div class="callout info">
+          <div class="callout-title">Tip pre nás</div>
+          Na krúžku používame virtuálny stroj - je najbezpečnejší a všetko sa dá kedykoľvek zmazať a začať odznova.
         </div>
 
         <div class="homework">
@@ -756,6 +871,125 @@ projekt/src/main.c</span>
   <div class="callout danger">
     <div class="callout-title">Nikdy nepíš toto</div>
     <code>sudo rm -rf /</code> vymaže celý tvoj systém. Toto je prvý príkaz, ktorý by si mal poznať, aby si ho nikdy náhodou nenapísal.
+  </div>
+
+  <h2><span class="sec-num">5.5</span> Všetko je súbor: adresár /dev</h2>
+  <p class="lead">Linux pristupuje k hardvéru rovnako ako k obyčajným súborom. Žiadne špeciálne rozhranie, žiadne zvláštne API. Jednoducho čítaš a zapisuješ.</p>
+  <p>Jednou z kľúčových filozofií Linuxu je: <strong>"Všetko je súbor."</strong> Každé hardvérové zariadenie, ktoré je pripojené k počítaču, sa sprístupňuje vo forme špeciálneho súboru v adresári <code>/dev</code>. Čítaš z neho, zapisuješ do neho a tým komunikuješ so zariadením. Jednotné rozhranie cez klasické súborové operácie (file I/O) znamená, že nepotrebuješ žiadnu špeciálnu knižnicu ani ovládač v používateľskom priestore.</p>
+
+  <p>Adresár <code>/dev</code> obsahuje <strong>device files</strong>, teda špeciálne súbory reprezentujúce hardvér. Kvôli bezpečnostným právam je rozumné ho len prezerať, nie upravovať. Pozri sa naň takto:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -l /dev</span>
+<span class="out">brw-rw---- 1 root disk    8, 0 sep  8 08:00 <span class="dir">sda</span>
+crw-rw-rw- 1 root tty     5, 0 sep  8 08:00 <span class="dir">tty</span>
+crw-rw-rw- 1 root root    1, 3 sep  8 08:00 <span class="dir">null</span>
+crw-rw-rw- 1 root root    1, 5 sep  8 08:00 <span class="dir">zero</span>
+crw-rw-rw- 1 root root    1, 8 sep  8 08:00 <span class="dir">random</span>
+crw-rw-rw- 1 root root    1, 9 sep  8 08:00 <span class="dir">urandom</span></span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>V prvom stĺpci výpisu vidíš typ zariadenia. Existujú dva hlavné typy:</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Znak</th><th>Typ</th><th>Ako komunikuje</th><th>Príklady</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>b</code></td><td>Blokové</td><td>Blokového zariadenia sa číta/zapisuje po blokoch (napr. 512 bajtov naraz). Vhodné pre disky.</td><td><code>/dev/sda</code>, <code>/dev/nvme0n1</code></td></tr>
+        <tr><td><code>c</code></td><td>Znakové</td><td>Znakové zariadenia komunikujú po jednom znaku. Používajú sa pre terminály, zvuk, klávesnice.</td><td><code>/dev/tty</code>, <code>/dev/snd/*</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Niektoré zariadenia v <code>/dev</code> sú obzvlášť užitočné aj pre bežnú prácu v termináli.</p>
+
+  <ul>
+    <li><strong><code>/dev/null</code></strong> je "čierna diera". Všetko, čo do nej pošleš, zmizne. Potlačíš ňou nechcený výstup: <code>echo ahoj > /dev/null</code>. Potlačíš aj chyby: <code>command 2>/dev/null</code>.</li>
+    <li><strong><code>/dev/zero</code></strong> produkuje nekonečný prúd nulových bajtov. Hodí sa na vytvorenie testovacích súborov: <code>dd if=/dev/zero of=test.bin bs=1M count=10</code> ti vytvorí 10 MB plný nul.</li>
+    <li><strong><code>/dev/random</code></strong> a <strong><code>/dev/urandom</code></strong> generujú náhodné dáta. <code>/dev/random</code> môže prerušiť čakanie, ak systém nedostal dosť entropy (od jadra 5.6, tj. od roku 2020, blokuje už len na začiatku štartu systému). <code>/dev/urandom</code> je rýchlejší a vždy dostupný, takže sa používa častejšie.</li>
+    <li><strong><code>/dev/tty</code></strong> je aktuálny terminál. Hodí sa, keď chceš napriek redirekcii niečo zobraziť priamo na obrazovku: <code>echo AHOJ > /dev/tty</code>.</li>
+  </ul>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">cat /dev/urandom | head -c 32 | hexdump</span>
+<span class="out">0000000 3a7f 94b1 0ff6 2e8a c7d4 53a1 b8e9 1d6f
+0000010 a45c 7203 e9b8 5f16 0d84 6ba2 31e7 c9f0</span>
+<span class="comment"># náhodné dáta</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Nikdy nečítaj surový disk</div>
+    Príkaz <code>cat /dev/sda</code> by načítal celý RAW obsah tvojho disku. Nikdy to nespúšťaj naozaj, mohol by si čítať citlivé dáta a navyše to trvá veľmi dlho. Toto je len ukážka sily filozofie "všetko je súbor" aj v takejto forme. Na čítanie diskov sa používajú špecializované nástroje ako <code>dd</code> alebo <code>xxd</code> s rozumnými obmedzeniami.
+  </div>
+
+  <p>Zaujímavosťou je aj <code>/proc</code>. Je to <strong>virtuálny súborový systém</strong> generovaný priamo jadrom. Súbory tam neležia na disku, jadro ich generuje na požiadanie. Môžeš v ňom čítať informácie o systéme:</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">head -n 5 /proc/cpuinfo</span>
+<span class="out">processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 142
+model name	: Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">head -n 5 /proc/meminfo</span>
+<span class="out">MemTotal:       16384000 kB
+MemFree:         8234568 kB
+MemAvailable:   13456000 kB
+Buffers:          512000 kB
+Cached:          4096000 kB</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h2><span class="sec-num">5.6</span> Odkazy: hardlink a symlink</h2>
+  <p class="lead">Súbory v Linuxe sa dajú odkazovať viacerými spôsobmi. hardlink a symlink sú dva rozdielne mechanizmy s rozdielnym správaním.</p>
+  <p><strong>Hardlink</strong> je druhé meno pre TEN ISTÝ súbor. Oba názvy odkazujú na rovnaký inode (interný identifikátor súboru na disku). Hardlink funguje len v rámci jedného súborového systému a vytvoríš ho príkazom:</p>
+
+  <p><code>ln subor odkaz</code></p>
+
+  <p><strong>Symlink</strong> (symbolický odkaz) je malý súbor, ktorý obsahuje cestu k inému súboru alebo adresáru. Funguje podobne ako zástupca (shortcut) vo Windowse. V <code>ls -l</code> ho spoznáš podľa písmena <code>l</code> na začiatku a šípky <code>-></code> ukazujúcej cieľ. Vytvoríš ho takto:</p>
+
+  <p><code>ln -s ciel odkaz</code></p>
+
+  <p>Hlavný rozdiel sa prejaví, keď pôvodný súbor vymažeš:</p>
+  <ul>
+    <li><strong>Hardlink</strong> stále funguje. Dáta na disku zmiznú až vtedy, keď zmizne posledný názov (hardlink), ktorý na ne ukazuje.</li>
+    <li><strong>Symlink</strong> sa "pretrhne" (broken). Ukazuje na cestu, ktorá už neexistuje. Takýto symlink zobrazí chybu pri pokuse o čítanie.</li>
+  </ul>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Vlastnosť</th><th>hardlink</th><th>symlink</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Vytvorenie</td><td><code>ln subor odkaz</code></td><td><code>ln -s ciel odkaz</code></td></tr>
+        <tr><td>Typ v <code>ls -l</code></td><td>Vyzerá ako obyčajný súbor</td><td>Začína <code>l</code>, ukazuje <code>-></code> cieľ</td></tr>
+        <tr><td>Keď zmizne pôvodný súbor</td><td>Funguje ďalej (rovnaký inode)</td><td>Pretrhne sa (broken symlink)</td></tr>
+        <tr><td>Cez súborové systémy</td><td>Nie (len v rámci jedného FS)</td><td>Áno (ukazuje na cestu)</td></tr>
+        <tr><td>Aktualizácia cieľa</td><td>Nie (pevne viazaný na inode)</td><td>Áno (upravíš cestu)</td></tr>
+        <tr><td>Veľkosť</td><td>0 bajtov (iba odkaz)</td><td>Veľkosť textu cesty</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "Ahoj" > subor.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ln subor.txt hardlink.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ln -s subor.txt symlink.txt</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -l subor.txt hardlink.txt symlink.txt</span>
+<span class="out">-rw-r--r-- 2 student student 6 sep 15 10:00 <span class="dir">subor.txt</span>
+-rw-r--r-- 2 student student 6 sep 15 10:00 <span class="dir">hardlink.txt</span>
+lrwxrwxrwx 1 student student 9 sep 15 10:00 <span class="dir">symlink.txt</span> -> subor.txt</span>
+<span class="comment"># všimni počet odkazov (2) a šípku pri symlinke</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
   <div class="homework">
@@ -1421,6 +1655,33 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
     </table>
   </div>
 
+  <h2><span class="sec-num">10.7</span> Špeciálne bity</h2>
+  <p>Okrem klasických <code>rwx</code> práv existujú tri špeciálne bity, ktoré menia správanie súborov a adresárov.</p>
+
+  <p><strong>SUID (setuid)</strong> — proces sa pri spustení spúšťa s UID <strong>vlastníka</strong> súboru (často root), nie s UID používateľa, ktorý ho spustil. Príklad: <code>/usr/bin/passwd</code> — bežný používateľ musí zmeniť heslo, a to si vyžaduje zápis do systémových súborov, na ktoré nemá práva; vďaka SUID sa passwd spustí s právami roota presne len na túto úlohu. Vo výpise <code>ls -l</code> sa zobrazuje ako <code>s</code> namiesto <code>x</code> (napr. <code>-rwsr-xr-x</code>).</p>
+
+  <p><strong>SGID (setgid)</strong> — na súbore: proces beží s GID súboru; na adresári: nové súbory vytvorené v tomto adresári <strong>dedičia skupinu adresára</strong> (užitočné pre zdieľané adresáre, napr. tímový priečinok).</p>
+
+  <p><strong>sticky bit</strong> — keď má adresár write právo pre všetkých (typicky <code>/tmp</code>), súbor v ňom môže odstrániť len jeho vlastník, vlastník adresára alebo root. Zabráni tomu, aby si ktokoľvek mazal cudzie súbory v zdieľanom adresári. Zobrazuje sa ako <code>t</code> na konci práv (<code>drwxrwxrwt</code>).</p>
+
+  <p><strong>ACL (Access Control Lists)</strong> — rozšírenie klasických práv: umožňuje nastaviť práva jednotlivo pre konkrétnych používateľov a skupiny (príkazy <code>getfacl</code> a <code>setfacl</code>). Na kurze sa nimi nebudeme hrať, ale vedieť o nich treba.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -l /usr/bin/passwd</span>
+<span class="out"><span class="path">-rwsr-xr-x</span> 1 root root 59976 sep  8 08:00 <span class="path">/usr/bin/passwd</span></span>
+<span class="comment"># SUID bit: <code>s</code> namiesto <code>x</code></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -ld /tmp</span>
+<span class="out"><span class="path">drwxrwxrwt</span> 10 root root 4096 sep  8 08:05 <span class="path">/tmp</span></span>
+<span class="comment"># sticky bit: <code>t</code> na konci</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">SUID je bezpečnostná diera</div>
+    SUID na nesprávnom súbore je bezpečnostná diera. Nikdy neprideľuj SUID skriptom, ktoré píšeš na kurze, kým presne nevieš, čo robíš. Napríklad skript, ktorý maže súbory, by sa dal zneužiť.
+  </div>
+
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
         <ol>
@@ -1497,7 +1758,7 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
-  <p>Ako to funguje: maximálne práva pre súbor sú <code>666</code> (rw-rw-rw-), pre adresár <code>777</code> (rwxrwxrwx). Umask odoberá: <code>666 - 022 = 644</code> (rw-r--r--). Preto nové súbory nemajú <code>x</code>.</p>
+  <p>Ako to funguje: maximálne práva pre súbor sú <code>666</code> (rw-rw-rw-), pre adresár <code>777</code> (rwxrwxrwx). Umask maže práva bit po bite (nie aritmetickým odčítaním) - bit nastavený v umask sa z maximálnych práv odoberie. Pri <code>022</code> stratia skupina a ostatní zápis: <code>666</code> → <code>644</code> (rw-r--r--). Preto nové súbory nemajú <code>x</code>.</p>
 
   <div class="callout info">
     <div class="callout-title">Prečo súbory nemajú x?</div>
@@ -3048,6 +3309,32 @@ nohup: appending output to 'nohup.out'</span>
     <code>kill PID</code> = jemné ukončenie (SIGTERM). <code>kill -9 PID</code> = okamžité ukončenie (SIGKILL). <code>pkill nazov</code> = zabiť všetky procesy podľa názvu. <code>killall nazov</code> = to isté, ale presnejšie.
   </div>
 
+  <h2><span class="sec-num">20.6</span> Ako vzniká proces</h2>
+  <p class="lead">Každý proces vzniká tak, že ho vytvorí iný proces. Žiadny proces jednoducho nevznikne z ničoho. Jadro na to používa dve systémové volania: <code>fork()</code> a <code>exec</code>.</p>
+  <ul>
+    <li><strong><code>fork()</code></strong> vytvorí kópiu rodičovského procesu. Nový proces dostane vlastné PID a dedí obsah pamäte rodiča.</li>
+    <li><strong><code>exec</code></strong> (napr. <code>execl()</code>, <code>execv()</code>) nahradí aktuálny obraz programu novým programom. Proces zostane ten istý (rovnaké PID), ale beží už niečo úplne iné.</li>
+  </ul>
+  <p>Keď v termináli napíšeš nejaký príkaz, tvoj shell (proces) najprv zavolá <code>fork()</code> a vytvorí kópiu seba samého. V tomto dieťati hneď zavolá <code>exec()</code> a nahradí svoj obraz tým príkazom, ktorý si zadal. Preto má každý proces okrem <strong>PID</strong> aj <strong>PPID</strong> (parent PID, číslo rodičovského procesu). Všetky procesy tak tvoria <strong>strom</strong>, na čele celého stromu je PID 1, čo je <code>systemd</code>.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ps -ef --forest</span>
+<span class="out">UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 Sep07 ?        00:00:12 /sbin/init ── systemd
+root         345       1  0 Sep07 ?        00:00:05  └─ sshd
+root        1200     345  0 10:00 ?        00:00:00      └─ sshd: student [priv]
+student     1234    1200  0 10:00 pts/0    00:00:00      │   └─ -bash
+student     5678    1234  0 10:05 pts/0    00:00:00      │       └─ ps -ef --forest</span>
+<span class="comment"># strom procesov: každý má rodiča</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Zombie procesy</div>
+    Keď "zabiješ" nejaký proces, jadro to oznámi jeho rodičovi. Rodič musí zavolať <code>wait()</code>, aby si prevzal informáciu o ukončení dieťaťa. Ak tak neurobí, dieťa sa stane <strong>zombie</strong> procesom. V <code>top</code> alebo <code>htop</code> ho uvidíš ako <code>Z</code> v stave procesu alebo ako "defunct". Väčšinou sa o to postará sám systém, ale ak zombie zostane visieť, znamená to chybu v rodičovskom procese.
+  </div>
+
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
         <ol>
@@ -3189,6 +3476,51 @@ Sep 08 11:10:15 debian kernel: [12345.678] USB disconnect, address 2</span>
   <div class="callout warn">
     <div class="callout-title">root oprávnenia</div>
     Na ovládanie služieb potrebuješ <code>sudo</code>. Čítanie logov cez <code>journalctl</code> väčšinou funguje aj ako normálny používateľ, ale niekedy potrebuješ <code>sudo journalctl</code> pre staršie záznamy.
+  </div>
+
+  <h2><span class="sec-num">21.5</span> Ako prebieha boot</h2>
+  <p class="lead">Keď stlačíš tlačidlo napájania, nedostaneš sa k shellu okamžite. Systém prechádza niekoľkými krokmi, než sa spustí.</p>
+  <ol>
+    <li><strong>BIOS alebo UEFI</strong> sa spustí a vykoná základné testy hardvéru (POST, Power-On Self Test). Overí, že RAM, disk a ďalšie komponenty fungujú.</li>
+    <li><strong>Nájde bootloader</strong> zvyčajne v MBR (Master Boot Record) alebo EFI partícii.</li>
+    <li><strong>Spustí bootloader</strong>, napríklad GRUB2, systemd-boot alebo LILO.</li>
+    <li><strong>Bootloader načíta kernel</strong> a voliteľne <strong>initramfs</strong>, čo je malý dočasný koreňový systém.</li>
+    <li><strong>Kernel inicializuje hardvér</strong> a ovládače a nakoniec spustí <strong>init systém</strong> (u nás <code>systemd</code>), a tým celý systém.</li>
+  </ol>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl --version</span>
+<span class="out">systemd 252 (252.30-1~deb12u2)
++PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFSETUP +FUTEX +GETTEXT +IDN2 -ICONV +CRYPTO +LIBCRYPTSETUP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFSETUP +FUTEX +IDN2 +PCRE2</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">systemd-analyze</span>
+<span class="out">Startup finished in 4.123s (kernel) + 8.456s (userspace) = 12.580s
+graphical.target reached after 11.234s in userspace.</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">GRUB2 a initramfs</div>
+    Väčšina distribúcií dnes používa práve <strong>GRUB2</strong> ako bootloader. <strong>initramfs</strong> je malý dočasný systém, ktorý kernel potrebuje na to, aby dokázal načítať ovládače diskov a prístup ku koreňovému systému. Bez neho by kernel možno nevedel, na ktorom disku má hľadať tvoj systém.
+  </div>
+
+  <h2><span class="sec-num">21.6</span> Iné init systémy a daemoni</h2>
+  <p class="lead"><code>systemd</code> nie je jediný init systém, ktorý existuje. Linuxová komunita má viacero alternatív.</p>
+  <ul>
+    <li><strong>SysVinit</strong>, klasický UNIX-ovský init. Používa <strong>runlevely</strong> (stav systému, napríklad podľa Red Hat konvencie 3 = iba terminál, 5 = grafické rozhranie; Debian má naproti tomu 2-5 rovnaké) a skripty v <code>/etc/init.d/</code>. Jednoduchý, ale pomalší, pretože spúšťa služby postupne za sebou.</li>
+    <li><strong>OpenRC</strong>, ľahký init systém založený na shell skriptoch. Podporuje paralelné spúšťanie služieb. Typický pre Gentoo, Devuan a ďalšie distribúcie, ktoré nechcú systemd.</li>
+    <li><strong>runit</strong>, extrémne rýchly a minimalistický init. Služby spúšťa paralelne a automaticko restartuje tie, ktoré spadnú. Používa ho Void Linux.</li>
+  </ul>
+  <p>Základným pojmom je <strong>daemon</strong>. Daemon je proces, ktorý beží na pozadí bez priamej interakcie s používateľom. Práve tie spravuješ príkazmi <code>systemctl</code>. Vybrané príklady:</p>
+  <ul>
+    <li><strong>CUPS</strong>, tlačový server, ktorý spravuje tlačiarne a tlačové úlohy.</li>
+    <li><strong>XOrg / X11</strong>, služba na vykresľovanie grafického rozhrania. Zastaralá architektúra, ale stále veľmi rozšírená.</li>
+    <li><strong>Wayland</strong>, novšia náhrada XOrg. Postupne ju preberajú distribúcie (Fedora, Ubuntu) ako predvolený zobrazovací server.</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-title">Čo je daemon?</div>
+    Daemon je len proces bežiaci na pozadí bez interakcie s používateľom. Práve tie spravuješ príkazmi <code>systemctl</code>. Keď zapneš <code>sshd</code>, spúšťaš daemon, ktorý čaká na SSH pripojenia. Keď vypneš <code>cups</code>, vypínaš daemon pre tlač. Všetko sú to jednoduché procesy, akurát žiadne nevyžadujú tvoju prítomnosť.
   </div>
 
   <div class="homework">
@@ -3602,7 +3934,7 @@ moj_adresar/subor2.txt                       100%   34     0.3KB/s   00:00</span
 
   <h2><span class="sec-num">25.1</span> Čo je mount a súborový systém?</h2>
   <p class="lead">Súborový systém určuje, ako sú dáta uložené na disku. Linux najčastejšie používa <code>ext4</code>. Mount znamená pripojiť disk do adresárovej štruktúry.</p>
-  <p>Na rozdiel od Windowsu, kde má každý disk písmeno, v Linuxe sa disky pripájajú do existujúcich adresárov. Napríklad tvoj hlavný disk je pripojený na <code>/</code> a swap je špeciálny oddiel, ktorý slúži ako rozšírená pamäť.</p>
+  <p>Na rozdiel od Windowsu, kde má každý disk písmeno, v Linuxe sa disky pripájajú do existujúcich adresárov. Napríklad tvoj hlavný disk je pripojený na <code>/</code> a swap je špeciálny oddiel, ktorý slúži ako virtuálna pamäť (diskový doplnok RAM).</p>
 
   <h2><span class="sec-num">25.2</span> lsblk a blkid</h2>
   <p><code>lsblk</code> ukáže disky a oddiely v prehľadnej stromovej štruktúre. <code>blkid</code> ukáže identifikátory oddielov.</p>
@@ -3681,6 +4013,37 @@ UUID=e5f6a7b8-...  none  swap  sw  0  0</span>
   </div>
 
   <p><code>if=/dev/zero</code> znamená vstup plný núl, <code>bs=1M</code> veľkosť bloku a <code>count=100</code> počet blokov, teda 100 MB. Súbor sme hneď odstránili, aby sme nezaplnili disk.</p>
+
+  <h2><span class="sec-num">25.6</span> Prehľad súborových systémov</h2>
+  <p>Na disku môže byť viac formátov a každý má inú filozofiu. Toto sú tie, na ktoré v Linuxe najčastejšie narazíš.</p>
+
+  <div class="table-wrap">
+    <table class="lesson-table">
+      <thead>
+        <tr><th>Formát</th><th>Kde ho stretneš</th><th>Poznámka</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>ext4</code></td><td>systémový disk <code>/</code> a <code>/home</code></td><td>moderný žurnalovací súborový systém, natívny pre Linux, dnešný štandard</td></tr>
+        <tr><td><code>ext2</code></td><td>staršie systémy, embedded</td><td>bez žurnalovania, výborná podpora v jadre</td></tr>
+        <tr><td><code>btrfs</code></td><td><code>/home</code>, <code>/var</code>, NAS servery</td><td>žurnalovací, podporuje snapshoty</td></tr>
+        <tr><td><code>xfs</code></td><td>veľké dáta, serverové disky</td><td>silný žurnalovací FS, bežný na Linux serveroch</td></tr>
+        <tr><td><code>swap</code></td><td>swapovací súbor/partícia</td><td>disková virtuálna pamäť (paging), dnes častejšie swapfile (obdoba <code>pagefile.sys</code> vo Windows)</td></tr>
+        <tr><td><code>FAT32</code> / <code>exFAT</code></td><td>USB kľúče, pamäťové karty</td><td>univerzálna podpora všade</td></tr>
+        <tr><td><code>NTFS</code></td><td>Windows disky</td><td>žurnalovací, v Linuxe výborná podpora cez <code>ntfs-3g</code>, rozumie aj Windows právam</td></tr>
+        <tr><td><code>SquashFS</code></td><td>live CD / read-only systémy</td><td>komprimovaný súborový systém v obraze</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Ktorý si vybrať?</div>
+    Pre systémový disk <code>ext4</code>, pre zdieľané dáta medzi OS <code>NTFS</code>/<code>exFAT</code>, pre snapshoty <code>btrfs</code>.
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-title">Formátovanie zmaže všetky dáta</div>
+    Súborový systém disku sa mení formátovaním, ktoré <strong>zmaže všetky dáta</strong>. Nikdy neformátuj disk, ktorého obsah nechceš stratiť. Na kurze to nepotrebuješ robiť.
+  </div>
 
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
@@ -4579,6 +4942,49 @@ var/www/html/index.nginx-debian.html</span>
     Pýtaj sa. Rozbíjaj si veci vo VM. Čítaj man stránky. Vždy si zapisuj. A hlavne: <strong>skús to sám</strong>, ešte predtým, než sa spýtaš.
   </div>
 
+  <h2><span class="sec-num">33.4</span> Programovanie na Linuxe</h2>
+  <p class="lead">Linux je rodiskom obrovskej časti moderného softvéru. Väčšina serverov, na ktorých beží internet, je programovaná práve na Linuxe. Ak ťa programovanie ťahá, tu je prehľad toho, čo ťa čaká.</p>
+
+  <h3>CLI nástroje - kompilátory a jazyky priamo v termináli</h3>
+  <p>Na programovanie nepotrebuješ nič navyše. Kompilátory a jazyky sú priamo v systéme: <code>gcc</code>/<code>g++</code> pre C/C++, <code>python</code> pre Python a <code>git</code> na správu kódu je neoddeliteľnou súčasťou systému. Všetko ovládaš z terminálu, ktorý už dôverne poznáš.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">python3 -c "print('Ahoj, Linux!')"</span>
+<span class="out">Ahoj, Linux!</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <h3>GUI prostredia - vývojové nástroje s oknami</h3>
+  <p>Ak chceš programovať s oknami, na Linuxe máš na výber z desiatok prostredí:</p>
+  <ul>
+    <li><strong>VS Codium</strong> - plne open-source odvodenina <strong>Visual Studio Code</strong> (ktorý má aj proprietárne časti a telemetriu Microsoftu), univerzálne, najpopulárnejšie</li>
+    <li><strong>Eclipse</strong> - univerzálne, hlavne pre Javu</li>
+    <li><strong>QT Creator</strong> - C/C++</li>
+    <li><strong>Apache NetBeans</strong> - Java</li>
+    <li><strong>Jupyter</strong> - Python, matematika a dáta</li>
+    <li><strong>Thonny a PyCharm</strong> - Python</li>
+    <li><strong>Code::Blocks</strong> - C/C++</li>
+    <li><strong>MonoDevelop</strong> - .NET</li>
+    <li><strong>Scratch</strong> - vizuálne programovanie pre úplný začiatok</li>
+    <li><strong>Lazarus</strong> - Pascal</li>
+    <li><strong>Arduino IDE</strong> - mikrokontroléry</li>
+  </ul>
+
+  <h3>Výhody Linuxu pre programátorov</h3>
+  <ul>
+    <li><strong>Git a Mercurial</strong> sú integrálnou súčasťou systému - nemusíš nič doťahovať</li>
+    <li><strong>Výborná podpora rôznych architektúr</strong> - toolchaining pre x86, ARM, RISC-V a ďalšie</li>
+    <li><strong>Dokumentácia jazykov priamo v systéme</strong> - man stránky pokrývajú aj C/C++</li>
+    <li><strong>Filozofia "všetko je súbor"</strong> dáva programom jednotné rozhranie</li>
+    <li><strong>Balíčkový systém</strong> nainštaluje všetky nástroje jedným príkazom</li>
+  </ul>
+
+  <div class="callout info">
+    <div class="callout-title">Skús to</div>
+    Webový server z hodiny 29 je vlastne tvoj prvý "program" bežiaci 24/7. Programovanie je prirodzené pokračovanie kurzu - aj bash skripty z bloku 4 už programovanie sú!
+  </div>
+
   <div class="homework">
     <div class="homework-title">🏠 Posledná domáca úloha</div>
         <ol>
@@ -4589,12 +4995,10 @@ var/www/html/index.nginx-debian.html</span>
   </div>
 </section>
 
-
-
-
-    </main>
+        </main>
   </div>
 
   <script src="js/app.js"></script>
 </body>
 </html>
+

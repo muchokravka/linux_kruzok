@@ -255,6 +255,33 @@
     </table>
   </div>
 
+  <h2><span class="sec-num">10.7</span> Špeciálne bity</h2>
+  <p>Okrem klasických <code>rwx</code> práv existujú tri špeciálne bity, ktoré menia správanie súborov a adresárov.</p>
+
+  <p><strong>SUID (setuid)</strong> — proces sa pri spustení spúšťa s UID <strong>vlastníka</strong> súboru (často root), nie s UID používateľa, ktorý ho spustil. Príklad: <code>/usr/bin/passwd</code> — bežný používateľ musí zmeniť heslo, a to si vyžaduje zápis do systémových súborov, na ktoré nemá práva; vďaka SUID sa passwd spustí s právami roota presne len na túto úlohu. Vo výpise <code>ls -l</code> sa zobrazuje ako <code>s</code> namiesto <code>x</code> (napr. <code>-rwsr-xr-x</code>).</p>
+
+  <p><strong>SGID (setgid)</strong> — na súbore: proces beží s GID súboru; na adresári: nové súbory vytvorené v tomto adresári <strong>dedičia skupinu adresára</strong> (užitočné pre zdieľané adresáre, napr. tímový priečinok).</p>
+
+  <p><strong>sticky bit</strong> — keď má adresár write právo pre všetkých (typicky <code>/tmp</code>), súbor v ňom môže odstrániť len jeho vlastník, vlastník adresára alebo root. Zabráni tomu, aby si ktokoľvek mazal cudzie súbory v zdieľanom adresári. Zobrazuje sa ako <code>t</code> na konci práv (<code>drwxrwxrwt</code>).</p>
+
+  <p><strong>ACL (Access Control Lists)</strong> — rozšírenie klasických práv: umožňuje nastaviť práva jednotlivo pre konkrétnych používateľov a skupiny (príkazy <code>getfacl</code> a <code>setfacl</code>). Na kurze sa nimi nebudeme hrať, ale vedieť o nich treba.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -l /usr/bin/passwd</span>
+<span class="out"><span class="path">-rwsr-xr-x</span> 1 root root 59976 sep  8 08:00 <span class="path">/usr/bin/passwd</span></span>
+<span class="comment"># SUID bit: <code>s</code> namiesto <code>x</code></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ls -ld /tmp</span>
+<span class="out"><span class="path">drwxrwxrwt</span> 10 root root 4096 sep  8 08:05 <span class="path">/tmp</span></span>
+<span class="comment"># sticky bit: <code>t</code> na konci</span>
+<span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-title">SUID je bezpečnostná diera</div>
+    SUID na nesprávnom súbore je bezpečnostná diera. Nikdy neprideľuj SUID skriptom, ktoré píšeš na kurze, kým presne nevieš, čo robíš. Napríklad skript, ktorý maže súbory, by sa dal zneužiť.
+  </div>
+
   <div class="homework">
     <div class="homework-title">🏠 Domáca úloha</div>
         <ol>
@@ -331,7 +358,7 @@
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
-  <p>Ako to funguje: maximálne práva pre súbor sú <code>666</code> (rw-rw-rw-), pre adresár <code>777</code> (rwxrwxrwx). Umask odoberá: <code>666 - 022 = 644</code> (rw-r--r--). Preto nové súbory nemajú <code>x</code>.</p>
+  <p>Ako to funguje: maximálne práva pre súbor sú <code>666</code> (rw-rw-rw-), pre adresár <code>777</code> (rwxrwxrwx). Umask maže práva bit po bite (nie aritmetickým odčítaním) - bit nastavený v umask sa z maximálnych práv odoberie. Pri <code>022</code> stratia skupina a ostatní zápis: <code>666</code> → <code>644</code> (rw-r--r--). Preto nové súbory nemajú <code>x</code>.</p>
 
   <div class="callout info">
     <div class="callout-title">Prečo súbory nemajú x?</div>
