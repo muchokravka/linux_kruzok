@@ -3827,24 +3827,31 @@ LISTEN  0       128     127.0.0.1:631        0.0.0.0:*</span>
   <p>Keď sa pripojíš cez SSH, dostaneš terminál vzdialeného počítača, akoby si pri ňom sedel. Všetko, čo pošleš, je šifrované, takže nikto na ceste nevidí tvoje heslá ani príkazy.</p>
 
   <h2><span class="sec-num">24.2</span> Prvé pripojenie</h2>
-  <p>Pripojenie má tvar <code>ssh používateľ@ip</code>. Skúsime sa pripojiť na localhost ako root, čo je bežné na VM.</p>
+  <p>Pripojenie má tvar <code>ssh používateľ@ip</code>. Skúsime sa pripojiť sami na seba - na <code>localhost</code>. Je to plnohodnotné SSH spojenie, len vzdialený stroj si ty sám.</p>
 
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
-    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ssh root@localhost</span>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ssh student@localhost</span>
 <span class="out">The authenticity of host 'localhost (127.0.0.1)' can't be established.
-Are you sure you want to continue connecting (yes/no)? <span class="comment">yes</span>
-root@localhost's password: <span class="comment">********</span>
-Welcome to Debian GNU/Linux 12!</span>
-<span class="prompt">root@debian:~#</span> <span class="cmd">hostname</span>
+ED25519 key fingerprint is SHA256:5rXk9v2QpLm8TnW1cYb...
+Are you sure you want to continue connecting (yes/no/[fingerprint])? <span class="comment">yes</span>
+Warning: Permanently added 'localhost' (ED25519) to the list of known hosts.
+student@localhost's password: <span class="comment">********</span>
+Linux debian 6.1.0-25-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1 x86_64</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">hostname</span>
 <span class="out">debian</span>
-<span class="prompt">root@debian:~#</span> <span class="cmd">exit</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">exit</span>
 <span class="out">logout
 Connection to localhost closed.</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
-  <p>Pri prvom pripojení sa ťa systém pýta, či dôveruješ serveru. Odpovieš <code>yes</code> a potom zadáš heslo. Všimni si, že prompt sa zmenil na <code>root@debian:~#</code>.</p>
+  <p>Pri prvom pripojení sa ťa systém pýta, či dôveruješ serveru - jeho odtlačok (fingerprint) si uloží do <code>~/.ssh/known_hosts</code> a nabudúce sa už nepýta. Odpovieš <code>yes</code> a zadáš heslo. Prompt vyzerá rovnako, ale si už v druhej, vzdialenej relácii - <code>exit</code> ťa vráti do tej pôvodnej.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Prečo nie <code>ssh root@...</code>?</div>
+    Skúsiť sa prihlásiť ako root cez SSH heslom na Debiane nevyjde - v <code>/etc/ssh/sshd_config</code> je predvolene <code>PermitRootLogin prohibit-password</code>, teda root sa heslom prihlásiť nesmie. Je to zámer a je to dobre: root cez SSH je prvá vec, ktorú skúšajú útočníci. Prihlás sa ako bežný používateľ a použi <code>sudo</code>, presne ako na hodine 9.
+  </div>
 
   <h2><span class="sec-num">24.3</span> Inštalácia SSH servera</h2>
   <p>Ak SSH server nemáš nainštalovaný, nainštalujeme ho. Na Debiane a Minte cez <code>apt</code>, na Fedore cez <code>dnf</code>.</p>
@@ -3887,13 +3894,14 @@ Enter file in which to save the key (/home/student/.ssh/id_ed25519): <span class
 Enter passphrase (empty for no passphrase): <span class="comment">Enter</span>
 Your identification has been saved in /home/student/.ssh/id_ed25519
 Your public key has been saved in /home/student/.ssh/id_ed25519.pub</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">ssh-copy-id root@localhost</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ssh-copy-id student@localhost</span>
 <span class="out">/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s)
-root@localhost's password: <span class="comment">********</span>
+student@localhost's password: <span class="comment">********</span>
 Number of key(s) added: 1</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">ssh root@localhost</span>
-<span class="out">Welcome to Debian GNU/Linux 12!</span>
-<span class="prompt">root@debian:~#</span> <span class="cmd">exit</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">ssh student@localhost</span>
+<span class="out"><span class="comment"># tentoraz sa na heslo uz nepyta</span>
+Linux debian 6.1.0-25-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1 x86_64</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">exit</span>
 <span class="out">logout</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
@@ -3911,9 +3919,9 @@ Number of key(s) added: 1</span>
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "ahoj" &gt; poznamka.txt</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">scp poznamka.txt root@localhost:/root/</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">scp poznamka.txt student@localhost:/tmp/</span>
 <span class="out">poznamka.txt                                   100%    5     0.1KB/s   00:00</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">scp -r moj_adresar root@localhost:/root/</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">scp -r moj_adresar student@localhost:/tmp/</span>
 <span class="out">moj_adresar/subor1.txt                       100%   12     0.2KB/s   00:00
 moj_adresar/subor2.txt                       100%   34     0.3KB/s   00:00</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
@@ -4202,14 +4210,16 @@ Dnes sme sa ucilo nano a vim.
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">tmux new -s praca</span>
-<span class="out">[detached (from session praca)]</span>
+<span class="out"><span class="comment"># si vnutri relacie - dole vidis zeleny stavovy riadok</span>
+<span class="comment"># odpojis sa cez Ctrl+B a potom d</span>
+[detached (from session praca)]</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">tmux ls</span>
 <span class="out">praca: 1 windows (created Tue Sep  8 10:30:01 2026)</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">tmux attach -t praca</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
-  <p>Všimni si: <code>tmux new -s praca</code> vytvoril reláciu, ale hneď sa odpojil, pretože sme ju spustili z terminálu. <code>tmux ls</code> ukáže bežiace relácie a <code>tmux attach -t praca</code> sa k nej pripojí.</p>
+  <p>Všimni si: <code>tmux new -s praca</code> reláciu vytvorí a <strong>hneď ťa do nej prepne</strong> - dole sa objaví stavový riadok. Von sa dostaneš klávesami <kbd>Ctrl</kbd>+<kbd>B</kbd> a potom <kbd>d</kbd> (detach), relácia beží ďalej. <code>tmux ls</code> ukáže bežiace relácie a <code>tmux attach -t praca</code> sa k nej vráti. Ak chceš reláciu vytvoriť a zostať mimo nej, použi <code>tmux new -d -s praca</code>.</p>
 
   <h2><span class="sec-num">27.4</span> Dlhý príkaz a odpojenie</h2>
   <p>Teraz to najdôležitejšie. Spustíme dlhý príkaz v tmux, odpojíme sa a znova pripojíme. Príkaz medzitým beží.</p>
@@ -4283,13 +4293,12 @@ Dnes sme sa ucilo nano a vim.
 
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
-    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw enable</span>
-<span class="out">Firewall is active and enabled on system startup</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw status</span>
-<span class="out">Status: active</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw allow ssh</span>
-<span class="out">Rule added
-Rule added (v6)</span>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw allow ssh</span>
+<span class="out">Rules updated
+Rules updated (v6)</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw enable</span>
+<span class="out">Command may disrupt existing ssh connections. Proceed with operation (y|n)? <span class="comment">y</span>
+Firewall is active and enabled on system startup</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw status</span>
 <span class="out">Status: active
 
@@ -4301,6 +4310,11 @@ To                         Action      From
   </div>
 
   <p>Po zapnutí firewall blokuje všetko okrem povolených pravidiel. <code>sudo ufw allow ssh</code> povolí port 22, aby si sa mohol pripojiť cez SSH.</p>
+
+  <div class="callout danger">
+    <div class="callout-title">Najprv povoľ, až potom zapni</div>
+    Poradie nie je náhodné. Ak si na stroji pripojený cez SSH a spustíš <code>ufw enable</code> skôr, ako povolíš port 22, odstrihneš sám seba a na vzdialený server sa už nedostaneš. Na serveri v datacentre je to problém za stovky eur. Pravidlo znie: <code>allow</code> najskôr, <code>enable</code> až potom.
+  </div>
 
   <h2><span class="sec-num">28.4</span> Firewalld na Fedore</h2>
   <p>Fedora používa <code>firewalld</code>. Skontroluješ stav služby a vypíšeš aktívne pravidlá.</p>
@@ -4339,11 +4353,23 @@ To                         Action      From
 <span class="prompt">student@debian:~$</span> <span class="cmd">sudo ufw enable</span>
 <span class="out">Firewall is active and enabled on system startup</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">ss -tln | grep 8080</span>
-<span class="out"><span class="err">(žiadny výstup - port je zablokovaný)</span></span>
+<span class="out">LISTEN  0  1  0.0.0.0:8080  0.0.0.0:*
+<span class="comment"># sluzba stale pocuva! ss ukazuje sokety, nie pravidla firewallu</span></span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
-  <p>So zapnutým firewallom sa k portu 8080 zvonku nikto nedostane, aj keď služba beží. Firewall ho jednoducho neprepustí.</p>
+  <p>Toto je dôležité nedorozumenie, ktoré stojí za to pochopiť: <strong><code>ss</code> ukazuje sokety, nie firewall</strong>. Služba počúva ďalej, firewall len zahadzuje pakety, ktoré k nej idú zvonku. Rozdiel teda neuvidíš z VM - musíš to skúsiť z iného stroja.</p>
+
+  <div class="term">
+    <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">z hostiteľského PC, nie z VM</span></div>
+    <div class="term-body"><span class="prompt">user@host:~$</span> <span class="cmd">nc -vz 192.168.1.10 8080</span>
+<span class="out"><span class="err">nc: connect to 192.168.1.10 port 8080 (tcp) failed: Connection timed out</span>
+<span class="comment"># to iste po "sudo ufw allow 8080" vo VM prejde:</span>
+Connection to 192.168.1.10 8080 port [tcp/*] succeeded!</span>
+<span class="prompt">user@host:~$</span> <span class="term-cursor"></span></div>
+  </div>
+
+  <p>Aktívne pravidlá firewallu si vždy pozri cez <code>sudo ufw status</code>. To je jediný spoľahlivý zdroj toho, čo je povolené.</p>
 
   <h2><span class="sec-num">28.6</span> Ďalšie bezpečnostné tipy</h2>
   <p>Pár pravidiel, ktoré ťa ochránia na reálnom serveri:</p>
