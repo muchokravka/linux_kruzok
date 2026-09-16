@@ -203,7 +203,7 @@ NAME="Debian GNU/Linux"</span>
           <li><strong>Rodina Red Hat</strong> - Red Hat (1994, najstaršia komerčná, dnes pod IBM). Odvodené: <code>Fedora</code>, <code>CentOS</code>.</li>
           <li><strong>Rodina Slackware</strong> - Slackware (1993, autor <em>Volkerding</em>, spartánske, pre „pravých" linuxákov). Odvodené: <code>SUSE</code>, <code>Slax</code>.</li>
           <li><strong>Rodina Arch</strong> - Arch (2002, „linux na mieru", pre pokročilých). Odvodené: <code>Manjaro</code>, <code>BlackArch</code>.</li>
-          <li><strong>Gentoo</strong> - (2002) všetko si kompiluješ sám, najrýchlejšie, ale najnáročnejšie na údržbu.</li>
+          <li><strong>Gentoo</strong> - (2002) všetko si kompiluješ sám priamo pre svoj hardvér. Dá sa tým vyladiť do posledného detailu, ale kompilácia trvá hodiny a údržba je najnáročnejšia zo všetkých.</li>
           <li><strong>LFS</strong> (Linux From Scratch) - nie distribúcia, ale sada nástrojov na zostavenie vlastnej distribúcie.</li>
         </ul>
 
@@ -238,7 +238,7 @@ NAME="Debian GNU/Linux"</span>
           <li><strong>MATE</strong> - fork starého GNOME 2, rýchle.</li>
           <li><strong>Cinnamon</strong> - vyvíjané Mintom, využíva hardvérovú akceleráciu, pomalé na nekompatibilnej grafike.</li>
           <li><strong>Xfce</strong> - samostatné, rýchle, obľúbené na staršom hardvéri.</li>
-          <li><strong>LXDE/LXQt</strong> - ľahké pre slabší HW.</li>
+          <li><strong>LXDE</strong> - ľahké prostredie pre slabší hardvér. Vývoj pokračuje ako LXQt, ktoré už patrí do rodiny QT (vyššie).</li>
         </ul>
 
         <div class="callout warn">
@@ -326,7 +326,7 @@ NAME="Debian GNU/Linux"</span>
         <h2><span class="sec-num">1.5</span> GNU/Linux - prečo sa to tak volá?</h2>
         <p class="lead">Keď počuješ „Linux", väčšinou myslíš celý systém. Ale presný názov tohto systému je <strong>GNU/Linux</strong> - a za týmto spojovníkom sa skrýva zaujímavý príbeh.</p>
         <p>Linux je iba <strong>jadro</strong> (kernel) - monolitické, teda jeden veľký program, ktorý riadi úplne všetko. Jeho rodokmeň siaha k systému <strong>UN*X</strong>: UNIX vznikol v roku 1969 v <em>AT&amp;T Bell Labs</em> (autori <em>Ken Thompson</em> a <em>Dennis Ritchie</em>) a stal sa základom modernej výpočtovej techniky. Pre IBM PC ho zjednodušene skopíroval <strong>MINIX</strong> (klon UNIX) - a práve z MINIXu vyšiel v roku 1991 <em>Linus Torvalds</em>, ktorý napísal vlastné jadro a nazval ho Linux.</p>
-        <p><strong>GNU</strong> je naopak slobodný projekt <em>Richarda Stallmana</em> - nie jadro, ale sada nástrojov a programov na prácu s OS: editory, shelly, kompilátory, debugery. Keď skombinuješ GNU nástroje + Linux jadro, dostaneš <strong>GNU/Linux</strong> - kompletný operačný systém. Mimochodom, aj moderný Android je distribúcia vychádzajúca z Linux jadra.</p>
+        <p><strong>GNU</strong> je naopak slobodný projekt <em>Richarda Stallmana</em> - nie jadro, ale sada nástrojov a programov na prácu s OS: editory, shelly, kompilátory, debugery. Keď skombinuješ GNU nástroje + Linux jadro, dostaneš <strong>GNU/Linux</strong> - kompletný operačný systém. Mimochodom, Android beží na Linuxovom jadre, ale <strong>nie je to GNU/Linux</strong> - namiesto GNU nástrojov má vlastnú knižnicu (Bionic) a úplne iný userspace. Pekne to ukazuje, prečo jadro ≠ operačný systém.</p>
 
         <div class="callout info">
           <div class="callout-title">Prečo sa to hovorí?</div>
@@ -5014,9 +5014,9 @@ var/www/html/index.nginx-debian.html</span>
 
   <h3>Výhody Linuxu pre programátorov</h3>
   <ul>
-    <li><strong>Git a Mercurial</strong> sú integrálnou súčasťou systému - nemusíš nič doťahovať</li>
+    <li><strong>Git na jeden príkaz</strong> - <code>sudo apt install git</code> a máš nástroj, na ktorom stojí celý open-source svet (Linux samotný sa vyvíja v gite)</li>
     <li><strong>Výborná podpora rôznych architektúr</strong> - toolchaining pre x86, ARM, RISC-V a ďalšie</li>
-    <li><strong>Dokumentácia jazykov priamo v systéme</strong> - man stránky pokrývajú aj C/C++</li>
+    <li><strong>Dokumentácia priamo v systéme</strong> - po <code>sudo apt install manpages-dev</code> ti <code>man 3 printf</code> vysvetlí funkciu z C bez otvorenia prehliadača</li>
     <li><strong>Filozofia "všetko je súbor"</strong> dáva programom jednotné rozhranie</li>
     <li><strong>Balíčkový systém</strong> nainštaluje všetky nástroje jedným príkazom</li>
   </ul>
