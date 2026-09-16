@@ -1710,14 +1710,14 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
-    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">touch poznamka.txt</span>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">echo "Ahoj" &gt; poznamka.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">ls -l poznamka.txt</span>
-<span class="out"><span class="path">-rw-r--r--</span> 1 student student 0 sep  8 09:00 <span class="dir">poznamka.txt</span></span>
+<span class="out"><span class="path">-rw-r--r--</span> 1 student student 5 sep  8 09:00 <span class="dir">poznamka.txt</span></span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">sudo chown root:root poznamka.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">ls -l poznamka.txt</span>
-<span class="out"><span class="path">-rw-r--r--</span> 1 <span class="path">root</span> <span class="path">root</span> 0 sep  8 09:00 <span class="dir">poznamka.txt</span></span>
+<span class="out"><span class="path">-rw-r--r--</span> 1 <span class="path">root</span> <span class="path">root</span> 5 sep  8 09:00 <span class="dir">poznamka.txt</span></span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">cat poznamka.txt</span>
-<span class="out">Hello</span>
+<span class="out">Ahoj</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">echo "zmena" >> poznamka.txt</span>
 <span class="out">bash: poznamka.txt: Permission denied</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
@@ -1731,11 +1731,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -l poznamka.txt</span>
-<span class="out"><span class="path">-rw-r--r--</span> 1 <span class="path">root</span> <span class="path">root</span> 6 sep  8 09:00 <span class="dir">poznamka.txt</span></span>
+<span class="out"><span class="path">-rw-r--r--</span> 1 <span class="path">root</span> <span class="path">root</span> 5 sep  8 09:00 <span class="dir">poznamka.txt</span></span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">sudo chown student:student poznamka.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">sudo chgrp students poznamka.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">ls -l poznamka.txt</span>
-<span class="out"><span class="path">-rw-r--r--</span> 1 <span class="path">student</span> <span class="err">students</span> 6 sep  8 09:05 <span class="dir">poznamka.txt</span></span>
+<span class="out"><span class="path">-rw-r--r--</span> 1 <span class="path">student</span> <span class="err">students</span> 5 sep  8 09:05 <span class="dir">poznamka.txt</span></span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
@@ -1754,11 +1754,11 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">umask 0002</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">touch zdielane.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">ls -l zdielane.txt</span>
-<span class="out"><span class="path">-rw-rw-rw-</span> 1 student student 0 sep  8 09:10 <span class="dir">zdielane.txt</span></span>
+<span class="out"><span class="path">-rw-rw-r--</span> 1 student student 0 sep  8 09:10 <span class="dir">zdielane.txt</span></span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
-  <p>Ako to funguje: maximálne práva pre súbor sú <code>666</code> (rw-rw-rw-), pre adresár <code>777</code> (rwxrwxrwx). Umask maže práva bit po bite (nie aritmetickým odčítaním) - bit nastavený v umask sa z maximálnych práv odoberie. Pri <code>022</code> stratia skupina a ostatní zápis: <code>666</code> → <code>644</code> (rw-r--r--). Preto nové súbory nemajú <code>x</code>.</p>
+  <p>Ako to funguje: maximálne práva pre súbor sú <code>666</code> (rw-rw-rw-), pre adresár <code>777</code> (rwxrwxrwx). Umask maže práva bit po bite (nie aritmetickým odčítaním) - bit nastavený v umask sa z maximálnych práv odoberie. Pri <code>022</code> stratia skupina a ostatní zápis: <code>666</code> → <code>644</code> (rw-r--r--). Pri <code>002</code> stratia zápis len ostatní: <code>666</code> → <code>664</code> (rw-rw-r--). Preto nové súbory nemajú <code>x</code>.</p>
 
   <div class="callout info">
     <div class="callout-title">Prečo súbory nemajú x?</div>
@@ -2023,7 +2023,7 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">meno="Jano"</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">echo $meno</span>
 <span class="out">Jano</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">echo "$ meno je super"</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">echo "$meno je super"</span>
 <span class="out">Jano je super</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
@@ -2335,7 +2335,7 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">for farba in cervena zelena modra; do</span>
-<span class="out">&gt;</span>    <span class="cmd">echo</span> <span class="out">"Mám rád $farbu"</span>
+<span class="out">&gt;</span>    <span class="cmd">echo</span> <span class="out">"Mám rád $farba"</span>
 <span class="out">&gt;</span> <span class="cmd">done</span>
 <span class="out">Mám rád cervena</span>
 <span class="out">Mám rád zelena</span>
@@ -2857,7 +2857,6 @@ drwxr-xr-x 5 student student 4096 sep  8 11:00 <span class="dir">.</span>
 <span class="cmd">df</span> <span class="out">-h /</span>
 
 <span class="out">sekcia</span> <span class="out">"Procesy"</span>
-<span class="cmd">ps</span> <span class="out">-u "$(whoami)" --no-headers | wc -l</span>
 <span class="cmd">echo</span> <span class="out">"Bežiacich procesov: $(ps -u "$(whoami)" --no-headers | wc -l)"</span>
 
 <span class="out">sekcia</span> <span class="out">"Súbory v aktuálnom adresári"</span>
