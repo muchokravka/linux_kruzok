@@ -78,11 +78,11 @@ Complete!</span>
   </div>
 
   <h2><span class="sec-num">19.3</span> Hľadanie a inštalácia</h2>
-  <p>Ak nevieš presný názov balíka, vyhľadaj ho:</p>
+  <p>Ak nevieš presný názov balíka, vyhľadaj ho. Pozor: balíky majú popisy po anglicky, takže hľadaj anglické slovo - <code>prehravac</code> nenájde nič.</p>
 
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Debian / Mint</span></div>
-    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">apt search prehravac</span>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">apt search "media player"</span>
 <span class="out">Sorting... Done
 Full Text Search... Done
 vlc/stable,now 3.0.21-0+deb12u1 amd64 [installed]
@@ -95,11 +95,9 @@ mpv/stable 0.35.1-3 amd64
 
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Fedora</span></div>
-    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">dnf search prehravac</span>
+    <div class="term-body"><span class="prompt">student@fedora:~$</span> <span class="cmd">dnf search "media player"</span>
 <span class="out">Last metadata expiration check: 0:15:22 ago on Thu Sep  8 10:00:00 2026.
-================================= Name Exactly Matched: prehravac ==================================
-
-================================== Name Matched: prehravac ====================================
+=========================== Summary Matched: media player ============================
 vlc.x86_64 : Multimedia player and streamer
 mpv.x86_64 : Movie player playing almost everything</span>
 <span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
@@ -465,9 +463,7 @@ student     5678    1234  0 10:05 pts/0    00:00:00      │       └─ ps -ef
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">systemctl --failed</span>
-<span class="out">  UNIT           LOAD   ACTIVE SUB     DESCRIPTION
-● ssh.service    loaded failed failed  OpenBSD Secure Shell server
-
+<span class="out">  UNIT LOAD ACTIVE SUB DESCRIPTION
 0 loaded units listed.</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>

@@ -364,7 +364,10 @@ var/www/html/index.nginx-debian.html</span>
 <span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --permanent --add-service=http</span>
 <span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --reload</span>
 <span class="prompt">student@fedora:~$</span> <span class="cmd">sudo firewall-cmd --list-all</span>
-<span class="out">ports: 22/tcp 80/tcp</span>
+<span class="out">public (active)
+  target: default
+  services: dhcpv6-client http ssh
+  ports:</span>
 <span class="prompt">student@fedora:~$</span> <span class="term-cursor"></span></div>
   </div>
 

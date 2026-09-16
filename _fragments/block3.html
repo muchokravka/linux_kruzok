@@ -97,8 +97,8 @@
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
     <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls /root</span>
 <span class="out">ls: cannot open directory '/root': Permission denied</span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ls /root</span>
-<span class="out">snap snapd</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo ls -a /root</span>
+<span class="out">.  ..  .bashrc  .profile</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">sudo nano /etc/hosts</span>
 <span class="out"><span class="comment"># Otvorí sa súbor, ktorý normálne nemáš právo meniť</span></span>
 <span class="out"><span class="comment"># Len ukážka! Nič nemeň, len sa pozri a exit</span></span>
@@ -231,7 +231,9 @@
 <span class="prompt">student@debian:~$</span> <span class="cmd">chmod 600 tajny.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="cmd">ls -l tajny.txt</span>
 <span class="out"><span class="path">-rw-------</span> 1 student student 6 sep  8 08:35 <span class="dir">tajny.txt</span></span>
-<span class="prompt">student@debian:~$</span> <span class="cmd">su - druhý</span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">sudo adduser druhy</span>
+<span class="out"><span class="comment"># vytvori druheho pouzivatela, zadas mu heslo</span></span>
+<span class="prompt">student@debian:~$</span> <span class="cmd">su - druhy</span>
 <span class="out">Password: ****</span>
 <span class="out">druhy@debian:~$ cat /home/student/tajny.txt</span>
 <span class="out">cat: /home/student/tajny.txt: Permission denied</span>
@@ -452,12 +454,13 @@
 <span class="out">firma</span>
 <span class="out">├── <span class="dir">dokumenty</span></span>
 <span class="out">│   └── <span class="dir">zmluvy</span></span>
+<span class="out">│       └── <span class="path">zmluva.txt</span></span>
 <span class="out">├── <span class="dir">scripty</span></span>
 <span class="out">│   ├── <span class="path">uvitanie.sh</span></span>
 <span class="out">│   └── <span class="path">info.sh</span></span>
 <span class="out">└── <span class="dir">verejne</span></span>
 <span class="out">    └── <span class="path">cennik.txt</span></span>
-<span class="out">0 directories, 4 files</span>
+<span class="out">4 directories, 4 files</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
@@ -521,15 +524,29 @@
 
   <div class="term">
     <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">student@debian: ~</span></div>
-    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -laR firma/</span>
+    <div class="term-body"><span class="prompt">student@debian:~$</span> <span class="cmd">ls -lR firma/</span>
 <span class="out"><span class="dir">firma/</span>:</span>
-<span class="out">druwxr-x---  <span class="path">3 student student</span> 4096 sep  8 09:30 <span class="dir">.</span></span>
-<span class="out">druwxr-x---  <span class="path">2 student student</span> 4096 sep  8 09:30 <span class="dir">dokumenty</span></span>
-<span class="out">druwxr-xr-x  <span class="path">2 student student</span> 4096 sep  8 09:30 <span class="dir">scripty</span></span>
-<span class="out">-rwxr-xr-x  <span class="path">1 student student</span>   67 sep  8 09:32 <span class="dir">info.sh</span></span>
-<span class="out">-rwxr-xr-x  <span class="path">1 student student</span>   85 sep  8 09:31 <span class="dir">uvitanie.sh</span></span>
-<span class="out">druwxr-xr-x  <span class="path">2 student student</span> 4096 sep  8 09:30 <span class="dir">verejne</span></span>
-<span class="out">-rw-r--r--  <span class="path">1 student student</span>   28 sep  8 09:30 <span class="dir">cennik.txt</span></span>
+<span class="out">total 12</span>
+<span class="out"><span class="path">drwxr-x---</span> 3 student student 4096 sep  8 09:30 <span class="dir">dokumenty</span></span>
+<span class="out"><span class="path">drwxr-xr-x</span> 2 student student 4096 sep  8 09:32 <span class="dir">scripty</span></span>
+<span class="out"><span class="path">drwxr-xr-x</span> 2 student student 4096 sep  8 09:30 <span class="dir">verejne</span></span>
+<span class="out"></span>
+<span class="out"><span class="dir">firma/dokumenty</span>:</span>
+<span class="out">total 4</span>
+<span class="out"><span class="path">drwxr-x---</span> 2 student student 4096 sep  8 09:30 <span class="dir">zmluvy</span></span>
+<span class="out"></span>
+<span class="out"><span class="dir">firma/dokumenty/zmluvy</span>:</span>
+<span class="out">total 0</span>
+<span class="out"><span class="path">-rw-r--r--</span> 1 student student    0 sep  8 09:30 zmluva.txt</span>
+<span class="out"></span>
+<span class="out"><span class="dir">firma/scripty</span>:</span>
+<span class="out">total 8</span>
+<span class="out"><span class="path">-rwxr-xr-x</span> 1 student student   67 sep  8 09:32 info.sh</span>
+<span class="out"><span class="path">-rwxr-xr-x</span> 1 student student   85 sep  8 09:31 uvitanie.sh</span>
+<span class="out"></span>
+<span class="out"><span class="dir">firma/verejne</span>:</span>
+<span class="out">total 4</span>
+<span class="out"><span class="path">-rw-r--r--</span> 1 student student   28 sep  8 09:30 cennik.txt</span>
 <span class="prompt">student@debian:~$</span> <span class="term-cursor"></span></div>
   </div>
 
